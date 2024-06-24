@@ -2,7 +2,7 @@ package main
 
 import (
 	"reflect"
-    "strings"
+	"strings"
 	"testing"
 )
 
@@ -29,13 +29,13 @@ Soy Brett. Pienso que quieras ver a esto 💃
 	expected := map[string][]string{
 		"2022-07": {
 			"Hola Judith!",
-            "Soy Brett. Pienso que quieras ver a esto 💃",
+			"Soy Brett. Pienso que quieras ver a esto 💃",
 			"‎Video omitido",
 			"Si vas a los Estados Unidos, podrías bailar con nuestros en casa y a la rumba",
 		},
 	}
 
-    textReader := strings.NewReader(chatContent)
+	textReader := strings.NewReader(chatContent)
 	// Call the function
 	result, err := filterLinesByAuthor(textReader, "Brett")
 	if err != nil {
@@ -44,6 +44,6 @@ Soy Brett. Pienso que quieras ver a esto 💃
 
 	// Compare the result with the expected output
 	if !reflect.DeepEqual(result, expected) {
-        t.Errorf("Expected:\n%v\n, but got:\n%v", expected, result)
+		t.Errorf("Expected:\n%v\n, but got:\n%v", expected, result)
 	}
 }
