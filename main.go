@@ -43,7 +43,6 @@ func filterLinesByAuthor(reader io.Reader, targetAuthor string) (map[string][]st
 			currentMonth = date.Format(monthFormat)
 		}
 
-		// else, currentMessage = line, currentAuthor = previous, currentMonth = previous
 		if currentMessage == "" || currentAuthor != targetAuthor {
 			continue
 		}
@@ -91,20 +90,18 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	defer logger.Sync()
+
 	//config stuff to extract later
 	port := 8080
-
-	defer logger.Sync()
 
 	// Register handler functions for specific paths
 	http.HandleFunc("/heathcheck", healthcheckHandler)
 	http.HandleFunc("/chat", chatHandler)
-	//http.HandleFunc("/", healthcheckHandler)
 
 	logger.Infof("Starting server on port %v", port)
-	// Start the server on $port  (or a different port if needed)
 	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
 	if err != nil {
-		panic(err)
+		logger.Fatal(err)
 	}
 }
