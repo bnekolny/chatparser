@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -59,11 +60,6 @@ func filterLinesByAuthor(reader io.Reader, targetAuthor string) (map[string][]st
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
 	defer logger.Sync()
-	// I don't think this is needed with GorillaMux
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 
 	author := "Brett"
 	messages, err := filterLinesByAuthor(r.Body, author)
@@ -76,6 +72,26 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+}
+
+func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
+	defer logger.Sync()
+
+	author := "Brett"
+	messages, err := filterLinesByAuthor(r.Body, author)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// TODO: remove this hardcoding
+	response, err := getFeedback(strings.Join(messages["2024-06"], "\n"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte(response))
 }
 
 func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +114,7 @@ func main() {
 	// Register handler functions for specific paths
 	http.HandleFunc("/heathcheck", healthcheckHandler)
 	http.HandleFunc("/chat", chatHandler)
+	http.HandleFunc("/chatFeedback", chatFeedbackHandler)
 
 	logger.Infof("Starting server on port %v", port)
 	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
