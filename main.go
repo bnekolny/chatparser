@@ -4,12 +4,10 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"go.uber.org/zap"
 	"io"
 	"net/http"
 	"regexp"
 	"time"
-	//adapter "github.com/axiomhq/axiom-go/adapters/zap"
 )
 
 // Function to read lines from a file and filter by author
@@ -60,6 +58,27 @@ func filterLinesByAuthor(reader io.Reader, targetAuthor string) (map[string][]st
 	return messages, nil
 }
 
+func chatHandler(w http.ResponseWriter, r *http.Request) {
+	defer logger.Sync()
+	// I don't think this is needed with GorillaMux
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	author := "Brett"
+	messages, err := filterLinesByAuthor(r.Body, author)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(messages)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(map[string]string{
@@ -75,28 +94,17 @@ func main() {
 	//config stuff to extract later
 	port := 8080
 
-	logger, _ := zap.NewDevelopment() //zap.NewProduction()
-	defer logger.Sync()               // flushes buffer, if any
-	sugar := logger.Sugar()
+	defer logger.Sync()
 
 	// Register handler functions for specific paths
 	http.HandleFunc("/heathcheck", healthcheckHandler)
+	http.HandleFunc("/chat", chatHandler)
 	//http.HandleFunc("/", healthcheckHandler)
-	//http.HandleFunc("/chat", chatHandler)
 
-	sugar.Infof("Starting server on port %v", port)
+	logger.Infof("Starting server on port %v", port)
 	// Start the server on $port  (or a different port if needed)
 	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
 	if err != nil {
 		panic(err)
 	}
-
-	//author := "Brett"
-	//messages, err := filterLinesByAuthor(file, author)
-	//for month, msgs := range messages {
-	//	fmt.Printf("Month: %s\n", month)
-	//	for _, msg := range msgs {
-	//		fmt.Println(msg)
-	//	}
-	//}
 }
