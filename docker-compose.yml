@@ -1,0 +1,14 @@
+services:
+  chatparser:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - .:/go/src/app  # Mount current directory as /app in the container (for code changes)
+    #command: ["reflex", "-r", "\\.go$", "-s", "go", "run", "main.go"]
+    command: ["go", "run", "main.go"]
+    environment:
+      - GO_ENV=development
+      - PORT=8080
+    ports:
+      - "8080:8080"  # Map container port 8080 to host port 8080
