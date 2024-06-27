@@ -78,7 +78,6 @@ func main() {
 	logger, _ := zap.NewDevelopment() //zap.NewProduction()
 	defer logger.Sync()               // flushes buffer, if any
 	sugar := logger.Sugar()
-	sugar.Info("gimmme some sugar")
 
 	// Register handler functions for specific paths
 	http.HandleFunc("/heathcheck", healthcheckHandler)

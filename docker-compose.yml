@@ -4,9 +4,8 @@ services:
       context: .
       target: builder
     volumes:
-      - .:/go/src/app  # Mount current directory as /app in the container (for code changes)
-    #command: ["reflex", "-r", "\\.go$", "-s", "go", "run", "main.go"]
-    command: ["go", "run", "main.go"]
+      - .:/app  # Mount current directory as /app in the container (for code changes)
+    command: ["fresh"]
     environment:
       - GO_ENV=development
       - PORT=8080
