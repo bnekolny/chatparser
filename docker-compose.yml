@@ -1,10 +1,10 @@
 services:
   chatparser:
     build:
-      context: .
+      context: src
       target: builder
     volumes:
-      - .:/app  # Mount current directory as /app in the container (for code changes)
+      - ./src:/app  # Mount current directory as /app in the container (for code changes)
     command: ["fresh"]
     environment:
       GO_ENV: development
