@@ -12,3 +12,15 @@ services:
       GEMINI_API: ${GEMINI_API}
     ports:
       - "${PORT}:${PORT}"
+  terraform:
+    build: terraform
+    volumes:
+      - ./terraform:/workspace
+      - ~/.config/gcloud:/root/.config/gcloud
+    environment:
+      IMPERSONATE_SERVICE_ACCOUNT: ${IMPERSONATE_SERVICE_ACCOUNT}
+    working_dir: /workspace/envs
+    entrypoint: /bin/bash
+    # prevent this from running with `docker-compose up`
+    profiles:
+      - terraform

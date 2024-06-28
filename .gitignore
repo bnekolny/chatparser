@@ -30,3 +30,7 @@ go.work.sum
 *.swp
 
 chatparser
+
+# terraform files
+*.terraform.lock.hcl
+.terragrunt-cache/
