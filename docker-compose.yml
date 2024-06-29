@@ -12,15 +12,26 @@ services:
       GEMINI_API: ${GEMINI_API}
     ports:
       - "${PORT}:${PORT}"
-  terraform:
+  terraform: &terraform
     build: terraform
     volumes:
       - ./terraform:/workspace
       - ~/.config/gcloud:/root/.config/gcloud
     environment:
-      IMPERSONATE_SERVICE_ACCOUNT: ${IMPERSONATE_SERVICE_ACCOUNT}
+      TF_VAR_IMPERSONATE_SERVICE_ACCOUNT: ${IMPERSONATE_SERVICE_ACCOUNT}
     working_dir: /workspace/envs
     entrypoint: /bin/bash
     # prevent this from running with `docker-compose up`
     profiles:
       - terraform
+
+  formatter-terraform:
+    <<: *terraform
+    # array elements aren't inhereted from <<: *service syntax
+    volumes:
+      - ./terraform:/workspace
+    working_dir: /workspace
+    command: >
+      -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
+    profiles:
+      - formatters

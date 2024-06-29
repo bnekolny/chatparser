@@ -3,16 +3,7 @@ include {
 }
 
 inputs = {
+  env            = "prod"
   gcp_project    = "chatparser"
-  bucket_name    = "chatparser-data-prod"
-  force_destroy  = true
+  force_destroy  = false
 }
-
-remote_state {
-  backend = "gcs"
-  config = {
-    bucket = "chatparser-terraform"
-    prefix = "terraform/state"
-  }
-}
-
