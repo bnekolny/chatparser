@@ -5,4 +5,4 @@ steps:
   - --cache=true
   - --cache-ttl=6h
 options:
-  logging: LOGGING_UNSPECIFIED
+  logging: NONE
