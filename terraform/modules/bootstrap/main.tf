@@ -45,7 +45,7 @@ resource "google_artifact_registry_repository" "docker" {
     id     = "keep-minimum-versions"
     action = "KEEP"
     most_recent_versions {
-      keep_count            = 20
+      keep_count = 20
     }
   }
 
@@ -78,6 +78,7 @@ resource "google_project_iam_member" "cloudbuild_sa_logging" {
 }
 
 resource "google_cloudbuild_trigger" "build" {
+  name            = "build"
   service_account = google_service_account.cloudbuild_service_account["dev"].id
   location        = "us-central1"
 
@@ -93,6 +94,7 @@ resource "google_cloudbuild_trigger" "build" {
 }
 
 resource "google_cloudbuild_trigger" "test" {
+  name            = "test"
   service_account = google_service_account.cloudbuild_service_account["dev"].id
   location        = "us-central1"
 
@@ -109,6 +111,7 @@ resource "google_cloudbuild_trigger" "test" {
 
 resource "google_cloudbuild_trigger" "deploy" {
   for_each        = local.envs
+  name            = "deploy-${each.value}"
   service_account = google_service_account.cloudbuild_service_account[each.value].id
   location        = "us-central1"
 
