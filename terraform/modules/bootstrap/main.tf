@@ -35,6 +35,25 @@ resource "google_project_service" "services" {
 # resource "google_cloudbuildv2_connection" "bnekolny" {
 # data "google_cloudbuildv2_connection" "bnekolny" {
 
+resource "google_artifact_registry_repository" "docker" {
+  location      = "us-central1"
+  repository_id = "docker"
+  description   = "project docker repository"
+  format        = "DOCKER"
+
+  cleanup_policies {
+    id     = "keep-minimum-versions"
+    action = "KEEP"
+    most_recent_versions {
+      keep_count            = 20
+    }
+  }
+
+  labels = {
+    managed = "terraform"
+  }
+}
+
 resource "google_service_account" "cloudbuild_service_account" {
   for_each     = local.all_configs
   account_id   = "cloudbuild-sa-${each.value}"
@@ -43,10 +62,19 @@ resource "google_service_account" "cloudbuild_service_account" {
 }
 
 resource "google_project_iam_member" "cloudbuild_sa_logging" {
-  for_each = local.all_configs
-  project  = var.gcp_project
-  role     = "roles/logging.logWriter"
-  member   = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value].email}"
+  for_each = {
+    for pair in setproduct(toset([
+      "roles/logging.logWriter",
+      "roles/artifactregistry.writer"
+      ]), local.all_configs) : "${pair[0]}-${pair[1]}" => {
+      role = pair[0]
+      env  = pair[1]
+    }
+  }
+
+  role    = each.value.role
+  project = var.gcp_project
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value.env].email}"
 }
 
 resource "google_cloudbuild_trigger" "build" {
