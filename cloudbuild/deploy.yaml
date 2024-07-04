@@ -1,9 +1,9 @@
 steps:
-- name: 'gcr.io/cloud-builders/kustomize'
+- name: 'gcr.io/$PROJECT_NUMBER/kustomize'
   args: ['edit', 'set', 'namespace', "$PROJECT_NUMBER"]
-- name: 'gcr.io/cloud-builders/kustomize'
+- name: 'gcr.io/$PROJECT_NUMBER/kustomize'
   args: ['edit', 'set', 'image', "us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA"]
-- name: 'gcr.io/cloud-builders/kustomize'
+- name: 'gcr.io/$PROJECT_NUMBER/kustomize'
   args: ['build', '--output', 'out/cloudrun.yaml']
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'services', 'replace', 'cloudbuild/cloudrun-service.yaml']
