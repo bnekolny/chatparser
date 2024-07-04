@@ -109,6 +109,22 @@ resource "google_cloudbuild_trigger" "test" {
   filename = "cloudbuild/test.yaml"
 }
 
+resource "google_cloudbuild_trigger" "validate" {
+  name            = "validate"
+  service_account = google_service_account.cloudbuild_service_account["dev"].id
+  location        = "us-central1"
+
+  repository_event_config {
+    repository = "projects/chatparser/locations/us-central1/connections/bnekolny/repositories/bnekolny-chatparser"
+
+    push {
+      branch = ".*"
+    }
+  }
+
+  filename = "cloudbuild/validate.yaml"
+}
+
 resource "google_cloudbuild_trigger" "deploy" {
   for_each        = local.envs
   name            = "deploy-${each.value}"
