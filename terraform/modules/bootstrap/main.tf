@@ -15,6 +15,7 @@ locals {
     "test",
     #"prod",
   ])
+  all_configs = toset(concat(tolist(local.envs), ["dev"]))
 }
 
 resource "google_project_service" "services" {
@@ -35,10 +36,17 @@ resource "google_project_service" "services" {
 # data "google_cloudbuildv2_connection" "bnekolny" {
 
 resource "google_service_account" "cloudbuild_service_account" {
-  for_each     = toset(concat(tolist(local.envs), ["dev"]))
+  for_each     = local.all_configs
   account_id   = "cloudbuild-sa-${each.value}"
   display_name = "cloudbuild-sa-${each.value}"
   description  = "Cloud build service account (${each.value})"
+}
+
+resource "google_project_iam_member" "cloudbuild_sa_logging" {
+  for_each = local.all_configs
+  project  = var.gcp_project
+  role     = "roles/logging.logWriter"
+  member   = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value].email}"
 }
 
 resource "google_cloudbuild_trigger" "build" {
