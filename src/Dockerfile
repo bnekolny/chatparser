@@ -12,12 +12,13 @@ RUN go mod download
 COPY . .
 
 # Build the application with CGO disabled
-RUN CGO_ENABLED=0 go build -o chatparser ./main.go
+RUN CGO_ENABLED=0 go build -o chatparser
 
 FROM scratch
 WORKDIR /app 
 
-COPY --from=builder /go/bin/main /app/main
+COPY --from=builder /app/chatparser /app/chatparser
 
-EXPOSE 8080  # Expose port 8080 for the server
+# Expose port 8080 for the server
+EXPOSE 8080
 CMD ["/app/chatparser"]
