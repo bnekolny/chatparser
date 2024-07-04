@@ -3,11 +3,11 @@ include {
 }
 
 terraform {
-  source = "../../modules/app"
+  source = "../../modules/bootstrap"
 }
 
 inputs = {
-  env             = "test"
+  env             = "bootstrap"
   gcp_project     = "chatparser"
   bucket_location = "us-central1"
   force_destroy   = true
