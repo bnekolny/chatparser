@@ -89,7 +89,7 @@ resource "google_cloudbuild_trigger" "build" {
     }
   }
 
-  filename = "build.yaml"
+  filename = "cloudbuild/build.yaml"
 }
 
 resource "google_cloudbuild_trigger" "deploy" {
@@ -106,5 +106,5 @@ resource "google_cloudbuild_trigger" "deploy" {
     }
   }
 
-  filename = "deploy.yaml"
+  filename = "cloudbuild/deploy.yaml"
 }
