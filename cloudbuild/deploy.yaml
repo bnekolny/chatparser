@@ -2,8 +2,11 @@ steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   entrypoint: '/bin/bash'
   args:
-  - -c
-  - |
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    set -x
     cd kustomize
     kubectl kustomize edit set namespace $PROJECT_NUMBER
     kubectl kustomize edit set image us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
