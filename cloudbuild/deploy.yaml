@@ -4,6 +4,7 @@ steps:
   args:
   - -c
   - |
+    cd kustomize
     kubectl kustomize edit set namespace $PROJECT_NUMBER
     kubectl kustomize edit set image us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
     kustomize build --output out/cloudrun.yaml
