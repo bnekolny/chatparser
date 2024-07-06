@@ -24,7 +24,7 @@ spec:
       serviceAccountName: 649910881533-compute@developer.gserviceaccount.com
       containers:
       - name: chatparser
-        #image: kustomize helping here
+        image: chatparser
         ports:
         - name: http1
           containerPort: 8080
