@@ -9,8 +9,8 @@ steps:
   script: |
     #!/bin/sh
     cd terraform
-    terraform fmt -recursive .
-    test -z $(terraform fmt -recursive .)
+    terraform fmt -recursive -diff -write=false .
+    test -z $(terraform fmt -recursive -check .)
 
 options:
   logging: CLOUD_LOGGING_ONLY
