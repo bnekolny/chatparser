@@ -175,5 +175,9 @@ resource "google_cloudbuild_trigger" "deploy" {
     }
   }
 
+  substitutions = {
+    _CLOUD_RUN_SERVICE_ACCOUNT = "${google_service_account.cloudrun_service_account[each.value].email}"
+  }
+
   filename = "cloudbuild/deploy.yaml"
 }

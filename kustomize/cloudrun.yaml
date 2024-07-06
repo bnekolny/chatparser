@@ -21,7 +21,7 @@ spec:
     spec:
       containerConcurrency: 80
       timeoutSeconds: 20
-      serviceAccountName: 649910881533-compute@developer.gserviceaccount.com
+      serviceAccountName: CLOUDRUN_SA
       containers:
       - name: chatparser
         image: chatparser
