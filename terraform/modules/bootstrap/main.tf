@@ -61,6 +61,23 @@ resource "google_service_account" "cloudbuild_service_account" {
   description  = "Cloud build service account (${each.value})"
 }
 
+resource "google_service_account" "cloudrun_service_account" {
+  for_each     = local.envs
+  account_id   = "cloudrun-sa-${each.value}"
+  display_name = "cloudrun-sa-${each.value}"
+  description  = "Cloud Run service account (${each.value})"
+}
+
+resource "google_service_account_iam_binding" "cloudbuild_cloudrun_iam" {
+  for_each           = local.envs
+  service_account_id = google_service_account.cloudrun_service_account[each.value].name
+  role               = "roles/iam.serviceAccountUser"
+
+  members = [
+    "serviceAccount:${google_service_account.cloudbuild_service_account[each.value].email}",
+  ]
+}
+
 resource "google_project_iam_member" "cloudbuild_sa" {
   for_each = {
     for pair in setproduct(toset([
