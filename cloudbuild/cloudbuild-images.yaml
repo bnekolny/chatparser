@@ -1,0 +1,21 @@
+steps:
+- id: 'kustomize'
+  name: 'gcr.io/cloud-builders/docker'
+  script: |
+    #!/bin/sh
+    docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2 -f- . <<EOF
+    FROM curlimages/curl AS build
+
+    RUN set -ex; \
+      curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz | tar xz && \
+      chmod +x kustomize
+
+    FROM alpine:3.16.0
+    COPY --from=build /home/curl_user/kustomize /usr/local/bin/kustomize
+    EOF
+
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2
+
+options:
+  automapSubstitutions: true
+  logging: CLOUD_LOGGING_ONLY

@@ -77,6 +77,23 @@ resource "google_project_iam_member" "cloudbuild_sa_logging" {
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value.env].email}"
 }
 
+resource "google_cloudbuild_trigger" "cloudbuild-images" {
+  name            = "cloudbuild-images"
+  service_account = google_service_account.cloudbuild_service_account["dev"].id
+  location        = "us-central1"
+
+  repository_event_config {
+    repository = "projects/chatparser/locations/us-central1/connections/bnekolny/repositories/bnekolny-chatparser"
+
+    push {
+      branch = ".*"
+    }
+  }
+
+  included_files = ["cloudbuild/cloudbuild-images.yaml"]
+  filename = "cloudbuild/cloudbuild-images.yaml"
+}
+
 resource "google_cloudbuild_trigger" "build" {
   name            = "build"
   service_account = google_service_account.cloudbuild_service_account["dev"].id
