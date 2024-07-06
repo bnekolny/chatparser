@@ -19,8 +19,8 @@ steps:
       COPY --from=downloader /downloads/kustomize /usr/local/bin/kustomize
     EOF
 
-    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
-    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
+    #docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
+    #docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
 
 substitutions:
   _KUSTOMIZE_VERSION: v5.4.2
