@@ -1,18 +1,16 @@
 steps:
 - name: golang:1.22
-  entrypoint: /bin/bash
-  args:
-    - -c
-    - |
-      go fmt src/
-      test -z $(go fmt src/)
+  script: |
+    #!/bin/sh
+    cd src
+    gofmt -d -s .
+    test -z $(gofmt -d -s .)
 - name: hashicorp/terraform:1.9.0
-  entrypoint: /bin/bash
-  args:
-    - -c
-    - |
-      terraform fmt -recursive terraform
-      test -z $(terraform fmt -recursive terraform)
+  script: |
+    #!/bin/sh
+    cd terraform
+    terraform fmt -recursive .
+    test -z $(terraform fmt -recursive .)
 
 options:
   logging: CLOUD_LOGGING_ONLY
