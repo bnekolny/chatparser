@@ -1,5 +1,6 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
+- id: 'kustomize'
+  name: 'gcr.io/cloud-builders/docker'
   script: |
     #!/bin/sh
     docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2 -f- . <<EOF
