@@ -1,0 +1,29 @@
+step:
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: '/bin/bash'
+  args:
+  - '-eEuo'
+  - 'pipefail'
+  - '-c'
+  - |-
+    docker build -t TAG -f - . <<EOF
+      FROM curlimages/curl AS build
+      ARG KUSTOMIZE_VERSION
+
+      RUN set -ex; \
+        curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz | tar xz && \
+        chmod +x kustomize
+
+      FROM alpine:3.16.0
+      COPY --from=downloader /downloads/kustomize /usr/local/bin/kustomize
+    EOF
+
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
+
+substitutions:
+  _BUILD_DIRECTORY: "./" #set to kustomize to run in a trigger
+  _KUSTOMIZE_VERSION: v5.4.2
+
+options:
+  logging: CLOUD_LOGGING_ONLY
