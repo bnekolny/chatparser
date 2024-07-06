@@ -10,7 +10,7 @@ steps:
       chmod +x kustomize
 
     FROM alpine:3.16.0
-    COPY --from=downloader /downloads/kustomize /usr/local/bin/kustomize
+    COPY --from=build /home/curl_user/kustomize /usr/local/bin/kustomize
     EOF
 
     docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
