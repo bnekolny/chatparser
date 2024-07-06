@@ -1,13 +1,15 @@
 steps:
 # copied from #cloudbuild/build.yaml since this image needs to exist before we can deploy
-- name: 'gcr.io/kaniko-project/executor:latest'
+- id: 'build container'
+  name: 'gcr.io/kaniko-project/executor:latest'
   args:
   - --destination=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
   - --context=src/
   - --cache=true
   - --cache-ttl=6h
 
-- name: 'us-central1-docker.pkg.dev/chatparser/docker/kustomize:v5.4.2'
+- id: 'build yaml'
+  name: 'us-central1-docker.pkg.dev/chatparser/docker/kustomize:v5.4.2'
   script: |
     #!/bin/sh
     cd kustomize && mkdir out
@@ -17,7 +19,8 @@ steps:
     kustomize build --output out/cloudrun.yaml
     sed -i.bak "s/CLOUDRUN_SA/$_CLOUD_RUN_SERVICE_ACCOUNT/g" out/cloudrun.yaml
 
-- name: 'gcr.io/cloud-builders/gcloud'
+- id: 'deploy cloud run'
+  name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'services', 'replace', 'kustomize/out/cloudrun.yaml']
 
 options:
