@@ -11,4 +11,5 @@ steps:
 #  args: ['run', 'services', 'replace', 'cloudbuild/cloudrun-service.yaml']
 
 options:
+  automapSubstitutions: true
   logging: CLOUD_LOGGING_ONLY
