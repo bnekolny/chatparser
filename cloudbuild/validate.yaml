@@ -4,15 +4,15 @@ steps:
   args:
     - -c
     - |
-      go fmt -s src/
-      test -z $(go fmt -l -s src/)
+      go fmt src/
+      test -z $(go fmt src/)
 - name: hashicorp/terraform:1.9.0
   entrypoint: /bin/bash
   args:
     - -c
     - |
-      terraform fmt -recursive
-      test -z $(terraform fmt -recursive)
+      terraform fmt -recursive terraform
+      test -z $(terraform fmt -recursive terraform)
 
 options:
   logging: CLOUD_LOGGING_ONLY
