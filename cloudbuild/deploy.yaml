@@ -6,7 +6,7 @@ steps:
     kustomize edit set image us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
     kustomize edit set namespace $PROJECT_NUMBER
     kustomize build --output out/cloudrun.yaml
-    cat out/cloudrun.yaml
+
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'services', 'replace', 'kustomize/out/cloudrun.yaml']
 
