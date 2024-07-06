@@ -12,6 +12,7 @@ steps:
     #!/bin/sh
     cd kustomize && mkdir out
     kustomize edit set image chatparser=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
+    kustomize edit set namesuffix $_ENV
     kustomize edit set namespace $PROJECT_NUMBER
     kustomize build --output out/cloudrun.yaml
     sed -i.bak "s/CLOUDRUN_SA/$_CLOUD_RUN_SERVICE_ACCOUNT/g" out/cloudrun.yaml
