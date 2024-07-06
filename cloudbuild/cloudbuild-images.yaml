@@ -1,18 +1,14 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
   env: 'KUSTOMIZE_VERSION=${_KUSTOMIZE_VERSION}'
-  entrypoint: '/bin/bash'
-  args:
-  - '-eEuo'
-  - 'pipefail'
-  - '-c'
-  - |-
+  script: |
+    #!/bin/sh
     docker build -t TAG -f - . <<EOF
       FROM curlimages/curl AS build
-      ARG KUSTOMIZE_VERSION
+      ARG _KUSTOMIZE_VERSION
 
       RUN set -ex; \
-        curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz | tar xz && \
+        curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${_KUSTOMIZE_VERSION}/kustomize_v${_KUSTOMIZE_VERSION}_linux_amd64.tar.gz | tar xz && \
         chmod +x kustomize
 
       FROM alpine:3.16.0
