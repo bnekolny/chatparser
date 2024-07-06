@@ -5,12 +5,15 @@ steps:
     cd src
     gofmt -d -s .
     test -z $(gofmt -d -s .)
+  waitFor: ["-"]
+
 - name: hashicorp/terraform:1.9.0
   script: |
     #!/bin/sh
     cd terraform
     terraform fmt -recursive -diff -write=false .
     test -z $(terraform fmt -recursive -check .)
+  waitFor: ["-"]
 
 options:
   logging: CLOUD_LOGGING_ONLY
