@@ -4,20 +4,18 @@ steps:
     #!/bin/sh
     docker build -t tmp -f- . <<EOF
     FROM curlimages/curl AS build
-    ARG _KUSTOMIZE_VERSION
 
     RUN set -ex; \
-      curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${_KUSTOMIZE_VERSION}/kustomize_v${_KUSTOMIZE_VERSION}_linux_amd64.tar.gz | tar xz && \
+      curl -fL https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v5.4.2/kustomize_v5.4.2_linux_amd64.tar.gz | tar xz && \
       chmod +x kustomize
 
     FROM alpine:3.16.0
     COPY --from=downloader /downloads/kustomize /usr/local/bin/kustomize
     EOF
 
-options:
-  automapSubstitutions: true
-substitutions:
-  _KUSTOMIZE_VERSION: v5.4.2
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
 
 options:
+  automapSubstitutions: true
   logging: CLOUD_LOGGING_ONLY
