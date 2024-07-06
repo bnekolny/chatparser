@@ -91,7 +91,7 @@ resource "google_cloudbuild_trigger" "cloudbuild-images" {
   }
 
   included_files = ["cloudbuild/cloudbuild-images.yaml"]
-  filename = "cloudbuild/cloudbuild-images.yaml"
+  filename       = "cloudbuild/cloudbuild-images.yaml"
 }
 
 resource "google_cloudbuild_trigger" "build" {
