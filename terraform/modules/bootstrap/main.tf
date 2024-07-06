@@ -77,8 +77,8 @@ resource "google_project_iam_member" "cloudbuild_sa_logging" {
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value.env].email}"
 }
 
-resource "google_cloudbuild_trigger" "buildstep-images" {
-  name            = "buildstep-images"
+resource "google_cloudbuild_trigger" "cloudbuild-images" {
+  name            = "cloudbuild-images"
   service_account = google_service_account.cloudbuild_service_account["dev"].id
   location        = "us-central1"
 
@@ -90,8 +90,8 @@ resource "google_cloudbuild_trigger" "buildstep-images" {
     }
   }
 
-  included_files = ["cloudbuild/buildstep-images.yaml"]
-  filename = "cloudbuild/buildstep-images.yaml"
+  included_files = ["cloudbuild/cloudbuild-images.yaml"]
+  filename = "cloudbuild/cloudbuild-images.yaml"
 }
 
 resource "google_cloudbuild_trigger" "build" {
