@@ -2,7 +2,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   script: |
     #!/bin/sh
-    docker build -t tmp -f- . <<EOF
+    docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2 -f- . <<EOF
     FROM curlimages/curl AS build
 
     RUN set -ex; \
@@ -13,8 +13,7 @@ steps:
     COPY --from=build /home/curl_user/kustomize /usr/local/bin/kustomize
     EOF
 
-    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:$SHORT_SHA
-    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2
 
 options:
   automapSubstitutions: true
