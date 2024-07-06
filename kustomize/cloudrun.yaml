@@ -36,8 +36,8 @@ spec:
           timeoutSeconds: 240
           periodSeconds: 240
           failureThreshold: 1
-          tcpSocket:
-            port: 8080
+          httpGet:
+            path: /healthcheck
   traffic:
   - percent: 100
     latestRevision: true

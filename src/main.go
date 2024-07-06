@@ -112,7 +112,7 @@ func main() {
 	port := 8080
 
 	// Register handler functions for specific paths
-	http.HandleFunc("/heathcheck", healthcheckHandler)
+	http.HandleFunc("/healthcheck", healthcheckHandler)
 	http.HandleFunc("/chat", chatHandler)
 	http.HandleFunc("/chatFeedback", chatFeedbackHandler)
 
