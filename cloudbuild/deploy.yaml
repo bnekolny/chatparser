@@ -1,4 +1,12 @@
 steps:
+# copied from #cloudbuild/build.yaml since this image needs to exist before we can deploy
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --destination=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
+  - --context=src/
+  - --cache=true
+  - --cache-ttl=6h
+
 - name: 'us-central1-docker.pkg.dev/chatparser/docker/kustomize:v5.4.2'
   script: |
     #!/bin/sh
