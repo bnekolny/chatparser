@@ -1,12 +1,26 @@
 steps:
-- name: 'gcr.io/$PROJECT_ID/kustomize'
-  args: ['edit', 'set', 'namespace', "$PROJECT_NUMBER"]
-- name: 'gcr.io/$PROJECT_ID/kustomize'
-  args: ['edit', 'set', 'image', "us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA"]
-- name: 'gcr.io/$PROJECT_ID/kustomize'
-  args: ['build', '--output', 'out/cloudrun.yaml']
+# copied from #cloudbuild/build.yaml since this image needs to exist before we can deploy
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --destination=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
+  - --context=src/
+  - --cache=true
+  - --cache-ttl=6h
+
+- name: 'us-central1-docker.pkg.dev/chatparser/docker/kustomize:v5.4.2'
+  script: |
+    #!/bin/sh
+    cd kustomize && mkdir out
+    kustomize edit set image chatparser=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
+    kustomize edit set namesuffix $_ENV
+    kustomize edit set namespace $PROJECT_NUMBER
+    kustomize build --output out/cloudrun.yaml
+    sed -i.bak "s/CLOUDRUN_SA/$_CLOUD_RUN_SERVICE_ACCOUNT/g" out/cloudrun.yaml
+    cat out/cloudrun.yaml
+
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['run', 'services', 'replace', 'cloudbuild/cloudrun-service.yaml']
+  args: ['run', 'services', 'replace', 'kustomize/out/cloudrun.yaml']
 
 options:
+  automapSubstitutions: true
   logging: CLOUD_LOGGING_ONLY

@@ -61,11 +61,29 @@ resource "google_service_account" "cloudbuild_service_account" {
   description  = "Cloud build service account (${each.value})"
 }
 
-resource "google_project_iam_member" "cloudbuild_sa_logging" {
+resource "google_service_account" "cloudrun_service_account" {
+  for_each     = local.envs
+  account_id   = "cloudrun-sa-${each.value}"
+  display_name = "cloudrun-sa-${each.value}"
+  description  = "Cloud Run service account (${each.value})"
+}
+
+resource "google_service_account_iam_binding" "cloudbuild_cloudrun_iam" {
+  for_each           = local.envs
+  service_account_id = google_service_account.cloudrun_service_account[each.value].name
+  role               = "roles/iam.serviceAccountUser"
+
+  members = [
+    "serviceAccount:${google_service_account.cloudbuild_service_account[each.value].email}",
+  ]
+}
+
+resource "google_project_iam_member" "cloudbuild_sa" {
   for_each = {
     for pair in setproduct(toset([
       "roles/logging.logWriter",
-      "roles/artifactregistry.writer"
+      "roles/artifactregistry.writer",
+      "roles/run.developer"
       ]), local.all_configs) : "${pair[0]}-${pair[1]}" => {
       role = pair[0]
       env  = pair[1]
@@ -155,6 +173,11 @@ resource "google_cloudbuild_trigger" "deploy" {
     push {
       branch = "^${each.value}$"
     }
+  }
+
+  substitutions = {
+    _CLOUD_RUN_SERVICE_ACCOUNT = "${google_service_account.cloudrun_service_account[each.value].email}"
+    _ENV                       = each.value
   }
 
   filename = "cloudbuild/deploy.yaml"
