@@ -1,5 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
+  env: 'KUSTOMIZE_VERSION=${_KUSTOMIZE_VERSION}'
   entrypoint: '/bin/bash'
   args:
   - '-eEuo'
@@ -22,7 +23,6 @@ steps:
     docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:latest
 
 substitutions:
-  _BUILD_DIRECTORY: "./" #set to kustomize to run in a trigger
   _KUSTOMIZE_VERSION: v5.4.2
 
 options:
