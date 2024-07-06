@@ -61,11 +61,12 @@ resource "google_service_account" "cloudbuild_service_account" {
   description  = "Cloud build service account (${each.value})"
 }
 
-resource "google_project_iam_member" "cloudbuild_sa_logging" {
+resource "google_project_iam_member" "cloudbuild_sa" {
   for_each = {
     for pair in setproduct(toset([
       "roles/logging.logWriter",
-      "roles/artifactregistry.writer"
+      "roles/artifactregistry.writer",
+      "roles/run.developer"
       ]), local.all_configs) : "${pair[0]}-${pair[1]}" => {
       role = pair[0]
       env  = pair[1]
