@@ -21,7 +21,8 @@ func getFeedback(text string) (string, error) {
 	defer logger.Sync()
 
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("GEMINI_API")))
+	// TODO: on boot, throw an error if this isn't configured
+	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("GEMINI_API_KEY")))
 	if err != nil {
 		logger.Fatal(err)
 		return "", err

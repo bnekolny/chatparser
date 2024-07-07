@@ -18,6 +18,7 @@ steps:
     kustomize edit set namespace $PROJECT_NUMBER
     kustomize build --output out/cloudrun.yaml
     sed -i.bak "s/CLOUDRUN_SA/$_CLOUD_RUN_SERVICE_ACCOUNT/g" out/cloudrun.yaml
+  waitFor: ['-']
 
 - id: 'deploy cloud run'
   name: 'gcr.io/cloud-builders/gcloud'
