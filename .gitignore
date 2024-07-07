@@ -34,3 +34,5 @@ chatparser
 # terraform files
 *.terraform.lock.hcl
 .terragrunt-cache/
+
+kustomize/out
