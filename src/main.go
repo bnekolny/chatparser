@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"regexp"
 	"strings"
@@ -95,6 +96,20 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
+func emailForwardHandler(w http.ResponseWriter, r *http.Request) {
+	defer logger.Sync()
+
+	reqDump, err := httputil.DumpRequest(r, true)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	logger.Infof("REQUEST: %s", string(reqDump))
+
+	w.Write([]byte("ok"))
+}
+
 func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err := json.NewEncoder(w).Encode(map[string]string{
@@ -119,6 +134,7 @@ func main() {
 	http.HandleFunc("/healthcheck", healthcheckHandler)
 	http.HandleFunc("/chat", chatHandler)
 	http.HandleFunc("/chatFeedback", chatFeedbackHandler)
+	http.HandleFunc("/email-forward", emailForwardHandler)
 
 	logger.Infof("Starting server on port %v", port)
 	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
