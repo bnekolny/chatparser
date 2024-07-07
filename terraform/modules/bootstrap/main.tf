@@ -95,6 +95,20 @@ resource "google_project_iam_member" "cloudbuild_sa" {
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account[each.value.env].email}"
 }
 
+resource "google_project_iam_member" "cloudrun_sa" {
+  for_each = {
+    for pair in setproduct(toset([
+      "roles/secretmanager.secretAccessor"
+      ]), local.envs) : "${pair[0]}-${pair[1]}" => {
+      role = pair[0]
+      env  = pair[1]
+    }
+  }
+
+  role    = each.value.role
+  project = var.gcp_project
+  member  = "serviceAccount:${google_service_account.cloudrun_service_account[each.value.env].email}"
+}
 resource "google_cloudbuild_trigger" "cloudbuild-images" {
   name            = "cloudbuild-images"
   service_account = google_service_account.cloudbuild_service_account["dev"].id
