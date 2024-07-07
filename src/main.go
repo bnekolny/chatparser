@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -109,10 +110,13 @@ func main() {
 	defer logger.Sync()
 
 	//config stuff to extract later
-	port := 8080
+	port, found := os.LookupEnv("PORT")
+	if !found {
+		port = "8080"
+	}
 
 	// Register handler functions for specific paths
-	http.HandleFunc("/heathcheck", healthcheckHandler)
+	http.HandleFunc("/healthcheck", healthcheckHandler)
 	http.HandleFunc("/chat", chatHandler)
 	http.HandleFunc("/chatFeedback", chatFeedbackHandler)
 

@@ -35,9 +35,9 @@ spec:
         startupProbe:
           timeoutSeconds: 240
           periodSeconds: 240
-          failureThreshold: 1
-          tcpSocket:
-            port: 8080
+          failureThreshold: 10
+          httpGet:
+            path: /healthcheck
   traffic:
   - percent: 100
     latestRevision: true

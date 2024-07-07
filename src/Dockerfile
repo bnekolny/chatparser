@@ -19,6 +19,4 @@ WORKDIR /app
 
 COPY --from=builder /app/chatparser /app/chatparser
 
-# Expose port 8080 for the server
-EXPOSE 8080
 CMD ["/app/chatparser"]
