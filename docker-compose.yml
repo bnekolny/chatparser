@@ -9,7 +9,7 @@ services:
     environment:
       GO_ENV: development
       PORT: ${PORT}
-      GEMINI_API: ${GEMINI_API}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     ports:
       - "${PORT}:${PORT}"
   terraform: &terraform

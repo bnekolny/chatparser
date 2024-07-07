@@ -25,6 +25,12 @@ spec:
       containers:
       - name: chatparser
         image: chatparser
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: GEMINI_API_KEY
         ports:
         - name: http1
           containerPort: 8080
