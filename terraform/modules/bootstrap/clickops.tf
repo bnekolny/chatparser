@@ -4,5 +4,5 @@
 # https://console.cloud.google.com/security/secret-manager/
 data "google_secret_manager_secret" "GEMINI_API_KEY" {
   secret_id = "GEMINI_API_KEY"
-  project = var.gcp_project
+  project   = var.gcp_project
 }
