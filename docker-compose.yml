@@ -25,6 +25,15 @@ services:
     profiles:
       - terraform
 
+  formatter-golang:
+    image: golang:1.22
+    volumes:
+      - ./src:/go
+    entrypoint: /bin/bash
+    command: >
+      -c "gofmt -w -s ."
+    profiles:
+      - formatters
   formatter-terraform:
     <<: *terraform
     # array elements aren't inhereted from <<: *service syntax
