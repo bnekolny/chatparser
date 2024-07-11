@@ -41,6 +41,7 @@
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 1.5;
+  overflow: hidden; /* Hide scrollbars */
 }
 
 /* Placeholder styling */
@@ -76,6 +77,7 @@
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 1.5;
+  overflow-wrap: break-word; /* Prevent overflow */
 }
 
 /* Description */
@@ -90,4 +92,10 @@
   font-size: 14px;
   text-align: center;
   color: #333333;
+}
+
+/* Additional styles for markdown content */
+.result ul,
+.result ol {
+  padding-left: 20px; /* Add padding to prevent overflow */
 }

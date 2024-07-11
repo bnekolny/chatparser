@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const TextInputForm: React.FC = () => {
   const [text, setText] = useState<string>('');
   const [result, setResult] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -28,14 +29,31 @@ const TextInputForm: React.FC = () => {
     }
   };
 
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+    autoResizeTextarea();
+  };
+
+  const autoResizeTextarea = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    autoResizeTextarea();
+  }, [text]);
+
   return (
     <div className="container">
       <form onSubmit={handleSubmit} className="form">
         <textarea
+          ref={textareaRef}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={handleTextChange}
           className="textarea"
-          rows={6}
+          rows={1}
           placeholder="Enter your text here"
         ></textarea>
         <button type="submit" className="button" disabled={isLoading}>
