@@ -20,6 +20,9 @@ RUN CGO_ENABLED=0 go build -o chatparser
 FROM node:22-alpine AS staticbuilder
 WORKDIR /srv/app
 
+# typescript is a dev dependency in package.json
+RUN npm install typescript --save-dev
+
 COPY web /srv/app
 
 RUN npm run build
