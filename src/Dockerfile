@@ -25,8 +25,8 @@ COPY web /srv/app
 RUN npm install
 RUN npm run build
 
-#FROM scratch as release
-FROM alpine as release
+FROM scratch as release
+#FROM alpine as release
 WORKDIR /app 
 
 COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
