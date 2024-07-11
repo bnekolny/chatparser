@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/rs/cors"
 )
 
 // Function to read lines from a file and filter by author
@@ -86,7 +88,44 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: remove this hardcoding
-	response, err := getFeedback(strings.Join(messages["2024-06"], "\n"))
+	response, err := getFeedback(CHAT_FEEDBACK, strings.Join(messages["2024-06"], "\n"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte(response))
+}
+
+func messageVerificationHandler(w http.ResponseWriter, r *http.Request) {
+	//w.Header().Set("Content-Type", "application/json")
+
+	buffer := make([]byte, 1024)
+	maxPayloadSize := int64(1024 * 1024 * 10)
+	if r.ContentLength > maxPayloadSize {
+		http.Error(w, "Request body too large", http.StatusRequestEntityTooLarge)
+		return
+	}
+
+	bodyString := ""
+	reader := io.LimitReader(r.Body, maxPayloadSize) // Optional: limit reading to specified size
+	for {
+		n, err := reader.Read(buffer)
+		if err != nil {
+			if err == io.EOF {
+				if n > 0 { // Check if any bytes were read
+					bodyString += string(buffer[:n])
+				}
+				break
+			}
+			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+			return
+		}
+		bodyString += string(buffer[:n])
+	}
+	defer r.Body.Close()
+
+	response, err := getFeedback(MESSAGE_FEEDBACK_VERIFICATION, string(bodyString))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -115,13 +154,19 @@ func main() {
 		port = "8080"
 	}
 
+	mux := http.NewServeMux()
 	// Register handler functions for specific paths
-	http.HandleFunc("/healthcheck", healthcheckHandler)
-	http.HandleFunc("/chat", chatHandler)
-	http.HandleFunc("/chatFeedback", chatFeedbackHandler)
+	mux.HandleFunc("/healthcheck", healthcheckHandler)
+	mux.Handle("/static/", http.StripPrefix("/", http.FileServer(http.Dir("./"))))
+	mux.HandleFunc("/chat", chatHandler)
+	mux.HandleFunc("/chatFeedback", chatFeedbackHandler)
+	mux.HandleFunc("/message/verification", messageVerificationHandler)
+
+	corsOpts := cors.AllowAll()
+	handler := corsOpts.Handler(mux)
 
 	logger.Infof("Starting server on port %v", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", port), handler)
 	if err != nil {
 		logger.Fatal(err)
 	}

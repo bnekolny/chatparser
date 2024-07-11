@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine AS builder
+FROM golang:1.22-alpine AS gobuilder
 WORKDIR /app
 
 # Install fresh for reloading
@@ -17,10 +17,19 @@ RUN apk --no-cache add ca-certificates
 # Build the application with CGO disabled
 RUN CGO_ENABLED=0 go build -o chatparser
 
-FROM scratch
+FROM node:22-alpine AS staticbuilder
+WORKDIR /srv/app
+
+COPY web /srv/app
+
+RUN npm run build
+
+#FROM scratch as release
+FROM alpine as release
 WORKDIR /app 
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /app/chatparser /app/chatparser
+COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=gobuilder /app/chatparser /app/chatparser
+COPY --from=staticbuilder /srv/app/dist /app/static
 
 CMD ["/app/chatparser"]

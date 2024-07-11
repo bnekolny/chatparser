@@ -7,17 +7,38 @@ import (
 	"os"
 )
 
-// https://cvc.cervantes.es/ensenanza/biblioteca_ele/marco/cvc_mer.pdf p43
-var promptPretext string = `
+type FeedbackType int
+
+const (
+	UNKNOWN FeedbackType = iota
+	CHAT_FEEDBACK
+	MESSAGE_FEEDBACK_VERIFICATION
+	MESSAGE_FEEDBACK_LEARNING
+)
+
+var FeedbackTypeMap = map[FeedbackType]string{
+	// https://cvc.cervantes.es/ensenanza/biblioteca_ele/marco/cvc_mer.pdf p43
+	CHAT_FEEDBACK: `
 The below text was written across WhatsApp message by someone who is learning a new language. I'll give you a bit more information about them and their journey, but what I'd like you to do is read the text, extremely breifly summarize how they're doing with the language, give an approximate level rating within the A1,A2,B1,B2,C1,C2 rating system as well as the amount of content you read to provide this rating, and finally, provide a suggestion of something to focus on related to the provided text (such as a type of repeat error, or a way to improve the gramatical abilities. Please give up to five examples if possible.
 
 The language being learned is Spanish, and this person is a level B2.
 
 Here is the text from the WhatsApp messages, please be sure to only grade the Spanish writing:
-`
+	`,
+	MESSAGE_FEEDBACK_VERIFICATION: `
+I'm still learning Spanish, so I make quite a lot of errors. I'm about to send this message, but I'd like your feedback before I do send.
+
+Can you please response to these prompts?
+Approve or suggest edits for this message based on whether or not it seems appropriate, you may lack context and need to work with that.
+
+Translate the message into English for verification
+
+Give any critical feedback, whether that be gramatical or whatever kind. Just don't ask for more context. Also, suggest one thing to make it better and how important that chagne is
+	`,
+}
 
 // func getFeedback(ctx context.Context, text string) string {
-func getFeedback(text string) (string, error) {
+func getFeedback(feedbackType FeedbackType, text string) (string, error) {
 	defer logger.Sync()
 
 	ctx := context.Background()
@@ -30,7 +51,7 @@ func getFeedback(text string) (string, error) {
 	defer client.Close()
 
 	model := client.GenerativeModel("gemini-1.5-flash")
-	resp, err := model.GenerateContent(ctx, genai.Text(promptPretext+"\n"+text))
+	resp, err := model.GenerateContent(ctx, genai.Text(FeedbackTypeMap[feedbackType]+"\n"+text))
 	if err != nil {
 		logger.Fatal(err)
 		return "", err
