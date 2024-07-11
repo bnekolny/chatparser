@@ -22,6 +22,7 @@ WORKDIR /srv/app
 
 COPY web /srv/app
 
+RUN npm install
 RUN npm run build
 
 #FROM scratch as release
