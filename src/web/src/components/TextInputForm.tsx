@@ -12,7 +12,7 @@ const TextInputForm: React.FC = () => {
 
     try {
       // TODO: make this dynamic for the environment
-      const response = await fetch('http://lvh.me:8080/message/verification', {
+      const response = await fetch('/message/verification', {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain',
