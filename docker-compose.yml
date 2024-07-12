@@ -5,7 +5,6 @@ services:
       target: gobuilder
     volumes:
       - ./src:/app  # Mount current directory as /app in the container (for code changes)
-      - ./src/web/dist:/static
     command: ["fresh"]
     environment:
       GO_ENV: development
@@ -16,14 +15,18 @@ services:
   vite:
     image: node:22-alpine
     entrypoint: ""
+    environment:
+      VITE_DEV_HOST: 'https://local.chatparser.xyz'
     ports:
-      - 8000:8000
+      - 443:443
     working_dir: /srv/app
     volumes:
-      - type: bind
-        source: src/web
-        target: /srv/app
+      - ./src/web:/srv/app
+      - ./src/.cert:/srv/.cert
     command: /bin/sh -c "npm run dev"
+    depends_on:
+      - chatparser
+
   terraform: &terraform
     build: terraform
     volumes:
@@ -56,15 +59,3 @@ services:
       -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
     profiles:
       - formatters
-
-  chatparser-prod:
-    build:
-      context: src
-      target: release
-    environment:
-      PORT: ${PORT}
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
-    ports:
-      - "${PORT}:${PORT}"
-    profiles:
-      - prodtest
