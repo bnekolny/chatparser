@@ -29,8 +29,11 @@ FROM scratch as release
 #FROM alpine as release
 WORKDIR /app 
 
+
 COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=gobuilder /app/chatparser /app/chatparser
+# store things as brotli overwriting original because Vite doesn't reference the brotli files directly
 COPY --from=staticbuilder /srv/app/dist /app/static
+RUN for f in ./static/assets/*.br; do mv -f "$f" "${f%.br}"; done
 
 CMD ["/app/chatparser"]
