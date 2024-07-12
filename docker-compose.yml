@@ -37,16 +37,6 @@ services:
     profiles:
       - terraform
 
-  chatparser-prod:
-    build:
-      context: src
-      target: release
-    environment:
-      PORT: ${PORT}
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
-    ports:
-      - "${PORT}:${PORT}"
-
   formatter-golang:
     image: golang:1.22
     volumes:
@@ -66,3 +56,15 @@ services:
       -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
     profiles:
       - formatters
+
+  chatparser-prod:
+    build:
+      context: src
+      target: release
+    environment:
+      PORT: ${PORT}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "${PORT}:${PORT}"
+    profiles:
+      - prodtest
