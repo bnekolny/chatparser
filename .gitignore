@@ -58,3 +58,5 @@ chatparser
 .terragrunt-cache/
 
 kustomize/out
+
+src/.cert/

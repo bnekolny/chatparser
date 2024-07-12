@@ -1,11 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import viteCompression from 'vite-plugin-compression';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
   return {
     base: '/static/',
-    plugins: [react()],
+    plugins: [
+      react(),
+      viteCompression({algorithm: 'brotliCompress'}),
+    ],
     server: {
       https: {
         key: '../.cert/key.pem',
@@ -20,6 +24,9 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
           //rewrite: (path) => path.replace(/^\/api/, ''),
         },
       }
+    },
+    build: {
+      sourcemap: false
     }
   }
 })

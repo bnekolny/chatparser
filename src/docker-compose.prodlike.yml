@@ -1,0 +1,35 @@
+services:
+  chatparser-prod:
+    build:
+      context: .
+      target: release
+    environment:
+      PORT: ${PORT}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "${PORT}:${PORT}"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    restart: always
+    volumes:
+      - .certs:/etc/nginx/ssl
+    tmpfs:
+      - /etc/nginx/conf.d/:ro
+    entrypoint:
+      - nginx
+      - -c
+      - |
+          server {
+            listen 443 ssl http2;
+            listen [::]:443 ssl http2;
+            server_name lvh.me;
+
+            ssl_certificate /etc/nginx/ssl/your-cert.pem;
+            ssl_certificate_key /etc/nginx/ssl/your-cert-key.pem;
+
+            location / {
+              # ... proxy configurations to your application container
+            }
+          }
