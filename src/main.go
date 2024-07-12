@@ -10,8 +10,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
-	"github.com/rs/cors"
 )
 
 // Function to read lines from a file and filter by author
@@ -158,15 +156,12 @@ func main() {
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
 	mux.Handle("/static/", http.StripPrefix("/", http.FileServer(http.Dir("./"))))
-	mux.HandleFunc("/chat", chatHandler)
-	mux.HandleFunc("/chatFeedback", chatFeedbackHandler)
-	mux.HandleFunc("/message/verification", messageVerificationHandler)
-
-	corsOpts := cors.AllowAll()
-	handler := corsOpts.Handler(mux)
+	mux.HandleFunc("/api/chat", chatHandler)
+	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
+	mux.HandleFunc("/api/message/verification", messageVerificationHandler)
 
 	logger.Infof("Starting server on port %v", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%v", port), handler)
+	err := http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
 	if err != nil {
 		logger.Fatal(err)
 	}
