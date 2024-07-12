@@ -2,9 +2,10 @@ services:
   chatparser:
     build:
       context: src
-      target: builder
+      target: gobuilder
     volumes:
       - ./src:/app  # Mount current directory as /app in the container (for code changes)
+      - ./src/web/dist:/static
     command: ["fresh"]
     environment:
       GO_ENV: development
@@ -12,6 +13,17 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
     ports:
       - "${PORT}:${PORT}"
+  vite:
+    image: node:22-alpine
+    entrypoint: ""
+    ports:
+      - 8000:8000
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: src/web
+        target: /srv/app
+    command: /bin/sh -c "npm run dev"
   terraform: &terraform
     build: terraform
     volumes:
@@ -24,6 +36,16 @@ services:
     # prevent this from running with `docker-compose up`
     profiles:
       - terraform
+
+  chatparser-prod:
+    build:
+      context: src
+      target: release
+    environment:
+      PORT: ${PORT}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "${PORT}:${PORT}"
 
   formatter-golang:
     image: golang:1.22
