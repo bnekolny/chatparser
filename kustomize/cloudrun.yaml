@@ -39,8 +39,8 @@ spec:
             cpu: 1000m
             memory: 512Mi
         startupProbe:
-          timeoutSeconds: 10
-          periodSeconds: 10
+          timeoutSeconds: 1
+          periodSeconds: 1
           failureThreshold: 10
           httpGet:
             path: /healthcheck
