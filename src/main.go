@@ -163,34 +163,14 @@ func main() {
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
-	mux.Handle("/statics/", http.StripPrefix("/", http.FileServer(http.Dir("./"))))
-	subDir, err := fs.Sub(staticFS, "static")
+	staticAssets, err := fs.Sub(staticFS, "static")
 	if err != nil {
 		logger.Fatal(err)
 	}
-	mux.Handle("/assets/", http.StripPrefix("/", statigz.FileServer(staticFS, brotli.AddEncoding)))
-	mux.Handle("/app/", http.StripPrefix("/app/", statigz.FileServer(subDir.(fs.ReadDirFS), brotli.AddEncoding)))
-	//mux.Handle("/staticz/", http.StripPrefix("/", statigz.FileServer(subDir.(fs.ReadDirFS), brotli.AddEncoding, statigz.OnNotFound(func(w http.ResponseWriter, r *http.Request) {
-	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(subDir.(fs.ReadDirFS), brotli.AddEncoding)))
-    //statigz.OnNotFound(func(w http.ResponseWriter, r *http.Request) {
-	//	logger.Info(r.URL.String() + "|404")
-	//	w.WriteHeader(http.StatusNotFound)
-	//}),
-	//)))
+	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/message/verification", messageVerificationHandler)
-
-	mux.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
-		files, err := fs.ReadDir(subDir, "assets")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		for _, file := range files {
-			fmt.Fprintf(w, "%s\n", file.Name())
-		}
-	})
 
 	logger.Infof("Starting server on port %v", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
