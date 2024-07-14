@@ -1,39 +1,33 @@
+FROM node:22-alpine AS staticbuilder
+WORKDIR /srv/app
+COPY web /srv/app
+RUN npm install
+RUN npm run build
+
 FROM golang:1.22-alpine AS gobuilder
 WORKDIR /app
-
 # Install fresh for reloading
 RUN go install github.com/pilu/fresh@latest
+# put this lower so it can cache better
+RUN apk --no-cache add ca-certificates
+
+# This has to go here, not in the final container because the static embed is loaded at compile time
+COPY --from=staticbuilder /srv/app/dist /app/static
 
 COPY go.mod .
 # this happens during build, but separating it out allows it to cache
 RUN go mod download
-
 # Copy the rest of your application code
 COPY . .
-
-# put this lower so it can cache better
-RUN apk --no-cache add ca-certificates
-
 # Build the application with CGO disabled
 RUN CGO_ENABLED=0 go build -o chatparser
 
-FROM node:22-alpine AS staticbuilder
-WORKDIR /srv/app
-
-COPY web /srv/app
-
-RUN npm install
-RUN npm run build
-# store things as brotli overwriting original because Vite doesn't reference the brotli files directly
-# has to go in this step because sh doesn't exist in the scratch container
-RUN for f in ./dist/assets/*.br; do mv -f "$f" "${f%.br}"; done
-
 FROM scratch as release
+# Not super helpful without the COPY below, because it's not needed at this stage
 #FROM alpine as release
 WORKDIR /app 
-
 COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=gobuilder /app/chatparser /app/chatparser
-COPY --from=staticbuilder /srv/app/dist /app/static
-
+# Can't go here with //go:embed static/* as the embed is loaded at build time
+#COPY --from=staticbuilder /srv/app/dist /app/static
 CMD ["/app/chatparser"]
