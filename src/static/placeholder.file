@@ -1,0 +1,4 @@
+this file exists because the embed line
+//go:embed static/*
+
+in the code requires a file to exist, and tests will fail without it

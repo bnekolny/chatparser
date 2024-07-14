@@ -2,16 +2,19 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/fs"
 	"net/http"
 	"os"
 	"regexp"
 	"strings"
 	"time"
 
-	"github.com/rs/cors"
+	"github.com/vearutop/statigz"
+	"github.com/vearutop/statigz/brotli"
 )
 
 // Function to read lines from a file and filter by author
@@ -145,6 +148,9 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//go:embed static/*
+var staticFS embed.FS
+
 func main() {
 	defer logger.Sync()
 
@@ -157,16 +163,17 @@ func main() {
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
-	mux.Handle("/static/", http.StripPrefix("/", http.FileServer(http.Dir("./"))))
-	mux.HandleFunc("/chat", chatHandler)
-	mux.HandleFunc("/chatFeedback", chatFeedbackHandler)
-	mux.HandleFunc("/message/verification", messageVerificationHandler)
-
-	corsOpts := cors.AllowAll()
-	handler := corsOpts.Handler(mux)
+	staticAssets, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		logger.Fatal(err)
+	}
+	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
+	mux.HandleFunc("/api/chat", chatHandler)
+	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
+	mux.HandleFunc("/api/message/verification", messageVerificationHandler)
 
 	logger.Infof("Starting server on port %v", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%v", port), handler)
+	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
 	if err != nil {
 		logger.Fatal(err)
 	}

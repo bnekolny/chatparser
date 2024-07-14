@@ -1,0 +1,39 @@
+services:
+  chatparser-prod:
+    build:
+      context: .
+      target: release
+    environment:
+      PORT: ${PORT}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "${PORT}:${PORT}"
+  nginx:
+    image: nginx:latest
+    ports:
+      - "443:443"
+    restart: always
+    volumes:
+      - .cert:/etc/nginx/ssl
+    configs:
+      - source: nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+    depends_on:
+      - chatparser-prod
+configs:
+  nginx.conf:
+    content: |
+      server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name local.chatparser.xyz;
+
+        ssl_certificate /etc/nginx/ssl/cert.pem;
+        ssl_certificate_key /etc/nginx/ssl/key.pem;
+
+        location / {
+          proxy_pass http://chatparser-prod:8080$uri;
+        }
+      }
+
+      http2 on;
