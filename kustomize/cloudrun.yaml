@@ -38,12 +38,14 @@ spec:
           limits:
             cpu: 1000m
             memory: 512Mi
-        startupProbe:
-          timeoutSeconds: 10
-          periodSeconds: 10
-          failureThreshold: 10
-          httpGet:
-            path: /healthcheck
+        # comenting this out for now because the startup latency is 1.12s
+        # this displays a 1sec imposed delay from the first failed healthcheck and the retry
+        #startupProbe:
+        #  timeoutSeconds: 1
+        #  periodSeconds: 1
+        #  failureThreshold: 1
+        #  httpGet:
+        #    path: /healthcheck
   traffic:
   - percent: 100
     latestRevision: true
