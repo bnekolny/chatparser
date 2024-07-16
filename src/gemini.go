@@ -13,7 +13,7 @@ const (
 	UNKNOWN FeedbackType = iota
 	CHAT_FEEDBACK
 	MESSAGE_FEEDBACK_VERIFICATION
-	MESSAGE_FEEDBACK_LEARNING
+	MESSAGE_FEEDBACK_IMPROVEMENT
 )
 
 var FeedbackTypeMap = map[FeedbackType]string{
@@ -33,8 +33,25 @@ Approve or suggest edits for this message based on whether or not it seems appro
 
 Translate the message into English for verification
 
-Give any critical feedback, whether that be gramatical or whatever kind. Just don't ask for more context. Also, suggest one thing to make it better and how important that chagne is
+Give any critical feedback, whether that be gramatical or whatever kind. Just don't ask for more context. Also, suggest one thing to make it better and how important that change is
+
+Here's the message:
 	`,
+	MESSAGE_FEEDBACK_IMPROVEMENT: `
+I'm actively learning Spanish, and while doing that, I attempt to push my abilities. I'm trying to compose a message which is utilizing a higher level of Spanish than I'm fully comfortable with and I'd like your help to both learn and get my message written effectively!
+
+Can you please respond to these prompts?
+Of the various forms of grammar in this message which gramatical construct is the most advanced?
+- let me know if I'm utilizing it appropriately
+- please explain the gramatical rules specific to the phrase I'm constructing, not something too generic
+- let me know what changes would be needed if not
+
+Translate the message into English to make sure it fits what I was trying to say.
+
+Give any other feedback, whether that me gramatical or whatever kind. Just don't ask for more context.
+
+Here's the message:
+    `,
 }
 
 // func getFeedback(ctx context.Context, text string) string {
