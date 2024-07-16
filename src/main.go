@@ -100,41 +100,43 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
-func messageVerificationHandler(w http.ResponseWriter, r *http.Request) {
-	//w.Header().Set("Content-Type", "application/json")
+func messageHandler(messageType FeedbackType) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		//w.Header().Set("Content-Type", "application/json")
 
-	buffer := make([]byte, 1024)
-	maxPayloadSize := int64(1024 * 1024 * 10)
-	if r.ContentLength > maxPayloadSize {
-		http.Error(w, "Request body too large", http.StatusRequestEntityTooLarge)
-		return
-	}
-
-	bodyString := ""
-	reader := io.LimitReader(r.Body, maxPayloadSize) // Optional: limit reading to specified size
-	for {
-		n, err := reader.Read(buffer)
-		if err != nil {
-			if err == io.EOF {
-				if n > 0 { // Check if any bytes were read
-					bodyString += string(buffer[:n])
-				}
-				break
-			}
-			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		buffer := make([]byte, 1024)
+		maxPayloadSize := int64(1024 * 1024 * 10)
+		if r.ContentLength > maxPayloadSize {
+			http.Error(w, "Request body too large", http.StatusRequestEntityTooLarge)
 			return
 		}
-		bodyString += string(buffer[:n])
-	}
-	defer r.Body.Close()
 
-	response, err := getFeedback(MESSAGE_FEEDBACK_VERIFICATION, string(bodyString))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+		bodyString := ""
+		reader := io.LimitReader(r.Body, maxPayloadSize) // Optional: limit reading to specified size
+		for {
+			n, err := reader.Read(buffer)
+			if err != nil {
+				if err == io.EOF {
+					if n > 0 { // Check if any bytes were read
+						bodyString += string(buffer[:n])
+					}
+					break
+				}
+				http.Error(w, "Error reading request body", http.StatusInternalServerError)
+				return
+			}
+			bodyString += string(buffer[:n])
+		}
+		defer r.Body.Close()
 
-	w.Write([]byte(response))
+		response, err := getFeedback(messageType, string(bodyString))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write([]byte(response))
+	}
 }
 
 func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
@@ -170,7 +172,8 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
-	mux.HandleFunc("/api/message/verification", messageVerificationHandler)
+	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
+	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
 
 	logger.Infof("Starting server on port %v", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)

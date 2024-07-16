@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Align content at the top */
+  justify-content: flex-start;
   min-height: 100vh;
   background-color: #f0f0f0;
   padding: 20px;
@@ -80,18 +80,80 @@
   overflow-wrap: break-word; /* Prevent overflow */
 }
 
-/* Description */
-.description {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #ffffff;
-  border-radius: 4px;
+/* Mode selector container */
+.mode-and-description {
   width: 100%;
   max-width: 500px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Mode selector */
+.mode-selector {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.mode-selector label {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  padding-left: 30px;
+}
+
+.mode-selector input[type="radio"] {
+  display: none;
+}
+
+.mode-selector label::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  vertical-align: middle;
+  background-color: #ffffff;
+  transition: background-color 0.3s, border-color 0.3s;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mode-selector input[type="radio"]:checked + label::before {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.mode-selector input[type="radio"]:checked + label::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Description */
+.description {
+  margin-top: 10px;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  text-align: center;
   color: #333333;
+  text-align: center;
 }
 
 /* Additional styles for markdown content */
