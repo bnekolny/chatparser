@@ -114,17 +114,23 @@ const TextInputForm: React.FC = () => {
             <button type="button" className="button copy-button" onClick={() => navigator.clipboard.writeText(text)} style={{ width: '48%', backgroundColor: '#81C784'}}>
               Copy
             </button>
-            <button type="button" className="button clear-button" onClick={() => {
+            <button
+              type="button"
+              className="button clear-button"
+              onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                 setText(revisedMessage);
-                handleSubmit(event);
+                handleSubmit(event as unknown as React.FormEvent<Element>);
                 // scroll to top with new submission
                 window.scrollTo({
                   top: 0,
                   left: 0,
                   behavior: 'auto',
                 });
-                }}  disabled={isLoading} style={{ width: '48%'}}>
-                {isLoading ? 'Loading...' : 'Submit Revised Message'}
+              }}
+              disabled={isLoading}
+              style={{ width: '48%' }}
+            >
+              {isLoading ? 'Loading...' : 'Submit Revised Message'}
             </button>
           </div>
         </div>
