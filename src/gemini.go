@@ -35,6 +35,8 @@ Translate the message into English for verification
 
 Give any critical feedback, whether that be gramatical or whatever kind. Just don't ask for more context. Also, suggest one thing to make it better and how important that change is
 
+Finally, if you suggest that the message change and have a proposed message please make that the last item in the response and prefix it with the words "Revised Message:"
+
 Here's the message:
 	`,
 	MESSAGE_FEEDBACK_IMPROVEMENT: `
