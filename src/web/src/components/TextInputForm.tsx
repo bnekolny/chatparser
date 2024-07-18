@@ -62,6 +62,14 @@ const TextInputForm: React.FC = () => {
         <button type="submit" className="button" disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Submit'}
         </button>
+        <div className="button-container" style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px' }}>
+          <button type="button" className="button copy-button" onClick={() => navigator.clipboard.writeText(text)} style={{ width: '48%', backgroundColor: '#C8E6C9'}}>
+            Copy
+          </button>
+          <button type="button" className="button clear-button" onClick={() => setText('')} style={{ width: '48%', backgroundColor: '#FFCDD2' }}>
+            Clear
+          </button>
+        </div>
       </form>
       {result && (
         <div className="result">
