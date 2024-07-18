@@ -1,4 +1,6 @@
-FROM node:22-alpine AS staticbuilder
+FROM node:22-alpine3.18 AS staticbuilder
+# was node:22-alpine, but alpine broke things
+# https://github.com/docker-library/official-images/issues/16830
 WORKDIR /srv/app
 COPY web/package*.json ./
 RUN npm ci
