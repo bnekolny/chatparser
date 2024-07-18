@@ -51,6 +51,12 @@
   font-size: 16px;
 }
 
+.button-container {
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Responsive button */
 .button {
   width: 100%;
@@ -65,12 +71,16 @@
   font-weight: 500;
 }
 
+.button:disabled {
+  background-color: #BBDEFB;
+}
+
 /* Responsive result */
 .result {
   margin-top: 20px;
-  padding: 10px;
+  padding: 20px;
   background-color: #e0e0e0;
-  border-radius: 4px;
+  border-radius: 8px;
   width: 100%;
   max-width: 500px;
   word-break: break-word;

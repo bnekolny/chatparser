@@ -2,12 +2,21 @@ import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 const TextInputForm: React.FC = () => {
+  const [previousText, setPreviousText] = useState<string>('');
   const [text, setText] = useState<string>('');
   const [result, setResult] = useState<string>('');
+  const [revisedMessage, setRevisedMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [mode, setMode] = useState<string>('verify');
 
+  const hasNewText = () : boolean => {
+    console.log(`previousText: ${previousText}`)
+    return text !== previousText;
+  }
+
   const handleSubmit = async (event: React.FormEvent) => {
+    // Store the submitted text
+    setPreviousText(text);
     event.preventDefault();
     setIsLoading(true);
 
@@ -19,13 +28,32 @@ const TextInputForm: React.FC = () => {
         },
         body: text,
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.text();
-      setResult(data);
+      const [resultWithoutRevision, revisedMessage] = parseResponse(data);
+
+      console.log(`resultWithoutRevision: ${resultWithoutRevision}`)
+      console.log(`revisedMessage: ${revisedMessage}`);
+      setResult(resultWithoutRevision);
+      setRevisedMessage(revisedMessage);
     } catch (error) {
       console.error('Error submitting text:', error);
+      setResult('An error occurred while processing your request.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const parseResponse = (data: string): [string, string] => {
+    const aiResponseRevisedMessageRegex = /[\*]*Revised Message:[\*]*([\s\S]*)/;
+    const revisedMessageMatch = data.match(aiResponseRevisedMessageRegex);
+    const revisedMessage = revisedMessageMatch ? revisedMessageMatch[1].trim() : '';
+    const resultWithoutRevision = data.replace(aiResponseRevisedMessageRegex, '').trim();
+    return [resultWithoutRevision, revisedMessage];
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,14 +87,14 @@ const TextInputForm: React.FC = () => {
             target.style.height = target.scrollHeight + 'px'
           }}
         ></textarea>
-        <button type="submit" className="button" disabled={isLoading}>
+        <button type="submit" className="button" disabled={!hasNewText() || isLoading}>
           {isLoading ? 'Loading...' : 'Submit'}
         </button>
-        <div className="button-container" style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px' }}>
-          <button type="button" className="button copy-button" onClick={() => navigator.clipboard.writeText(text)} style={{ width: '48%', backgroundColor: '#C8E6C9'}}>
+        <div className="button-container">
+          <button type="button" className="button copy-button" onClick={() => navigator.clipboard.writeText(text)} style={{ width: '48%', backgroundColor: '#81C784'}}>
             Copy
           </button>
-          <button type="button" className="button clear-button" onClick={() => setText('')} style={{ width: '48%', backgroundColor: '#FFCDD2' }}>
+          <button type="button" className="button clear-button" onClick={() => setText('')} style={{ width: '48%', backgroundColor: '#E57373' }}>
             Clear
           </button>
         </div>
@@ -74,6 +102,31 @@ const TextInputForm: React.FC = () => {
       {result && (
         <div className="result">
           <ReactMarkdown>{result}</ReactMarkdown>
+        </div>
+      )}
+      {revisedMessage && (
+        <div className="result">
+          <div className="result-content">
+            <ReactMarkdown>**Revised Message:**</ReactMarkdown>
+            <ReactMarkdown>{revisedMessage}</ReactMarkdown>
+          </div>
+          <div className="button-container">
+            <button type="button" className="button copy-button" onClick={() => navigator.clipboard.writeText(text)} style={{ width: '48%', backgroundColor: '#81C784'}}>
+              Copy
+            </button>
+            <button type="button" className="button clear-button" onClick={() => {
+                setText(revisedMessage);
+                handleSubmit(event);
+                // scroll to top with new submission
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: 'auto',
+                });
+                }}  disabled={isLoading} style={{ width: '48%'}}>
+                {isLoading ? 'Loading...' : 'Submit Revised Message'}
+            </button>
+          </div>
         </div>
       )}
       <div className="mode-and-description">
