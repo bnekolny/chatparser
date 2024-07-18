@@ -52,6 +52,11 @@ const TextInputForm: React.FC = () => {
           className="textarea"
           rows={1}
           placeholder="Enter your text here"
+          style={{ resize: 'vertical', overflow: 'hidden' }}
+          onInput={(e) => {
+            e.target.style.height = 'auto'
+            e.target.style.height = e.target.scrollHeight + 'px'
+          }}
         ></textarea>
         <button type="submit" className="button" disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Submit'}
