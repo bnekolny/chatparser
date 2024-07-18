@@ -1,4 +1,11 @@
 steps:
+- name: node:22-alpine3.18
+  script: |
+    #!/bin/sh
+    cd src/web
+    npm ci
+    tsc
+
 - name: golang:1.22
   script: |
     #!/bin/sh
