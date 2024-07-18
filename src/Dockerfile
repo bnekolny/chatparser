@@ -1,7 +1,8 @@
 FROM node:22-alpine AS staticbuilder
 WORKDIR /srv/app
 COPY web /srv/app
-RUN npm install
+RUN npm install \
+    && npm install typescript -g
 RUN npm run build
 
 FROM golang:1.22-alpine AS gobuilder
