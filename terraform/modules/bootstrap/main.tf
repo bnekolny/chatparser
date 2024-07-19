@@ -13,7 +13,7 @@ locals {
   # this could be a var
   envs = toset([
     "test",
-    #"prod",
+    "prod",
   ])
   all_configs = toset(concat(tolist(local.envs), ["dev"]))
 }
@@ -185,7 +185,7 @@ resource "google_cloudbuild_trigger" "deploy" {
 
     #repository = google_cloudbuildv2_repository.my-repository.id
     push {
-      branch = "^${each.value}$"
+      branch = each.value == "prod" ? "^main$" : "^${each.value}$"
     }
   }
 
