@@ -4,6 +4,7 @@ steps:
     #!/bin/sh
     cd src/web
     npm ci
+    npm install typescript
     tsc
 
 - name: golang:1.22
