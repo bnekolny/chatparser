@@ -5,7 +5,6 @@ services:
       target: gobuilder
     volumes:
       - ./src:/app  # Mount current directory as /app in the container (for code changes)
-      - ./src/web/dist:/app/static
     command: ["fresh"]
     environment:
       GO_ENV: development
