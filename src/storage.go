@@ -97,6 +97,9 @@ func write(userId string, objectType ObjectType, text string) (err error) {
 
 	// 3. write object
 	client, err := getStorageClient()
+	if err != nil {
+		return err
+	}
 	storageObj := client.Bucket(bucket).Object(storagePath)
 	w := storageObj.NewWriter(ctx)
 	if _, err := w.Write([]byte(compressed.Bytes())); err != nil {
