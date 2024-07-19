@@ -136,7 +136,16 @@ func messageHandler(messageType FeedbackType) http.HandlerFunc {
 		}
 
 		err = write(hardcodedUserId, Message, bodyString)
-		//text, err := read(hardcodedUserId, Message)
+		if err != nil {
+			logger.Error("write error")
+			logger.Error(err)
+		}
+		text, err := read(hardcodedUserId, Message)
+		if err != nil {
+			logger.Error("read error")
+			logger.Error(err)
+		}
+		logger.Info(text)
 
 		w.Write([]byte(response))
 	}

@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
+	"compress/gzip"
 	"context"
-	"io/ioutil"
+	"io"
 
 	"cloud.google.com/go/storage"
 )
@@ -41,24 +43,40 @@ func getStorageClient() (*storage.Client, error) {
 }
 
 func getObjectRef(userId string, objectType ObjectType) (string, string) {
-	return "<bucket>", "<userId>/<object>.<ext>"
+	return "bucket", userId + "object.gz"
 }
 
 func write(userId string, objectType ObjectType, text string) (err error) {
 	ctx := context.Background()
+	logger.Info(text)
 
 	// 1. construct path to object `getObjectRef`
 	bucket, storagePath := getObjectRef(userId, objectType)
+
 	// 2. compress text
-	compressedObject := text
+	var compressed bytes.Buffer
+	writer := gzip.NewWriter(&compressed)
+	defer writer.Close()
+
+	writer.Write([]byte(text))
+	err = writer.Flush()
+	if err != nil {
+		return err
+	}
+	compressedObject := compressed.Bytes()
+
+	logger.Info("Length of compressed data:", len(compressedObject))
+
 	// 3. write object
 	client, err := getStorageClient()
 	storageObj := client.Bucket(bucket).Object(storagePath)
 	w := storageObj.NewWriter(ctx)
-	if _, err := w.Write([]byte(compressedObject)); err != nil {
+	if _, err := w.Write(compressedObject); err != nil {
+		logger.Info("write error")
 		return err
 	}
 	if err := w.Close(); err != nil {
+		logger.Info("writter close error")
 		return err
 	}
 
@@ -82,15 +100,23 @@ func read(userId string, objectType ObjectType) (text string, err error) {
 	}
 	defer readerObj.Close()
 
-	textBytes, err := ioutil.ReadAll(readerObj)
-	readerObj.Close()
+	// 3. decompress object
+	var decompressed bytes.Buffer
+	reader, err := gzip.NewReader(readerObj)
 	if err != nil {
 		return text, err
 	}
+	defer reader.Close()
 
-	text = string(textBytes)
+	_, err = io.Copy(&decompressed, reader)
+	if err != nil {
+		logger.Info("read error")
+		logger.Info(err)
+		return text, err
+	}
 
-	// 3. decompress object
+	text = string(decompressed.Bytes())
+	logger.Info("decompressed file: " + text)
 
 	return text, err
 }
