@@ -188,6 +188,8 @@ func main() {
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
 	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
+	// Send requests to the root domain to something visible
+	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Infof("Starting server on port %v", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
