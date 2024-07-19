@@ -11,8 +11,11 @@ services:
       GO_ENV: development
       PORT: ${PORT}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      STORAGE_EMULATOR_HOST: gcsemulator:8888
     ports:
       - "${PORT}:${PORT}"
+    depends_on:
+      - gcsemulator
   vite:
     image: node:22-alpine
     entrypoint: ""
@@ -27,6 +30,18 @@ services:
     command: /bin/sh -c "npm run dev"
     depends_on:
       - chatparser
+  gcsemulator:
+    image: golang:alpine
+    ports:
+      - 8888:8888
+    volumes:
+      - ./src/tmp/local-gcs:/go/var/storage
+    command:
+      - /bin/sh
+      - -c
+      - |
+        go install github.com/fullstorydev/emulators/storage/...@latest
+        gcsemulator -port 8888 -host 0.0.0.0 -dir var/storage
 
   terraform: &terraform
     build: terraform
