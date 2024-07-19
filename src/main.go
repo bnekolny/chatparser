@@ -135,6 +135,9 @@ func messageHandler(messageType FeedbackType) http.HandlerFunc {
 			return
 		}
 
+		err = write(hardcodedUserId, Message, bodyString)
+		//text, err := read(hardcodedUserId, Message)
+
 		w.Write([]byte(response))
 	}
 }
@@ -152,6 +155,8 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 
 //go:embed static/*
 var staticFS embed.FS
+
+var hardcodedUserId string = "test"
 
 func main() {
 	defer logger.Sync()

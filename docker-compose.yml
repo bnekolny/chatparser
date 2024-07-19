@@ -34,12 +34,14 @@ services:
     image: golang:alpine
     ports:
       - 8888:8888
+    volumes:
+      - ./src/tmp/local-gcs:/go/var/storage
     command:
       - /bin/sh
       - -c
       - |
         go install github.com/fullstorydev/emulators/storage/...@latest
-        gcsemulator -port 8888 -dir var/storage
+        gcsemulator -port 8888 -host 0.0.0.0 -dir var/storage
 
   terraform: &terraform
     build: terraform
