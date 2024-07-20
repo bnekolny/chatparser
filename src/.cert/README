@@ -1,2 +1,2 @@
 # TODO: you need to create certificates here if empty
-$ mkdir -p src/.cert && mkcert -key-file ./src/.cert/key.pem -cert-file ./src/.cert/cert.pem 'local.chatparser.xyz'
+$ mkdir -p src/.cert && mkcert -key-file src/.cert/key.pem -cert-file src/.cert/cert.pem 'local.chatparser.xyz'
