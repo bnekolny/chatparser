@@ -135,6 +135,18 @@ func messageHandler(messageType FeedbackType) http.HandlerFunc {
 			return
 		}
 
+		err = write(hardcodedUserId, Message, bodyString)
+		if err != nil {
+			logger.Error("write error")
+			logger.Error(err)
+		}
+		//text, err := read(hardcodedUserId, Message)
+		//if err != nil {
+		//	logger.Error("read error")
+		//	logger.Error(err)
+		//}
+		//logger.Info(text)
+
 		w.Write([]byte(response))
 	}
 }
@@ -152,6 +164,8 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 
 //go:embed static/*
 var staticFS embed.FS
+
+var hardcodedUserId string = "anonymous"
 
 func main() {
 	defer logger.Sync()
@@ -174,6 +188,8 @@ func main() {
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
 	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
+	// Send requests to the root domain to something visible
+	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Infof("Starting server on port %v", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
