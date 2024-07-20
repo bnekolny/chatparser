@@ -4,6 +4,7 @@ WhatsApp chat parser to give feedback on language development.
 First step is to get the local development environment going
 1. Install gcloud: https://cloud.google.com/sdk/docs/install#linux
 2. `gcloud auth login`
+  a. gcloud config set project chatparser
 3. create .env
 ```
 PORT=8080
@@ -11,16 +12,19 @@ GEMINI_API_KEY=
 IMPERSONATE_SERVICE_ACCOUNT=fake@email.com
 ```
 get the gemini API key here: https://console.cloud.google.com/security/secret-manager/secret/GEMINI_API_KEY/versions?project=chatparser
+4. Install mkcert
+  a. mac via `brew install mkcert`
+  b. windows via https://github.com/FiloSottile/mkcert/releases
+5. generate certificates mkcert -key-file src/.cert/key.pem -cert-file src/.cert/cert.pem 'local.chatparser.xyz'
 
 TODO:
 - manual `npm install` was required
-- mkcert https://github.com/FiloSottile/mkcert/releases
 
 NOTE: requires a US VPN
 
 running locally
 ```
-dc up
+docker compose up
 ```
 
 testing locally via web:
