@@ -3,6 +3,7 @@ import {useMessageApi} from './hooks/useMessageApi';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
+import TestTextButton from './components/TestTextButton';
 import styles from './App.module.css';
 import {DESCRIPTION_TEXT} from './constants';
 import {Mode} from './types';
@@ -70,6 +71,12 @@ const App: React.FC = () => {
 				<ModeSelector mode={mode} setMode={setMode} />
 				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
 			</div>
+			{ window?.location?.host == 'local.chatparser.xyz' ?
+			<TestTextButton
+				setTextFunction={setText}
+				sendMessageFunction={sendMessage}
+			/> : null
+			}
 		</div>
 	);
 };
