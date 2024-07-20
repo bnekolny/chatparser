@@ -4,6 +4,7 @@ WhatsApp chat parser to give feedback on language development.
 First step is to get the local development environment going
 1. Install gcloud: https://cloud.google.com/sdk/docs/install#linux
 2. `gcloud auth login`
+  a. gcloud config set project chatparser
 3. create .env
 ```
 PORT=8080
@@ -20,7 +21,7 @@ NOTE: requires a US VPN
 
 running locally
 ```
-dc up
+docker compose up
 ```
 
 testing locally via web:
