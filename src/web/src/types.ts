@@ -3,3 +3,8 @@ export interface MessageApiResult {
 	revisedMessage: string;
 	isLoading: boolean;
 }
+
+export enum Mode {
+	Verify = 'verify',
+	Improve = 'improve',
+}

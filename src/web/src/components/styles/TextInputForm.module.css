@@ -1,0 +1,15 @@
+.buttonContainer {
+	padding-top: 10px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.submitButton {
+	width: 100%;
+}
+
+.copyButton,
+.clearButton,
+.submitRevisedButton {
+	width: 48%;
+}

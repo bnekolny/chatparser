@@ -4,18 +4,18 @@ services:
       context: src
       target: gobuilder
     volumes:
-      - ./src:/app  # Mount current directory as /app in the container (for code changes)
-      - ./src/web/dist:/app/static
-    command: ["fresh"]
+      - ./src:/app # Mount current directory as /app in the container (for code changes)
+      # - ./src/web/dist:/app/static
+    command: ['fresh']
     environment:
       GO_ENV: development
       PORT: ${PORT}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
     ports:
-      - "${PORT}:${PORT}"
+      - '${PORT}:${PORT}'
   vite:
     image: node:22-alpine
-    entrypoint: ""
+    entrypoint: ''
     environment:
       VITE_DEV_HOST: 'https://local.chatparser.xyz'
     ports:
