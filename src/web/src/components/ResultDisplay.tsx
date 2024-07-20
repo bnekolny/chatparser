@@ -8,7 +8,7 @@ interface ResultDisplayProps {
 	revisedMessage: string | null;
 	isLoading: boolean;
 	onCopy: (text: string) => void;
-	onSubmitRevised: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	onSubmitRevised: () => void;
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({
