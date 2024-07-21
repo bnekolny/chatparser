@@ -7,11 +7,12 @@ import TestTextButton from './components/TestTextButton';
 import styles from './App.module.css';
 import {DESCRIPTION_TEXT, HOSTS} from './constants';
 import {Mode} from './types';
+import {useChatContext} from './context/ChatContext';
 
 const App: React.FC = () => {
 	const [previousText, setPreviousText] = useState<string>('');
 	const [text, setText] = useState<string>('');
-	const [mode, setMode] = useState<Mode>(Mode.Verify);
+	const {mode, setMode} = useChatContext();
 	const {sendMessage, result, revisedMessage, isLoading} = useMessageApi();
 
 	const hasNewText = (): boolean => {
@@ -68,7 +69,7 @@ const App: React.FC = () => {
 				onSubmitRevised={handleSubmitRevised}
 			/>
 			<div className={styles.modeAndDescription}>
-				<ModeSelector mode={mode} setMode={setMode} />
+				<ModeSelector />
 				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
 			</div>
 			{window?.location?.host === HOSTS.LOCAL ? (

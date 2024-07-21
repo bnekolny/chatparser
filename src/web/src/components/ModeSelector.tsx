@@ -2,13 +2,10 @@ import React from 'react';
 import styles from './styles/ModeSelector.module.css';
 import {Mode} from '../types';
 import {capitalizeFirstLetter} from '../utils';
+import {useChatContext} from '../context/ChatContext';
 
-interface ModeSelectorProps {
-	mode: Mode;
-	setMode: (mode: Mode) => void;
-}
-
-const ModeSelector: React.FC<ModeSelectorProps> = ({mode, setMode}) => {
+const ModeSelector: React.FC = () => {
+	const {mode, setMode} = useChatContext();
 	return (
 		<div className={styles.modeSelector}>
 			<input
@@ -29,7 +26,9 @@ const ModeSelector: React.FC<ModeSelectorProps> = ({mode, setMode}) => {
 				checked={mode === Mode.Improve}
 				onChange={() => setMode(Mode.Improve)}
 			/>
-			<label htmlFor={Mode.Improve}>{capitalizeFirstLetter(Mode.Verify)}</label>
+			<label htmlFor={Mode.Improve}>
+				{capitalizeFirstLetter(Mode.Improve)}
+			</label>
 		</div>
 	);
 };
