@@ -2,34 +2,31 @@ import React from 'react';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
-import {BUTTON_TEXT, TEXTAREA} from '../constants';
+import {BUTTON_TEXT} from '../constants';
+import {useChatContext} from '../context/ChatContext';
 
-interface TextInputFormProps {
-	text: string;
-	onTextChange: (text: string) => void;
-	onSubmit: (event: React.FormEvent) => void;
-	onCopy: (text: string) => void;
-	onClear: () => void;
-	isLoading: boolean;
-	hasNewText: boolean;
-}
+const TextInputForm: React.FC = () => {
+	const {text, setText, previousText, mode, isLoading, handleSendMessage} =
+		useChatContext();
 
-const TextInputForm: React.FC<TextInputFormProps> = ({
-	text,
-	onTextChange,
-	onSubmit,
-	onCopy,
-	onClear,
-	isLoading,
-	hasNewText,
-}) => {
+	const hasNewText = text !== previousText;
+
+	const handleSubmit = async (event: React.FormEvent) => {
+		event.preventDefault();
+		await handleSendMessage(text, mode);
+	};
+
+	const handleCopy = () => {
+		navigator.clipboard.writeText(text);
+	};
+
+	const handleClear = () => {
+		setText('');
+	};
+
 	return (
-		<form onSubmit={onSubmit} className={styles.form}>
-			<TextArea
-				value={text}
-				onChange={e => onTextChange(e.target.value)}
-				placeholder={TEXTAREA.DEFAULT_PLACEHOLDER}
-			/>
+		<form onSubmit={handleSubmit} className={styles.form}>
+			<TextArea />
 			<Button
 				type="submit"
 				disabled={!hasNewText || isLoading}
@@ -40,12 +37,16 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
 			<div className={styles.buttonContainer}>
 				<Button
 					type="button"
-					onClick={() => onCopy(text)}
+					onClick={handleCopy}
 					className={styles.copyButton}
 				>
 					{BUTTON_TEXT.COPY}
 				</Button>
-				<Button type="button" onClick={onClear} className={styles.clearButton}>
+				<Button
+					type="button"
+					onClick={handleClear}
+					className={styles.clearButton}
+				>
 					{BUTTON_TEXT.CLEAR}
 				</Button>
 			</div>

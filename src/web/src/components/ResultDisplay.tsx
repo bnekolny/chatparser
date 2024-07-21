@@ -3,22 +3,22 @@ import ReactMarkdown from 'react-markdown';
 import Button from './Button';
 import styles from './styles/ResultDisplay.module.css';
 import {BUTTON_TEXT} from '../constants';
+import {useChatContext} from '../context/ChatContext';
+import {useMessageApi} from '../hooks/useMessageApi';
 
-interface ResultDisplayProps {
-	result: string | null;
-	revisedMessage: string | null;
-	isLoading: boolean;
-	onCopy: (text: string) => void;
-	onSubmitRevised: () => void;
-}
+const ResultDisplay: React.FC = () => {
+	const {result, revisedMessage, isLoading} = useMessageApi();
+	const {setText, setPreviousText} = useChatContext();
 
-const ResultDisplay: React.FC<ResultDisplayProps> = ({
-	result,
-	revisedMessage,
-	isLoading,
-	onCopy,
-	onSubmitRevised,
-}) => {
+	const handleCopy = (textToCopy: string) => {
+		navigator.clipboard.writeText(textToCopy);
+	};
+
+	const handleSubmitRevised = () => {
+		setText(revisedMessage);
+		setPreviousText(revisedMessage);
+	};
+
 	return (
 		<>
 			{result && (
@@ -35,14 +35,14 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
 					<div className={styles.buttonContainer}>
 						<Button
 							type="button"
-							onClick={() => onCopy(revisedMessage)}
+							onClick={() => handleCopy(revisedMessage)}
 							className={styles.copyButton}
 						>
 							Copy
 						</Button>
 						<Button
 							type="button"
-							onClick={onSubmitRevised}
+							onClick={handleSubmitRevised}
 							disabled={isLoading}
 							className={styles.submitRevisedButton}
 						>

@@ -1,7 +1,5 @@
 export interface MessageApiResult {
-	result: string;
-	revisedMessage: string;
-	isLoading: boolean;
+	data: string;
 }
 
 export enum Mode {

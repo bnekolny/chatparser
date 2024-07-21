@@ -1,24 +1,17 @@
-import {useState} from 'react';
-import {MessageApiResult} from '../types';
+import {MessageApiResult, Mode} from '../types';
 import {
 	API_ENDPOINTS,
 	CONTENT_TYPES,
 	ERROR_MESSAGES,
 	HTTP_METHODS,
-	REGEX,
+	SUBMIT_ERROR,
 } from '../constants';
 
 export const useMessageApi = () => {
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [result, setResult] = useState<string>('');
-	const [revisedMessage, setRevisedMessage] = useState<string>('');
-
 	const sendMessage = async (
 		text: string,
-		mode: string,
+		mode: Mode,
 	): Promise<MessageApiResult> => {
-		setIsLoading(true);
-
 		try {
 			const response = await fetch(API_ENDPOINTS.MESSAGE(mode), {
 				method: HTTP_METHODS.POST,
@@ -33,39 +26,19 @@ export const useMessageApi = () => {
 			}
 
 			const data = await response.text();
-			const [resultWithoutRevision, revisedMsg] = parseResponse(data);
-
-			setResult(resultWithoutRevision);
-			setRevisedMessage(revisedMsg);
 
 			return {
-				result: resultWithoutRevision,
-				revisedMessage: revisedMsg,
-				isLoading: false,
+				data: data,
 			};
 		} catch (error) {
-			console.error('Error submitting text:', error);
-			setResult(ERROR_MESSAGES.PROCESSING_ERROR);
+			console.error(`${SUBMIT_ERROR}:`, error);
 			return {
-				result: ERROR_MESSAGES.PROCESSING_ERROR,
-				revisedMessage: '',
-				isLoading: false,
+				data: ERROR_MESSAGES.PROCESSING_ERROR,
 			};
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
-	const parseResponse = (data: string): [string, string] => {
-		const revisedMessageMatch = data.match(REGEX.REVISED_MESSAGE);
-		const revisedMessage = revisedMessageMatch
-			? revisedMessageMatch[1].trim()
-			: '';
-		const resultWithoutRevision = data
-			.replace(REGEX.REVISED_MESSAGE, '')
-			.trim();
-		return [resultWithoutRevision, revisedMessage];
+	return {
+		sendMessage,
 	};
-
-	return {sendMessage, result, revisedMessage, isLoading};
 };

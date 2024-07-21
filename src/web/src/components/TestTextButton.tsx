@@ -1,15 +1,11 @@
 import React from 'react';
-import {Mode} from './../types';
+import {useChatContext} from '../context/ChatContext';
+import {useMessageApi} from '../hooks/useMessageApi';
 
-interface TestTextButtonProps {
-	setTextFunction: (arg0: string) => void;
-	sendMessageFunction: (arg0: string, arg1: Mode) => void;
-}
+const TestTextButton: React.FC = () => {
+	const {setText, mode} = useChatContext();
+	const {sendMessage} = useMessageApi();
 
-const TestTextButton: React.FC<TestTextButtonProps> = ({
-	setTextFunction,
-	sendMessageFunction,
-}) => {
 	const testString = `
     👋 hola! Creo que estamos lista para la próxima cita contigo! Puedas avisarme a cuando traerle? Lo más fácil para nosotros es algun tiempo después de 14:00, si es posible durante la semana o cualquier hora en el fin de semana. 
 
@@ -17,8 +13,8 @@ const TestTextButton: React.FC<TestTextButtonProps> = ({
     `.trim();
 
 	const submitTestText = async () => {
-		setTextFunction(testString);
-		sendMessageFunction(testString, Mode.Verify);
+		setText(testString);
+		await sendMessage(testString, mode);
 	};
 
 	return (
