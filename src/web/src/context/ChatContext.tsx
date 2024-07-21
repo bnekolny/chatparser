@@ -13,7 +13,7 @@ interface ChatContextType {
 	setPreviousText: (text: string) => void;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
-	handleSendMessage: (text: string, mode: Mode) => Promise<void>;
+	handleSendMessage: () => Promise<void>;
 	response: string;
 	setResponse: (response: string) => void;
 }

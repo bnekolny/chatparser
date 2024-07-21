@@ -10,7 +10,6 @@ const TextInputForm: React.FC = () => {
 		text,
 		setText,
 		previousText,
-		mode,
 		isLoading,
 		handleSendMessage,
 		setResponse,
@@ -20,7 +19,7 @@ const TextInputForm: React.FC = () => {
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		await handleSendMessage(text, mode);
+		await handleSendMessage();
 	};
 
 	const handleCopy = () => {
