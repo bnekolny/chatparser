@@ -12,8 +12,8 @@ const TestTextButton: React.FC = () => {
     `.trim();
 
 	const submitTestText = async () => {
-		setText(testString);
-		setMode(Mode.Verify);
+		await setText(testString);
+		await setMode(Mode.Verify);
 		handleSendMessage();
 	};
 
