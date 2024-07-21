@@ -1,58 +1,36 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import Button from './Button';
-import styles from './styles/ResultDisplay.module.css';
-import {BUTTON_TEXT} from '../constants';
+import React, {useEffect, useState} from 'react';
 import {useChatContext} from '../context/ChatContext';
-import {useMessageApi} from '../hooks/useMessageApi';
+import {parseMarkdown} from '../utils';
+import {Feedback} from '../types';
 
 const ResultDisplay: React.FC = () => {
-	const {result, revisedMessage, isLoading} = useMessageApi();
-	const {setText, setPreviousText} = useChatContext();
+	const {response} = useChatContext();
+	const [parsedMarkdown, setParsedMarkdown] = useState<Feedback | null>(null);
 
-	const handleCopy = (textToCopy: string) => {
-		navigator.clipboard.writeText(textToCopy);
-	};
+	useEffect(() => {
+		if (response) {
+			const parsed = parseMarkdown(response);
+			setParsedMarkdown(parsed);
+		}
+	}, [response]);
 
-	const handleSubmitRevised = () => {
-		setText(revisedMessage);
-		setPreviousText(revisedMessage);
-	};
-
-	return (
-		<>
-			{result && (
-				<div className={styles.result}>
-					<ReactMarkdown>{result}</ReactMarkdown>
+	if (parsedMarkdown) {
+		return (
+			<div className="response">
+				<h2>{parsedMarkdown.title}</h2>
+				<div className="responseContent">
+					{parsedMarkdown.sections.map((section, index) => (
+						<div key={index}>
+							<h3>{section.title}</h3>
+							<p>{section.content}</p>
+						</div>
+					))}
 				</div>
-			)}
-			{revisedMessage && (
-				<div className={styles.result}>
-					<div className={styles.resultContent}>
-						<ReactMarkdown>**Revised Message:**</ReactMarkdown>
-						<ReactMarkdown>{revisedMessage}</ReactMarkdown>
-					</div>
-					<div className={styles.buttonContainer}>
-						<Button
-							type="button"
-							onClick={() => handleCopy(revisedMessage)}
-							className={styles.copyButton}
-						>
-							Copy
-						</Button>
-						<Button
-							type="button"
-							onClick={handleSubmitRevised}
-							disabled={isLoading}
-							className={styles.submitRevisedButton}
-						>
-							{isLoading ? BUTTON_TEXT.LOADING : BUTTON_TEXT.SUBMIT_REVISED}
-						</Button>
-					</div>
-				</div>
-			)}
-		</>
-	);
+			</div>
+		);
+	}
+
+	return null;
 };
 
 export default ResultDisplay;

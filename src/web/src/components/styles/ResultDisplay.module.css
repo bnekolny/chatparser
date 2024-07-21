@@ -1,7 +1,7 @@
-.result {
+.response {
 	margin-top: 20px;
 	padding: 20px;
-	background-color: #e0e0e0;
+	background-color: papayawhip;
 	border-radius: 8px;
 	width: 100%;
 	max-width: 500px;
@@ -12,8 +12,9 @@
 	overflow-wrap: break-word;
 }
 
-.resultContent {
+.responseContent {
 	margin-bottom: 15px;
+	background-color: lightcoral;
 }
 
 .buttonContainer {
