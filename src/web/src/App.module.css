@@ -1,15 +1,14 @@
 .container {
-	max-width: 800px;
+	background-color: papayawhip;
+	display: flex;
+	flex-flow: column nowrap;
+	height: 100%;
 	margin: 0 auto;
-	padding: 20px;
-}
-
-.modeAndDescription {
-	margin-top: 20px;
+	justify-content: center;
+	align-items: center;
 }
 
 .description {
-	font-size: 14px;
-	color: #666;
-	margin-top: 10px;
+	font-size: 1.6rem;
+	text-align: center;
 }

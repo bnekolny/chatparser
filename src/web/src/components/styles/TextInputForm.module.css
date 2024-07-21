@@ -1,15 +1,19 @@
+.form {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	padding: 1rem;
+	background-color: #ffffff;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	font-family: 'Roboto', sans-serif;
+}
+
 .buttonContainer {
 	padding-top: 10px;
 	display: flex;
+	flex-flow: row wrap;
 	justify-content: space-between;
-}
-
-.submitButton {
+	align-items: center;
 	width: 100%;
-}
-
-.copyButton,
-.clearButton,
-.submitRevisedButton {
-	width: 48%;
 }

@@ -4,6 +4,7 @@ import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
 import {BUTTON_TEXT} from '../constants';
 import {useChatContext} from '../context/ChatContext';
+import {Mode} from '../types';
 
 const TextInputForm: React.FC = () => {
 	const {
@@ -13,12 +14,15 @@ const TextInputForm: React.FC = () => {
 		isLoading,
 		handleSendMessage,
 		setResponse,
+		mode,
+		revisedMessage,
+		handleSubmitRevisedText,
+		setRevisedMessage,
 	} = useChatContext();
 
 	const hasNewText = text !== previousText;
 
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
+	const handleSubmit = async () => {
 		await handleSendMessage();
 	};
 
@@ -29,35 +33,49 @@ const TextInputForm: React.FC = () => {
 	const handleClear = () => {
 		setText('');
 		setResponse('');
+		setRevisedMessage('');
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className={styles.form}>
-			<TextArea />
-			<Button
-				type="submit"
-				disabled={!hasNewText || isLoading}
-				className={styles.submitButton}
+		<>
+			<form
+				onSubmit={e => {
+					e.preventDefault();
+					handleSendMessage();
+				}}
+				className={styles.form}
 			>
-				{isLoading ? BUTTON_TEXT.LOADING : BUTTON_TEXT.SUBMIT}
-			</Button>
+				<TextArea />
+			</form>
+
 			<div className={styles.buttonContainer}>
 				<Button
-					type="button"
-					onClick={handleCopy}
-					className={styles.copyButton}
+					type="submit"
+					disabled={
+						(mode !== Mode.Verify || !revisedMessage) &&
+						(!hasNewText || isLoading)
+					}
+					onClick={
+						mode === Mode.Verify && revisedMessage
+							? handleSubmitRevisedText
+							: handleSubmit
+					}
+					className="submit"
 				>
+					{isLoading
+						? BUTTON_TEXT.LOADING
+						: mode === Mode.Verify && revisedMessage
+						? BUTTON_TEXT.SUBMIT_REVISED
+						: BUTTON_TEXT.SUBMIT}
+				</Button>
+				<Button type="button" onClick={handleCopy} className="copy">
 					{BUTTON_TEXT.COPY}
 				</Button>
-				<Button
-					type="button"
-					onClick={handleClear}
-					className={styles.clearButton}
-				>
+				<Button type="button" onClick={handleClear} className="clear">
 					{BUTTON_TEXT.CLEAR}
 				</Button>
 			</div>
-		</form>
+		</>
 	);
 };
 

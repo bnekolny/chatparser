@@ -1,50 +1,15 @@
 .response {
-	margin-top: 20px;
-	padding: 20px;
-	background-color: papayawhip;
-	border-radius: 8px;
+	margin-top: 2rem;
+	padding: 2rem;
+	border-radius: var(--radius);
 	width: 100%;
-	max-width: 500px;
 	word-break: break-word;
-	font-family: 'Roboto', sans-serif;
-	font-size: 16px;
+	font-size: 1.6rem;
 	line-height: 1.5;
 	overflow-wrap: break-word;
+	background-color: var(--color-tertiary);
 }
 
 .responseContent {
-	margin-bottom: 15px;
-	background-color: lightcoral;
-}
-
-.buttonContainer {
-	display: flex;
-	justify-content: space-between;
-	margin-top: 10px;
-}
-
-.copyButton,
-.submitRevisedButton {
-	padding: 8px 16px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	font-family: 'Roboto', sans-serif;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.copyButton {
-	background-color: #4caf50;
-	color: white;
-}
-
-.submitRevisedButton {
-	background-color: #2196f3;
-	color: white;
-}
-
-.submitRevisedButton:disabled {
-	background-color: #bbdefb;
-	cursor: not-allowed;
+	margin-bottom: 1.6rem;
 }

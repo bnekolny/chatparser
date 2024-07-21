@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Mode} from '../types';
 import {useMessageApi} from '../hooks/useMessageApi';
-import {CHAT_CONTEXT_ERROR} from '../constants';
+import {CHAT_CONTEXT_ERROR, REGEX} from '../constants';
 
 interface ChatContextType {
 	mode: Mode;
@@ -14,8 +14,11 @@ interface ChatContextType {
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
 	handleSendMessage: () => Promise<void>;
+	handleSubmitRevisedText: () => Promise<void>;
 	response: string;
 	setResponse: (response: string) => void;
+	revisedMessage: string;
+	setRevisedMessage: (text: string) => void;
 }
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
@@ -28,8 +31,16 @@ const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
 	const [previousText, setPreviousText] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
+	const [revisedMessage, setRevisedMessage] = useState<string>('');
 
 	const {sendMessage} = useMessageApi();
+
+	useEffect(() => {
+		if (mode === Mode.Verify && response) {
+			const extractedMessage = extractRevisedMessage(response);
+			setRevisedMessage(extractedMessage);
+		}
+	}, [mode, response]);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
@@ -49,6 +60,17 @@ const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
 		}
 	};
 
+	const handleSubmitRevisedText = async (): Promise<void> => {
+		setText(revisedMessage);
+		await handleSendMessage();
+	};
+
+	const extractRevisedMessage = (response: string): string => {
+		const match = response.match(REGEX.REVISED_MESSAGE);
+		return match ? match[1].trim() : '';
+		return '';
+	};
+
 	const chatContext = {
 		mode,
 		setMode,
@@ -62,6 +84,9 @@ const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
 		setResponse,
 		isLoading,
 		setIsLoading,
+		revisedMessage,
+		handleSubmitRevisedText,
+		setRevisedMessage,
 	};
 
 	return (

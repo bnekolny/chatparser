@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
 			type={type}
 			onClick={onClick}
 			disabled={disabled}
-			className={`${styles.button} ${className}`}
+			className={`${styles.button} ${className ? styles[className] : ''}`}
 		>
 			{children}
 		</button>

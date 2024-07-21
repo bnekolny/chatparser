@@ -24,12 +24,13 @@ const App: React.FC = () => {
 
 	return (
 		<div className={styles.container}>
+			<div className={styles.modeAndDescription}>
+				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
+				<ModeSelector />
+			</div>
 			<TextInputForm />
 			<ResultDisplay />
-			<div className={styles.modeAndDescription}>
-				<ModeSelector />
-				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
-			</div>
+
 			{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 		</div>
 	);

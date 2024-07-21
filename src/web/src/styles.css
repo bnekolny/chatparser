@@ -1,173 +1,29 @@
-/* Import Roboto font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-/* Basic reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
-}
-
-/* Responsive container */
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  background-color: #f0f0f0;
-  padding: 10px;
-}
-
-/* Responsive form */
-.form {
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive textarea */
-.textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  resize: none;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  overflow: hidden; /* Hide scrollbars */
-}
-
-/* Placeholder styling */
-.textarea::placeholder {
-  font-family: 'Roboto', sans-serif;
-  color: #999999;
-  font-size: 16px;
-}
-
-.button-container {
-  padding-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-/* Responsive button */
-.button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.button:disabled {
-  background-color: #BBDEFB;
-}
-
-/* Responsive result */
-.result {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #e0e0e0;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 500px;
-  word-break: break-word;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  overflow-wrap: break-word; /* Prevent overflow */
-}
-
-/* Mode selector container */
-.mode-and-description {
-  width: 100%;
-  max-width: 500px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  text-align: center;
-}
-
-/* Mode selector */
-.mode-selector {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
-  font-family: 'Roboto', sans-serif;
-}
-
-.mode-selector label {
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  position: relative;
-  padding-left: 30px;
-}
-
-.mode-selector input[type="radio"] {
-  display: none;
-}
-
-.mode-selector label::before {
-  content: '';
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  border: 2px solid #007bff;
-  border-radius: 50%;
-  vertical-align: middle;
-  background-color: #ffffff;
-  transition: background-color 0.3s, border-color 0.3s;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.mode-selector input[type="radio"]:checked + label::before {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.mode-selector input[type="radio"]:checked + label::after {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background-color: #ffffff;
-  border-radius: 50%;
-  position: absolute;
-  left: 8px;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* Description */
-.description {
-  margin-top: 10px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #333333;
-  text-align: center;
-}
-
-/* Additional styles for markdown content */
-.result ul,
-.result ol {
-  padding-left: 20px; /* Add padding to prevent overflow */
+:root {
+	box-sizing: border-box;
+	font-size: 62.5%;
+	margin: 0 auto;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+	--shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	--radius: 0.5rem;
+	color: var(--color-secondary);
+	--color-primary: #845ec2;
+	--color-secondary: #4b4453;
+	--color-tertiary: #b0a8b9;
+	--color-accent: #c34a36;
+	--color-highlight: #ff8066;
+	--color-primary-light: #a084dc;
+	--color-primary-dark: #6a3ea1;
+	--color-secondary-light: #635d6c;
+	--color-secondary-dark: #332e3a;
+	--color-accent-light: #d76b5a;
+	--color-accent-dark: #a13728;
+	--color-neutral-light: #f5f5f5;
+	--color-neutral: #e0e0e0;
+	--color-neutral-dark: #9e9e9e;
+	--color-success: #4caf50;
+	--color-warning: #ffc107;
+	--color-error: #f44336;
 }

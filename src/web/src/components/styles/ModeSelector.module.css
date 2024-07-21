@@ -1,16 +1,15 @@
 .modeSelector {
 	display: flex;
 	justify-content: space-around;
-	margin-bottom: 10px;
-	font-family: 'Roboto', sans-serif;
+	margin-bottom: 1rem;
 }
 
 .modeSelector label {
 	cursor: pointer;
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 500;
 	position: relative;
-	padding-left: 30px;
+	padding-left: 3rem;
 }
 
 .modeSelector input[type='radio'] {
@@ -20,13 +19,13 @@
 .modeSelector label::before {
 	content: '';
 	display: inline-block;
-	width: 16px;
-	height: 16px;
-	margin-right: 8px;
-	border: 2px solid #007bff;
+	width: 1.6rem;
+	height: 1.6rem;
+	margin-right: 0.8rem;
+	border: 0.2rem solid var(--color-primary);
 	border-radius: 50%;
 	vertical-align: middle;
-	background-color: #ffffff;
+	background-color: var(--color-neutral-light);
 	transition: background-color 0.3s, border-color 0.3s;
 	position: absolute;
 	left: 0;
@@ -35,19 +34,19 @@
 }
 
 .modeSelector input[type='radio']:checked + label::before {
-	background-color: #007bff;
-	border-color: #007bff;
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 
 .modeSelector input[type='radio']:checked + label::after {
 	content: '';
 	display: inline-block;
-	width: 8px;
-	height: 8px;
-	background-color: #ffffff;
+	width: 0.8rem;
+	height: 0.8rem;
+	background-color: var(--color-neutral-light);
 	border-radius: 50%;
 	position: absolute;
-	left: 6px;
+	left: 0.6rem;
 	top: 50%;
 	transform: translateY(-50%);
 }
