@@ -13,8 +13,8 @@ const ResultDisplay: React.FC = () => {
 			setParsedMarkdown(parsed);
 		}
 	}, [response]);
-
-	if (parsedMarkdown) {
+	// TODO: take into consideration how improve options is returned
+	if (response && parsedMarkdown) {
 		return (
 			<div className="response">
 				<h2>{parsedMarkdown.title}</h2>

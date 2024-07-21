@@ -6,8 +6,15 @@ import {BUTTON_TEXT} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
 const TextInputForm: React.FC = () => {
-	const {text, setText, previousText, mode, isLoading, handleSendMessage} =
-		useChatContext();
+	const {
+		text,
+		setText,
+		previousText,
+		mode,
+		isLoading,
+		handleSendMessage,
+		setResponse,
+	} = useChatContext();
 
 	const hasNewText = text !== previousText;
 
@@ -22,6 +29,7 @@ const TextInputForm: React.FC = () => {
 
 	const handleClear = () => {
 		setText('');
+		setResponse('');
 	};
 
 	return (
