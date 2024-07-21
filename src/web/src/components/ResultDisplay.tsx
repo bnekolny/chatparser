@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Button from './Button';
 import styles from './styles/ResultDisplay.module.css';
+import {BUTTON_TEXT} from '../constants';
 
 interface ResultDisplayProps {
 	result: string | null;
@@ -45,7 +46,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({
 							disabled={isLoading}
 							className={styles.submitRevisedButton}
 						>
-							{isLoading ? 'Loading...' : 'Submit Revised Message'}
+							{isLoading ? BUTTON_TEXT.LOADING : BUTTON_TEXT.SUBMIT_REVISED}
 						</Button>
 					</div>
 				</div>

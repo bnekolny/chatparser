@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
+import {BUTTON_TEXT, TEXTAREA} from '../constants';
 
 interface TextInputFormProps {
 	text: string;
@@ -27,14 +28,14 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
 			<TextArea
 				value={text}
 				onChange={e => onTextChange(e.target.value)}
-				placeholder="Enter your text here"
+				placeholder={TEXTAREA.DEFAULT_PLACEHOLDER}
 			/>
 			<Button
 				type="submit"
 				disabled={!hasNewText || isLoading}
 				className={styles.submitButton}
 			>
-				{isLoading ? 'Loading...' : 'Submit'}
+				{isLoading ? BUTTON_TEXT.LOADING : BUTTON_TEXT.SUBMIT}
 			</Button>
 			<div className={styles.buttonContainer}>
 				<Button
@@ -42,10 +43,10 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
 					onClick={() => onCopy(text)}
 					className={styles.copyButton}
 				>
-					Copy
+					{BUTTON_TEXT.COPY}
 				</Button>
 				<Button type="button" onClick={onClear} className={styles.clearButton}>
-					Clear
+					{BUTTON_TEXT.CLEAR}
 				</Button>
 			</div>
 		</form>

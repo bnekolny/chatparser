@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './styles/ModeSelector.module.css';
 import {Mode} from '../types';
+import {capitalizeFirstLetter} from '../utils';
 
 interface ModeSelectorProps {
 	mode: Mode;
@@ -12,23 +13,23 @@ const ModeSelector: React.FC<ModeSelectorProps> = ({mode, setMode}) => {
 		<div className={styles.modeSelector}>
 			<input
 				type="radio"
-				id="verify"
+				id={Mode.Verify}
 				name="mode"
-				value="verify"
+				value={Mode.Verify}
 				checked={mode === Mode.Verify}
 				onChange={() => setMode(Mode.Verify)}
 			/>
-			<label htmlFor="verify">Verify</label>
+			<label htmlFor={Mode.Verify}>{capitalizeFirstLetter(Mode.Verify)}</label>
 
 			<input
 				type="radio"
-				id="improve"
+				id={Mode.Improve}
 				name="mode"
-				value="improve"
+				value={Mode.Improve}
 				checked={mode === Mode.Improve}
 				onChange={() => setMode(Mode.Improve)}
 			/>
-			<label htmlFor="improve">Improve</label>
+			<label htmlFor={Mode.Improve}>{capitalizeFirstLetter(Mode.Verify)}</label>
 		</div>
 	);
 };

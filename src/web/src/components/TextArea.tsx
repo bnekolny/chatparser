@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles/TextArea.module.css';
+import {TEXTAREA} from '../constants';
 
 interface TextAreaProps {
 	value: string;
@@ -10,7 +11,7 @@ interface TextAreaProps {
 const TextArea: React.FC<TextAreaProps> = ({
 	value,
 	onChange,
-	placeholder = 'Enter your text here',
+	placeholder = TEXTAREA.DEFAULT_PLACEHOLDER,
 }) => {
 	const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
 		const target = e.currentTarget;
