@@ -14,6 +14,9 @@ export const capitalizeFirstLetter = (str: string): string => {
 	}
 };
 
+/* commenting these out so that they don't cause build failures with typescript
+src/utils.ts(17,7): error TS6133: 'sampleMDVerify' is declared but its value is never read.
+
 const sampleMDVerify = `
 ## Feedback on your message:
 
@@ -49,4 +52,4 @@ Okay, let's break down your Spanish phrase:
 * **Naturalness:** While grammatically sound, it might sound a bit stilted in a casual conversation. To make it more natural, you could use the more colloquial "quiero un helado" (I want an ice cream).
 
 **Overall:** You are on the right track! You understand the use of the indefinite article, which is an important aspect of Spanish grammar. Keep practicing and experimenting with different ways to express yourself in Spanish. Don't be afraid to make mistakes – they are a part of learning!
-`;
+`;*/
