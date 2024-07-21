@@ -4,20 +4,20 @@ services:
       context: src
       target: gobuilder
     volumes:
-      - ./src:/app  # Mount current directory as /app in the container (for code changes)
-    command: ["fresh"]
+      - ./src:/app # Mount current directory as /app in the container (for code changes)
+    command: ['fresh']
     environment:
       GO_ENV: development
       PORT: ${PORT}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       STORAGE_EMULATOR_HOST: gcsemulator:8888
     ports:
-      - "${PORT}:${PORT}"
+      - '${PORT}:${PORT}'
     depends_on:
       - gcsemulator
   vite:
     image: node:22-alpine
-    entrypoint: ""
+    entrypoint: ''
     environment:
       VITE_DEV_HOST: 'https://local.chatparser.xyz'
     ports:

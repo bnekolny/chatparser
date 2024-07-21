@@ -1,0 +1,53 @@
+.modeSelector {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 10px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.modeSelector label {
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+	position: relative;
+	padding-left: 30px;
+}
+
+.modeSelector input[type='radio'] {
+	display: none;
+}
+
+.modeSelector label::before {
+	content: '';
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+	border: 2px solid #007bff;
+	border-radius: 50%;
+	vertical-align: middle;
+	background-color: #ffffff;
+	transition: background-color 0.3s, border-color 0.3s;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.modeSelector input[type='radio']:checked + label::before {
+	background-color: #007bff;
+	border-color: #007bff;
+}
+
+.modeSelector input[type='radio']:checked + label::after {
+	content: '';
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	background-color: #ffffff;
+	border-radius: 50%;
+	position: absolute;
+	left: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+}
