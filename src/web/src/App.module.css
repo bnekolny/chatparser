@@ -5,9 +5,34 @@
 	margin: 0 auto;
 	justify-content: center;
 	align-items: center;
+	font-size: 1.6rem;
 }
 
 .description {
 	font-size: 1.6rem;
 	text-align: center;
+}
+
+@media screen and (min-width: 768px) and (orientation: landscape) {
+	/* CSS rules for desktop screens in landscape orientation */
+	/* Add your styles here */
+	.container {
+		width: 50%;
+	}
+
+	.description {
+		font-size: 3.6rem;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	/* CSS rules for tablet portrait */
+}
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+	/* CSS rules for mobile landscape */
+}
+
+@media only screen and (max-width: 480px) {
+	/* CSS rules for mobile portrait */
 }

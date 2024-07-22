@@ -7,3 +7,23 @@
 	min-height: 10rem;
 	padding: 1rem;
 }
+
+@media screen and (min-width: 768px) and (orientation: landscape) {
+	.textarea {
+		font-size: 3.6rem;
+		width: 95%;
+		min-height: 30vh;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	/* CSS rules for tablet portrait */
+}
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+	/* CSS rules for mobile landscape */
+}
+
+@media only screen and (max-width: 480px) {
+	/* CSS rules for mobile portrait */
+}

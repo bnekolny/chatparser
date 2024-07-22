@@ -17,3 +17,26 @@
 	align-items: center;
 	width: 100%;
 }
+
+@media screen and (min-width: 768px) and (orientation: landscape) {
+	.buttonContainer {
+		padding-top: 10px;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+		align-items: center;
+		width: 50%;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	/* CSS rules for tablet portrait */
+}
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+	/* CSS rules for mobile landscape */
+}
+
+@media only screen and (max-width: 480px) {
+	/* CSS rules for mobile portrait */
+}

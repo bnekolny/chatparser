@@ -1,6 +1,6 @@
 button {
 	width: 100%;
-	padding: 10px;
+	padding: 1rem;
 	border: none;
 	border-radius: var(--radius);
 	cursor: pointer;
@@ -32,4 +32,25 @@ button {
 .copy,
 .clear {
 	width: 48%;
+}
+
+@media screen and (min-width: 768px) and (orientation: landscape) {
+	button {
+		width: 100%;
+		padding: 3rem;
+		font-size: 3.6rem;
+		margin: 1rem 0;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	/* CSS rules for tablet portrait */
+}
+
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+	/* CSS rules for mobile landscape */
+}
+
+@media only screen and (max-width: 480px) {
+	/* CSS rules for mobile portrait */
 }
