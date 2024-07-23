@@ -8,27 +8,33 @@ const ModeSelector: React.FC = () => {
 	const {mode, setMode} = useChatContext();
 	return (
 		<div className={styles.modeSelector}>
-			<input
-				type="radio"
-				id={Mode.Verify}
-				name="mode"
-				value={Mode.Verify}
-				checked={mode === Mode.Verify}
-				onChange={() => setMode(Mode.Verify)}
-			/>
-			<label htmlFor={Mode.Verify}>{capitalizeFirstLetter(Mode.Verify)}</label>
+			<div className={styles.selector}>
+				<input
+					type="radio"
+					id={Mode.Verify}
+					name="mode"
+					value={Mode.Verify}
+					checked={mode === Mode.Verify}
+					onChange={() => setMode(Mode.Verify)}
+				/>
+				<label htmlFor={Mode.Verify}>
+					{capitalizeFirstLetter(Mode.Verify)}
+				</label>
+			</div>
 
-			<input
-				type="radio"
-				id={Mode.Improve}
-				name="mode"
-				value={Mode.Improve}
-				checked={mode === Mode.Improve}
-				onChange={() => setMode(Mode.Improve)}
-			/>
-			<label htmlFor={Mode.Improve}>
-				{capitalizeFirstLetter(Mode.Improve)}
-			</label>
+			<div className={styles.selector}>
+				<input
+					type="radio"
+					id={Mode.Improve}
+					name="mode"
+					value={Mode.Improve}
+					checked={mode === Mode.Improve}
+					onChange={() => setMode(Mode.Improve)}
+				/>
+				<label htmlFor={Mode.Improve}>
+					{capitalizeFirstLetter(Mode.Improve)}
+				</label>
+			</div>
 		</div>
 	);
 };

@@ -2,9 +2,8 @@ import React, {useEffect} from 'react';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
-import TestTextButton from './components/TestTextButton';
 import styles from './App.module.css';
-import {DESCRIPTION_TEXT, HOSTS} from './constants';
+import {DESCRIPTION_TEXT} from './constants';
 import {Mode} from './types';
 import {useChatContext} from './context/ChatContext';
 
@@ -30,8 +29,6 @@ const App: React.FC = () => {
 			</div>
 			<TextInputForm />
 			<ResultDisplay />
-
-			{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 		</div>
 	);
 };
