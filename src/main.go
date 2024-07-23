@@ -188,6 +188,7 @@ func main() {
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
 	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
+	mux.HandleFunc("/api/message/dictionary", messageHandler(MESSAGE_FEEDBACK_DICTIONARY))
 	// Send requests to the root domain to something visible
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
