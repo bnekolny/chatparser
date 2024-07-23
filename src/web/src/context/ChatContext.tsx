@@ -20,10 +20,11 @@ interface ChatContextType {
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
 
-const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
+const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<ChatContextType>}> = ({
 	children,
+	value = {},
 }) => {
-	const [mode, setMode] = useState<Mode>(Mode.Verify);
+	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);//Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
