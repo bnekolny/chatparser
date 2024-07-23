@@ -15,8 +15,6 @@ const TextInputForm: React.FC = () => {
 		setResponse,
 	} = useChatContext();
 
-	const inputQueryParamName = 'text';
-	const [inputQueyrParam, setInputQueryParam] = useState(getInputQueryParamValue);
 	React.useEffect(() => {
 		const initialValue = getInputQueryParamValue()
 		setText(initialValue);
@@ -27,6 +25,8 @@ const TextInputForm: React.FC = () => {
 			handleSendMessage();
 		}
 	}, [text]) // we need to wait for the state to set, or  we face a race condition
+
+	const inputQueryParamName = 'text';
 
 	function getInputQueryParamValue() {
 		const urlParams = new URLSearchParams(window.location.search);
