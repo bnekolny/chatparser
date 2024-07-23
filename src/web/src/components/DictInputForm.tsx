@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/DictInputForm.module.css';
@@ -15,10 +15,37 @@ const TextInputForm: React.FC = () => {
 		setResponse,
 	} = useChatContext();
 
+	const inputQueryParamName = 'text';
+	const [inputQueyrParam, setInputQueryParam] = useState(getInputQueryParamValue);
+	React.useEffect(() => {
+		const initialValue = getInputQueryParamValue()
+		setText(initialValue);
+	}, [])
+	React.useEffect(() => {
+		// checking !previousText should ensure this only runs once
+		if (text && !previousText) {
+			handleSendMessage();
+		}
+	}, [text]) // we need to wait for the state to set, or  we face a race condition
+
+	function getInputQueryParamValue() {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(inputQueryParamName) || '';
+	}
+
+	function updateQueryString(value: string) {
+		const url = new URL(window.location.href);
+		url.searchParams.set(inputQueryParamName, value);
+		window.history.pushState({}, '', url.toString());
+	}
+
 	const hasNewText = text !== previousText;
 
-	const handleSubmit = async (event: React.FormEvent) => {
-		event.preventDefault();
+	const handleSubmit = async (event?: React.FormEvent) => {
+		if (event) {
+			event.preventDefault();
+		}
+		updateQueryString(text);
 		await handleSendMessage();
 	};
 
