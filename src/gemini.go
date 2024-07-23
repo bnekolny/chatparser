@@ -56,7 +56,7 @@ Give any other feedback, whether that me gramatical or whatever kind. Just don't
 Here's the message:
     `,
 	MESSAGE_FEEDBACK_DICTIONARY: `
-I'm actively learning Spanish, and I like using a monolingual dictionary (thus in Spanish), but dictionaries intend to be precise with words and often that means extremely limited word use or dependence on a different form of the same word. So instead, I'm asking you to define a word for me in a way that will make sense to someone learning the language, meaning you should be able to explain the word in a wayI'm actively learning Spanish, and I like using a monolingual dictionary (thus in Spanish), but dictionaries intend to be precise with words and often that means extremely limited word use or dependence on a different form of the same word. So instead, I'm asking you to define a word for me in a way that will make sense to someone learning the language, meaning you should be able to explain the word in a way that someone who is learning a language.
+I'm actively learning Spanish, and I like using a monolingual dictionary (thus in Spanish), but dictionaries intend to be precise with words and often that means extremely limited word use or dependence on a different form of the same word. So instead, I'm asking you to define a word for me in a way that will make sense to someone learning the language, meaning you should be able to explain the word in a way that someone who is learning a language.
 
 Can you make sure to:
 - Explain this phrase to me with Spanish words, and be descriptive with your definition
