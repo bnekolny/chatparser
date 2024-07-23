@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import React, {useEffect} from 'react';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
