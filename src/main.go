@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -162,6 +163,25 @@ func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func staticHtmlPageHandler(targetHtmlFile string, staticFS fs.FS) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		f, err := staticFS.Open(targetHtmlFile)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		defer f.Close()
+
+		data, err := io.ReadAll(f)
+		defer f.Close()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		http.ServeContent(w, r, targetHtmlFile, time.Now(), bytes.NewReader(data))
+	}
+}
+
 //go:embed static/*
 var staticFS embed.FS
 
@@ -179,16 +199,17 @@ func main() {
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
-	staticAssets, err := fs.Sub(staticFS, "static")
-	if err != nil {
-		logger.Fatal(err)
-	}
-	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
 	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
 	mux.HandleFunc("/api/message/dictionary", messageHandler(MESSAGE_FEEDBACK_DICTIONARY))
+	staticAssets, err := fs.Sub(staticFS, "static")
+	if err != nil {
+		logger.Fatal(err)
+	}
+	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
+	mux.Handle("/dict", staticHtmlPageHandler("pages/dict.html", staticAssets))
 	// Send requests to the root domain to something visible
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
