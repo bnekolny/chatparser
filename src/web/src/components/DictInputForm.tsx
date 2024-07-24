@@ -35,7 +35,11 @@ const TextInputForm: React.FC = () => {
 
 	function updateQueryString(value: string) {
 		const url = new URL(window.location.href);
-		url.searchParams.set(inputQueryParamName, value);
+		if (value) {
+			url.searchParams.set(inputQueryParamName, value);
+		} else {
+			url.searchParams.delete(inputQueryParamName)
+		}
 		window.history.pushState({}, '', url.toString());
 	}
 
@@ -52,11 +56,15 @@ const TextInputForm: React.FC = () => {
 	const handleClear = () => {
 		setText('');
 		setResponse('');
+		updateQueryString('');
+		textAreaRef.current?.focus();
 	};
+
+	const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
-			<TextArea />
+			<TextArea ref={textAreaRef} />
 			<div className={styles.buttonContainer}>
 			<Button
 				type="submit"
