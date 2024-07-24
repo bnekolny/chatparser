@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/DictInputForm.module.css';
