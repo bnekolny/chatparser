@@ -18,6 +18,7 @@ interface ChatContextType {
 	setResponse: (response: string) => void;
 	revisedMessage: string;
 	setRevisedMessage: (text: string) => void;
+	handleSubmitRevisedText: () => void;
 }
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
