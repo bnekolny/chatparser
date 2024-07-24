@@ -7,6 +7,17 @@ import (
 	"os"
 )
 
+const GeminiModelSelection = "gemini-1.5-flash"
+var GeminiApiKey string
+
+func init() {
+	// TODO: on boot, throw an error if this isn't configured
+	GeminiApiKey = os.Getenv("GEMINI_API_KEY")
+    if GeminiApiKey == "" {
+        panic("GEMINI_API_KEY not set")
+    }
+}
+
 type FeedbackType int
 
 const (
@@ -89,4 +100,27 @@ func getFeedback(feedbackType FeedbackType, text string) (string, error) {
 
 	// TODO: check on contents so we don't hit errors
 	return string(resp.Candidates[0].Content.Parts[0].(genai.Text)), nil
+}
+
+func streamFeedback(ctx context.Context, promptPretext string, prompt string) (resp *genai.GenerateContentResponse, err error) {
+	defer logger.Sync()
+
+	client, err := genai.NewClient(ctx, option.WithAPIKey(GeminiApiKey))
+    // TODO: do better
+	if err != nil {
+		logger.Fatal(err)
+		return nil, err
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel(GeminiModelSelection)
+	resp, err = model.GenerateContent(ctx, genai.Text(promptPretext+"\n"+prompt))
+	if err != nil {
+		logger.Fatal(err)
+		return nil, err
+	}
+
+	// TODO: check on contents so we don't hit errors
+	//return string(resp.Candidates[0].Content.Parts[0].(genai.Text)), nil
+    return resp, err
 }
