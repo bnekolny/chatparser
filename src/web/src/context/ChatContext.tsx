@@ -13,7 +13,7 @@ interface ChatContextType {
 	setPreviousText: (text: string) => void;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
-	handleSubmit: (inputText?: string) => Promise<void>;
+	handleSendMessage: (inputText?: string) => Promise<void>;
 	response: string;
 	setResponse: (response: string) => void;
 }
@@ -39,7 +39,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		target.style.height = target.scrollHeight + 'px';
 	};
 
-	const handleSubmit = async (inputText?: string): Promise<void> => {
+	const handleSendMessage = async (inputText?: string): Promise<void> => {
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
@@ -58,7 +58,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setText,
 		previousText,
 		setPreviousText,
-		handleSubmit,
+		handleSendMessage,
 		response,
 		setResponse,
 		isLoading,

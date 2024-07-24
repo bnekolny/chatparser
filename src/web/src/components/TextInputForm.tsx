@@ -11,7 +11,7 @@ const TextInputForm: React.FC = () => {
 		setText,
 		previousText,
 		isLoading,
-		handleSubmit,
+		handleSendMessage,
 		setResponse,
 	} = useChatContext();
 
@@ -19,7 +19,7 @@ const TextInputForm: React.FC = () => {
 
 	const handleSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
-		await handleSubmit();
+		await handleSendMessage();
 	};
 
 	const handleCopy = () => {
