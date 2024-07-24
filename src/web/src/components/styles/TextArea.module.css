@@ -1,17 +1,17 @@
 .textarea {
-	width: 95%;
+	width: 100%;
 	border: 1px solid #ccc;
 	border-radius: 0.5rem;
-	font-size: 16px;
+	font-size: 1.6rem;
 	line-height: 1.5;
-	min-height: 10rem;
+	height: 100%;
 	padding: 1rem;
+	min-height: 20vh;
 }
 
 @media screen and (min-width: 768px) and (orientation: landscape) {
 	.textarea {
 		font-size: 3.6rem;
-		width: 95%;
 		min-height: 30vh;
 	}
 }

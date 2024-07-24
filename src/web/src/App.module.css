@@ -13,9 +13,8 @@
 	text-align: center;
 }
 
-@media screen and (min-width: 768px) and (orientation: landscape) {
+@media screen and (min-width: 775px) and (orientation: landscape) {
 	/* CSS rules for desktop screens in landscape orientation */
-	/* Add your styles here */
 	.container {
 		width: 50%;
 	}
@@ -25,11 +24,14 @@
 	}
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 775px) {
 	/* CSS rules for tablet portrait */
+	.container {
+		font-size: 3.6rem;
+	}
 }
 
-@media only screen and (min-width: 481px) and (max-width: 767px) {
+@media only screen and (min-width: 481px) and (max-width: 775px) {
 	/* CSS rules for mobile landscape */
 }
 

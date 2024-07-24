@@ -1,12 +1,16 @@
 .form {
 	display: flex;
 	justify-content: center;
-	width: 100%;
-	padding: 1rem;
 	background-color: #ffffff;
 	border-radius: var(--radius);
 	box-shadow: var(--shadow);
 	font-family: 'Roboto', sans-serif;
+	min-height: 20vh;
+}
+
+.mainContainer {
+	display: flex;
+	flex-flow: column nowrap;
 }
 
 .buttonContainer {
@@ -18,7 +22,18 @@
 	width: 100%;
 }
 
-@media screen and (min-width: 768px) and (orientation: landscape) {
+@media screen and (min-width: 775px) and (orientation: landscape) {
+	form {
+		margin-right: 5rem;
+		width: 100%;
+		min-height: 30vh;
+	}
+	.mainContainer {
+		flex-flow: row nowrap;
+		justify-content: space-evenly;
+		width: 100%;
+	}
+
 	.buttonContainer {
 		padding-top: 10px;
 		display: flex;
@@ -29,11 +44,14 @@
 	}
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 775px) {
 	/* CSS rules for tablet portrait */
+	.mainContainer {
+		width: 75%;
+	}
 }
 
-@media only screen and (min-width: 481px) and (max-width: 767px) {
+@media only screen and (min-width: 481px) and (max-width: 775px) {
 	/* CSS rules for mobile landscape */
 }
 

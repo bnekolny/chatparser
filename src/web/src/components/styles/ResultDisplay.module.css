@@ -7,9 +7,31 @@
 	font-size: 1.6rem;
 	line-height: 1.5;
 	overflow-wrap: break-word;
-	background-color: var(--color-tertiary);
 }
 
 .responseContent {
 	margin-bottom: 1.6rem;
+}
+
+@media screen and (min-width: 775px) and (orientation: landscape) {
+	/* CSS rules for desktop screens in landscape orientation */
+	.response {
+		padding: 2rem 5rem;
+		font-size: 3.6rem;
+	}
+}
+
+@media only screen and (max-width: 775px) {
+	/* CSS rules for tablet portrait */
+	.response {
+		font-size: 1.8rem;
+	}
+}
+
+@media only screen and (min-width: 481px) and (max-width: 775px) {
+	/* CSS rules for mobile landscape */
+}
+
+@media only screen and (max-width: 480px) {
+	/* CSS rules for mobile portrait */
 }
