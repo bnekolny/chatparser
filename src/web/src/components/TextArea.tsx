@@ -3,8 +3,7 @@ import styles from './styles/TextArea.module.css';
 import {TEXTAREA} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
-const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((props, ref) => {
-
+const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((_, ref) => {
 	const {text, handleTextChange} = useChatContext();
 
 	return (
