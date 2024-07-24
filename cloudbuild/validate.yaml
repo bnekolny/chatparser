@@ -1,4 +1,12 @@
 steps:
+- name: node:22-alpine3.18
+  script: |
+    #!/bin/sh
+    cd src/web
+    npm ci
+    npm run build
+  waitFor: ["-"]
+
 - name: golang:1.22
   script: |
     #!/bin/sh
