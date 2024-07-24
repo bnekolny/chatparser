@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/DictInputForm.module.css';
@@ -15,20 +15,11 @@ const TextInputForm: React.FC = () => {
 		setResponse,
 	} = useChatContext();
 
-	const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 	React.useEffect(() => {
 		const initialValue = getInputQueryParamValue()
 		setText(initialValue);
+		handleSendMessage(initialValue);
 	}, [])
-	React.useEffect(() => {
-		// checking these should ensure this only runs once
-		if (text && !previousText && !hasLoaded) {
-			handleSendMessage();
-		} else {
-			// Set hasLoaded otherwise it will run on the first character submit
-			setHasLoaded(true);
-		}
-	}, [text]) // we need to wait for the state to set, or  we face a race condition
 
 	const inputQueryParamName = 'text';
 
