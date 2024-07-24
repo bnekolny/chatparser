@@ -52,11 +52,14 @@ const TextInputForm: React.FC = () => {
 	const handleClear = () => {
 		setText('');
 		setResponse('');
+		textAreaRef.current?.focus();
 	};
+
+	const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
-			<TextArea />
+			<TextArea ref={textAreaRef} />
 			<div className={styles.buttonContainer}>
 			<Button
 				type="submit"

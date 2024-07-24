@@ -3,11 +3,13 @@ import styles from './styles/TextArea.module.css';
 import {TEXTAREA} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
-const TextArea: React.FC = () => {
+const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((props, ref) => {
+
 	const {text, handleTextChange} = useChatContext();
 
 	return (
 		<textarea
+			ref={ref}
 			value={text}
 			onChange={handleTextChange}
 			className={styles.textarea}
@@ -16,6 +18,5 @@ const TextArea: React.FC = () => {
 			style={{resize: 'vertical', overflow: 'hidden'}}
 		/>
 	);
-};
-
+});
 export default TextArea;
