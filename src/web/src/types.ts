@@ -5,4 +5,5 @@ export interface MessageApiResult {
 export enum Mode {
 	Verify = 'verify',
 	Improve = 'improve',
+	Dictionary = 'dictionary',
 }

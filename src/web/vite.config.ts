@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import viteCompression from 'vite-plugin-compression';
+import { resolve } from 'path'
+import viteCompression from 'vite-plugin-compression'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
@@ -26,7 +27,13 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       }
     },
     build: {
-      sourcemap: false
-    }
+      sourcemap: true,
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          dict: resolve(__dirname, 'pages/dict.html'),
+        },
+      },
+    },
   }
 })

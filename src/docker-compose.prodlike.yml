@@ -8,6 +8,12 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY}
     ports:
       - "${PORT}:${PORT}"
+  chatparser-shell:
+    build:
+      context: .
+      target: shell
+    profiles:
+      - shell
   nginx:
     image: nginx:latest
     ports:

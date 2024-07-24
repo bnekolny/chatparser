@@ -25,6 +25,13 @@ COPY . .
 # Build the application with CGO disabled
 RUN CGO_ENABLED=0 go build -o chatparser
 
+FROM alpine as shell
+WORKDIR /app
+COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=gobuilder /app/chatparser /app/chatparser
+COPY --from=staticbuilder /srv/app/dist /app/static
+CMD ["sh"]
+
 FROM scratch as release
 # Not super helpful without the COPY below, because it's not needed at this stage
 #FROM alpine as release

@@ -13,8 +13,7 @@ interface ChatContextType {
 	setPreviousText: (text: string) => void;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
-	handleSendMessage: () => Promise<void>;
-	handleSubmitRevisedText: () => Promise<void>;
+	handleSendMessage: (inputText?: string) => Promise<void>;
 	response: string;
 	setResponse: (response: string) => void;
 	revisedMessage: string;
@@ -23,10 +22,11 @@ interface ChatContextType {
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
 
-const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
-	children,
-}) => {
-	const [mode, setMode] = useState<Mode>(Mode.Verify);
+const ChatContextProvider: React.FC<{
+	children: React.ReactNode;
+	value?: Partial<ChatContextType>;
+}> = ({children, value = {}}) => {
+	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify); //Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,11 +49,11 @@ const ChatContextProvider: React.FC<{children: React.ReactNode}> = ({
 		target.style.height = target.scrollHeight + 'px';
 	};
 
-	const handleSendMessage = async (): Promise<void> => {
-		setPreviousText(text);
+	const handleSendMessage = async (inputText?: string): Promise<void> => {
+		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			const response = await sendMessage(text, mode);
+			const response = await sendMessage(inputText || text, mode);
 			setResponse(response.data);
 		} finally {
 			setIsLoading(false);
