@@ -3,6 +3,7 @@ import {Mode} from '../types';
 import {useMessageApi} from '../hooks/useMessageApi';
 import {CHAT_CONTEXT_ERROR, REGEX} from '../constants';
 
+// TODO: talk to Brett about dividing this file
 interface ChatContextType {
 	mode: Mode;
 	setMode: (mode: Mode) => void;
@@ -19,6 +20,8 @@ interface ChatContextType {
 	revisedMessage: string;
 	setRevisedMessage: (text: string) => void;
 	handleSubmitRevisedText: () => void;
+	isLandscape: boolean;
+	setIsLandscape: (isLandscape: boolean) => void;
 }
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
@@ -33,6 +36,7 @@ const ChatContextProvider: React.FC<{
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 	const [revisedMessage, setRevisedMessage] = useState<string>('');
+	const [isLandscape, setIsLandscape] = useState<boolean>(false);
 
 	const {sendMessage} = useMessageApi();
 
@@ -88,6 +92,8 @@ const ChatContextProvider: React.FC<{
 		revisedMessage,
 		handleSubmitRevisedText,
 		setRevisedMessage,
+		isLandscape,
+		setIsLandscape,
 	};
 
 	return (

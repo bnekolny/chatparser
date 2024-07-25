@@ -6,9 +6,21 @@ import styles from './App.module.css';
 import {DESCRIPTION_TEXT} from './constants';
 import {Mode} from './types';
 import {useChatContext} from './context/ChatContext';
+import LandscapeBlocker from './components/LandscapeBlocker';
 
 const App: React.FC = () => {
-	const {mode, setMode} = useChatContext();
+	const {mode, setMode, isLandscape, setIsLandscape} = useChatContext();
+
+	useEffect(() => {
+		const checkOrientation = () => {
+			setIsLandscape(window.innerWidth > window.innerHeight);
+		};
+
+		window.addEventListener('resize', checkOrientation);
+		checkOrientation();
+
+		return () => window.removeEventListener('resize', checkOrientation);
+	}, []);
 
 	useEffect(() => {
 		const hash = window.location.hash.slice(1) as Mode;
@@ -20,6 +32,10 @@ const App: React.FC = () => {
 	useEffect(() => {
 		window.location.hash = mode;
 	}, [mode]);
+
+	if (isLandscape && window.innerWidth <= 900) {
+		return <LandscapeBlocker />;
+	}
 
 	return (
 		<div className={styles.container}>
