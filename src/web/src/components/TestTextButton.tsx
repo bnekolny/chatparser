@@ -15,12 +15,7 @@ const TestTextButton: React.FC = () => {
 	};
 
 	return (
-		<button
-			type="button"
-			onClick={submitTestText}
-			className="button"
-			style={{marginTop: '30px'}}
-		>
+		<button type="button" onClick={submitTestText} className="button">
 			Submit test text
 		</button>
 	);

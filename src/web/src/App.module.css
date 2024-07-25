@@ -1,11 +1,21 @@
 .container {
+	box-sizing: border-box;
+	align-items: center;
+	background-color: papayawhip;
 	display: flex;
 	flex-flow: column nowrap;
-	min-height: 100vh;
-	margin: 0 auto;
-	justify-content: center;
-	align-items: center;
 	font-size: 1.6rem;
+	justify-content: center;
+	margin: 0 auto;
+	min-height: 100vh;
+	padding: var(--standard-container-padding);
+}
+
+.modeAndDescription {
+	box-sizing: border-box;
+	background-color: lightcoral;
+	padding: var(--standard-container-padding);
+	width: 100%;
 }
 
 .description {

@@ -26,4 +26,13 @@
 	--color-success: #4caf50;
 	--color-warning: #ffc107;
 	--color-error: #f44336;
+	--standard-container-padding: 1.5rem;
+	--standard-container-margin: 1.5rem;
+	--standard-element-margin: 0.5rem;
+}
+
+body {
+	background-color: lightgray;
+	margin: 0;
+	padding: 0;
 }

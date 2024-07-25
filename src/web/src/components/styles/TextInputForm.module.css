@@ -1,4 +1,12 @@
+.mainContainer {
+	box-sizing: border-box;
+	width: 100%;
+	background-color: lightseagreen;
+	padding: var(--standard-container-padding);
+}
+
 .form {
+	box-sizing: border-box;
 	display: flex;
 	justify-content: center;
 	background-color: #ffffff;
@@ -6,15 +14,10 @@
 	box-shadow: var(--shadow);
 	font-family: 'Roboto', sans-serif;
 	min-height: 20vh;
-}
-
-.mainContainer {
-	display: flex;
-	flex-flow: column nowrap;
+	padding: var(--standard-container-padding);
 }
 
 .buttonContainer {
-	padding-top: 10px;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-between;
@@ -46,9 +49,9 @@
 
 @media only screen and (max-width: 775px) {
 	/* CSS rules for tablet portrait */
-	.mainContainer {
+	/* .mainContainer {
 		width: 75%;
-	}
+	} */
 }
 
 @media only screen and (min-width: 481px) and (max-width: 775px) {

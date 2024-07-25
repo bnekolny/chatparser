@@ -38,48 +38,46 @@ const TextInputForm: React.FC = () => {
 	};
 
 	return (
-		<>
-			<div className={styles.mainContainer}>
-				<form
-					onSubmit={e => {
-						e.preventDefault();
-						handleSendMessage();
-					}}
-					className={styles.form}
-				>
-					<TextArea />
-				</form>
+		<div className={styles.mainContainer}>
+			<form
+				onSubmit={e => {
+					e.preventDefault();
+					handleSendMessage();
+				}}
+				className={styles.form}
+			>
+				<TextArea />
+			</form>
 
-				<div className={styles.buttonContainer}>
-					<Button
-						type="submit"
-						disabled={
-							(mode !== Mode.Verify || !revisedMessage) &&
-							(!hasNewText || isLoading)
-						}
-						onClick={
-							mode === Mode.Verify && revisedMessage
-								? handleSubmitRevisedText
-								: handleSubmit
-						}
-						className="submit"
-					>
-						{isLoading
-							? BUTTON_TEXT.LOADING
-							: mode === Mode.Verify && revisedMessage
-							? BUTTON_TEXT.SUBMIT_REVISED
-							: BUTTON_TEXT.SUBMIT}
-					</Button>
-					<Button type="button" onClick={handleCopy} className="copy">
-						{BUTTON_TEXT.COPY}
-					</Button>
-					<Button type="button" onClick={handleClear} className="clear">
-						{BUTTON_TEXT.CLEAR}
-					</Button>
-					{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
-				</div>
+			<div className={styles.buttonContainer}>
+				<Button
+					type="submit"
+					disabled={
+						(mode !== Mode.Verify || !revisedMessage) &&
+						(!hasNewText || isLoading)
+					}
+					onClick={
+						mode === Mode.Verify && revisedMessage
+							? handleSubmitRevisedText
+							: handleSubmit
+					}
+					className="submit"
+				>
+					{isLoading
+						? BUTTON_TEXT.LOADING
+						: mode === Mode.Verify && revisedMessage
+						? BUTTON_TEXT.SUBMIT_REVISED
+						: BUTTON_TEXT.SUBMIT}
+				</Button>
+				<Button type="button" onClick={handleCopy} className="copy">
+					{BUTTON_TEXT.COPY}
+				</Button>
+				<Button type="button" onClick={handleClear} className="clear">
+					{BUTTON_TEXT.CLEAR}
+				</Button>
+				{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 			</div>
-		</>
+		</div>
 	);
 };
 

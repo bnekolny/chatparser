@@ -1,16 +1,17 @@
 .response {
-	margin-top: 2rem;
-	padding: 2rem;
 	border-radius: var(--radius);
 	width: 100%;
 	word-break: break-word;
 	font-size: 1.6rem;
 	line-height: 1.5;
 	overflow-wrap: break-word;
+	background-color: lightpink;
+	margin: 0;
+	padding: 0;
+	width: auto; /* because of markdown component */
 }
 
 .responseContent {
-	margin-bottom: 1.6rem;
 }
 
 @media screen and (min-width: 775px) and (orientation: landscape) {
