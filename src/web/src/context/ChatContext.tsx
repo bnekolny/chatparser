@@ -58,7 +58,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 						fullResponse += chunk[i];
 						setResponse(fullResponse);
 						// Add a small delay to create a typing effect
-						await new Promise(resolve => setTimeout(resolve, 1));
+						await new Promise(resolve => setTimeout(resolve, 0));
 					}
 					//partialResponse += decoder.decode(value, { stream: true });
 					//setResponse(partialResponse);

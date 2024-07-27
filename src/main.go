@@ -14,9 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/generative-ai-go/genai"
-	"google.golang.org/api/iterator"
-
 	"github.com/vearutop/statigz"
 	"github.com/vearutop/statigz/brotli"
 )
@@ -133,39 +130,55 @@ func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// TODO: update this to hide google's genai specifics
-	genaiResponseIter, err := streamFeedback(ctx, FeedbackTypeMap[MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
+	headers, genaiReader, err := streamFeedback(ctx, FeedbackTypeMap[MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	bufferSize := 256 // Adjust buffer size as needed
+	writeBuffer := make([]byte, bufferSize)
+
 	// todo: write content safety information in headers?
 	w.WriteHeader(http.StatusOK)
-	if f, ok := w.(http.Flusher); ok {
-		logger.Info("flush status code")
-		f.Flush()
-	}
-	// todo: write to GCS
+	w.Header().Set("Transfer-Encoding", "chunked")
 
+	for k, v := range headers {
+		w.Header().Set(k, v)
+	}
+
+	bw := bufio.NewWriterSize(w, bufferSize)
 	for {
-		resp, err := genaiResponseIter.Next()
-		if err == iterator.Done {
+		n, err := genaiReader.Read(writeBuffer)
+		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			logger.Fatal(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		//time.Sleep(1 * time.Second)
-		txtResp := resp.Candidates[0].Content.Parts[0]
-		w.Write([]byte(txtResp.(genai.Text)))
-		if f, ok := w.(http.Flusher); ok {
-			logger.Info("flushing: %s", txtResp)
-			f.Flush()
+		for i := 0; i < n; i += bufferSize {
+			chunkSize := min(bufferSize, n-i)
+			_, err := bw.Write(writeBuffer[i : i+chunkSize])
+
+			if err != nil {
+				// Handle error
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = bw.Flush()
+			if f, ok := w.(http.Flusher); ok {
+				f.Flush()
+			}
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
-		// ... print resp
-		//w.Write([]byte(response))
 	}
+	// TODO: handle error
+	// todo: write to GCS
+	bw.Flush()
 }
 
 func messageHandler(messageType FeedbackType) http.HandlerFunc {
