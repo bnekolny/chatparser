@@ -43,8 +43,30 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			const response = await sendMessage(inputText || text, mode);
-			setResponse(response.data);
+			const stream = await sendMessage(text);
+			if (stream) {
+				const reader = stream.getReader();
+				const decoder = new TextDecoder();
+				let fullResponse = '';
+
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
+
+					const chunk = decoder.decode(value, { stream: true });
+					for (let i = 0; i < chunk.length; i++ ) {
+						fullResponse += chunk[i];
+						setResponse(fullResponse);
+						// Add a small delay to create a typing effect
+						await new Promise(resolve => setTimeout(resolve, 1));
+					}
+					//partialResponse += decoder.decode(value, { stream: true });
+					//setResponse(partialResponse);
+				}
+			}
+			else {
+				setResponse('doh! something went wrong');
+			}
 		} finally {
 			setIsLoading(false);
 		}

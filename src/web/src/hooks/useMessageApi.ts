@@ -1,4 +1,4 @@
-import {MessageApiResult, Mode} from '../types';
+//import {MessageApiResult, Mode} from '../types';
 import {
 	API_ENDPOINTS,
 	CONTENT_TYPES,
@@ -10,10 +10,10 @@ import {
 export const useMessageApi = () => {
 	const sendMessage = async (
 		text: string,
-		mode: Mode,
-	): Promise<MessageApiResult> => {
+		//mode: Mode,
+	): Promise<ReadableStream<Uint8Array> | null> => {
 		try {
-			const response = await fetch(API_ENDPOINTS.MESSAGE(mode), {
+			const response = await fetch(`/api/ai-response/stream`, {
 				method: HTTP_METHODS.POST,
 				headers: {
 					'Content-Type': CONTENT_TYPES.TEXT_PLAIN,
@@ -25,16 +25,15 @@ export const useMessageApi = () => {
 				throw new Error(ERROR_MESSAGES.HTTP_ERROR(response.status));
 			}
 
-			const data = await response.text();
+			return response.body;
+			/*const data = response.text();
 
 			return {
 				data: data,
-			};
+			};*/
 		} catch (error) {
 			console.error(`${SUBMIT_ERROR}:`, error);
-			return {
-				data: ERROR_MESSAGES.PROCESSING_ERROR,
-			};
+			return null;
 		}
 	};
 

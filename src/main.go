@@ -14,6 +14,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/api/iterator"
+
 	"github.com/vearutop/statigz"
 	"github.com/vearutop/statigz/brotli"
 )
@@ -99,6 +102,70 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(response))
+}
+
+func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
+	defer logger.Sync()
+	ctx := r.Context()
+
+	buffer := make([]byte, 1024)
+	maxPayloadSize := int64(1024 * 1024 * 10)
+	if r.ContentLength > maxPayloadSize {
+		http.Error(w, "Request body too large", http.StatusRequestEntityTooLarge)
+		return
+	}
+
+	bodyString := ""
+	reader := io.LimitReader(r.Body, maxPayloadSize) // Optional: limit reading to specified size
+	for {
+		n, err := reader.Read(buffer)
+		if err != nil {
+			if err == io.EOF {
+				if n > 0 { // Check if any bytes were read
+					bodyString += string(buffer[:n])
+				}
+				break
+			}
+			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+			return
+		}
+		bodyString += string(buffer[:n])
+	}
+	defer r.Body.Close()
+
+	// TODO: update this to hide google's genai specifics
+	genaiResponseIter, err := streamFeedback(ctx, FeedbackTypeMap[MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// todo: write content safety information in headers?
+	w.WriteHeader(http.StatusOK)
+	if f, ok := w.(http.Flusher); ok {
+		logger.Info("flush status code")
+		f.Flush()
+	}
+	// todo: write to GCS
+
+	for {
+		resp, err := genaiResponseIter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			logger.Fatal(err)
+		}
+
+		//time.Sleep(1 * time.Second)
+		txtResp := resp.Candidates[0].Content.Parts[0]
+		w.Write([]byte(txtResp.(genai.Text)))
+		if f, ok := w.(http.Flusher); ok {
+			logger.Info("flushing: %s", txtResp)
+			f.Flush()
+		}
+		// ... print resp
+		//w.Write([]byte(response))
+	}
 }
 
 func messageHandler(messageType FeedbackType) http.HandlerFunc {
@@ -201,6 +268,7 @@ func main() {
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
+	mux.HandleFunc("/api/ai-response/stream", aiResponseStreamingHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
 	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
 	mux.HandleFunc("/api/message/dictionary", messageHandler(MESSAGE_FEEDBACK_DICTIONARY))

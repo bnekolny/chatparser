@@ -8,14 +8,15 @@ import (
 )
 
 const GeminiModelSelection = "gemini-1.5-flash"
+
 var GeminiApiKey string
 
 func init() {
 	// TODO: on boot, throw an error if this isn't configured
 	GeminiApiKey = os.Getenv("GEMINI_API_KEY")
-    if GeminiApiKey == "" {
-        panic("GEMINI_API_KEY not set")
-    }
+	if GeminiApiKey == "" {
+		panic("GEMINI_API_KEY not set")
+	}
 }
 
 type FeedbackType int
@@ -102,11 +103,11 @@ func getFeedback(feedbackType FeedbackType, text string) (string, error) {
 	return string(resp.Candidates[0].Content.Parts[0].(genai.Text)), nil
 }
 
-func streamFeedback(ctx context.Context, promptPretext string, prompt string) (resp *genai.GenerateContentResponse, err error) {
+func streamFeedback(ctx context.Context, promptPretext string, prompt string) (resp *genai.GenerateContentResponseIterator, err error) {
 	defer logger.Sync()
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(GeminiApiKey))
-    // TODO: do better
+	// TODO: do better
 	if err != nil {
 		logger.Fatal(err)
 		return nil, err
@@ -114,7 +115,7 @@ func streamFeedback(ctx context.Context, promptPretext string, prompt string) (r
 	defer client.Close()
 
 	model := client.GenerativeModel(GeminiModelSelection)
-	resp, err = model.GenerateContent(ctx, genai.Text(promptPretext+"\n"+prompt))
+	resp = model.GenerateContentStream(ctx, genai.Text(promptPretext+"\n"+prompt))
 	if err != nil {
 		logger.Fatal(err)
 		return nil, err
@@ -122,5 +123,6 @@ func streamFeedback(ctx context.Context, promptPretext string, prompt string) (r
 
 	// TODO: check on contents so we don't hit errors
 	//return string(resp.Candidates[0].Content.Parts[0].(genai.Text)), nil
-    return resp, err
+	return resp, err
+	// TODO: I think this needs to return a function that proxies the io.Reader response
 }
