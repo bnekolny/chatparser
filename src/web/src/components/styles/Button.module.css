@@ -1,14 +1,12 @@
 button {
-	width: auto;
-	border: none;
-	border-radius: var(--radius);
 	cursor: pointer;
 	font-size: 1.6rem;
 	font-weight: bold;
 	color: white;
 	background-color: var(--color-primary);
-	padding: var(--standard-button-padding);
-	margin: var(--standard-button-margin);
+	padding: var(--button-padding);
+	margin: var(--button-margin);
+	min-width: 13rem;
 }
 
 .submitTestText {
@@ -22,12 +20,10 @@ button {
 
 .copy {
 	background-color: var(--color-warning);
-	width: 45%;
 }
 
 .clear {
 	background-color: var(--color-accent-light);
-	width: 45%;
 }
 
 .submit {
@@ -37,25 +33,19 @@ button {
 
 .copy,
 .clear {
+	width: 45%;
 }
 
-@media screen and (min-width: 768px) and (orientation: landscape) {
-	button {
+@media screen and (min-width: 700px) {
+	.copy,
+	.clear {
 		width: 100%;
-		padding: 3rem;
-		font-size: 3.6rem;
-		margin: 1rem 0;
 	}
 }
 
-@media only screen and (max-width: 767px) {
-	/* CSS rules for tablet portrait */
-}
-
-@media only screen and (min-width: 481px) and (max-width: 767px) {
-	/* CSS rules for mobile landscape */
-}
-
-@media only screen and (max-width: 480px) {
-	/* CSS rules for mobile portrait */
+@media screen and (max-width: 360px) {
+	.copy,
+	.clear {
+		width: 100%;
+	}
 }

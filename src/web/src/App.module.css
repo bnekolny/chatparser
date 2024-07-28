@@ -1,54 +1,24 @@
 .container {
-	box-sizing: border-box;
-	align-items: center;
-	background-color: papayawhip;
-	display: flex;
+	/* background-color: papayawhip; */
 	flex-flow: column nowrap;
-	font-size: 1.6rem;
 	justify-content: center;
-	margin: 0 auto;
 	min-height: 100vh;
-	padding: var(--standard-container-padding);
+	padding: var(--container-padding);
+	margin: 0rem auto;
+	max-width: 100rem;
 }
 
 .modeAndDescription {
-	box-sizing: border-box;
-	background-color: lightcoral;
-	padding: var(--standard-container-padding);
+	/* background-color: lightcoral; */
+	flex-flow: column nowrap;
+	max-width: 50rem;
 	width: 100%;
 }
 
-.modeAndDescription p {
+/* .modeAndDescription p {
 	background-color: lightgray;
-}
+} */
 
 .description {
-	font-size: 1.6rem;
 	text-align: center;
-}
-
-@media screen and (min-width: 775px) and (orientation: landscape) {
-	/* CSS rules for desktop screens in landscape orientation */
-	.container {
-		width: 50%;
-	}
-
-	.description {
-		font-size: 3.6rem;
-	}
-}
-
-@media only screen and (max-width: 775px) {
-	/* CSS rules for tablet portrait */
-	.container {
-		font-size: 3.6rem;
-	}
-}
-
-@media only screen and (min-width: 481px) and (max-width: 775px) {
-	/* CSS rules for mobile landscape */
-}
-
-@media only screen and (max-width: 480px) {
-	/* CSS rules for mobile portrait */
 }

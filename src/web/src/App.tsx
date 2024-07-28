@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
@@ -9,7 +9,8 @@ import {useChatContext} from './context/ChatContext';
 import LandscapeBlocker from './components/LandscapeBlocker';
 
 const App: React.FC = () => {
-	const {mode, setMode, isLandscape, setIsLandscape} = useChatContext();
+	const {mode, setMode} = useChatContext();
+	const [isLandscape, setIsLandscape] = useState<boolean>(false);
 
 	useEffect(() => {
 		const checkOrientation = () => {
@@ -33,7 +34,7 @@ const App: React.FC = () => {
 		window.location.hash = mode;
 	}, [mode]);
 
-	if (isLandscape && window.innerWidth <= 900) {
+	if (isLandscape && window.innerWidth >= 600 && window.innerWidth <= 1050) {
 		return <LandscapeBlocker />;
 	}
 

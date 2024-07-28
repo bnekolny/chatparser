@@ -26,16 +26,104 @@
 	--color-success: #4caf50;
 	--color-warning: #ffc107;
 	--color-error: #f44336;
-	--standard-container-padding: 1.5rem 1.5rem 0rem 1.5rem;
-	--standard-container-margin: 1.5rem 1.5rem 0rem 1.5rem;
-	--standard-element-margin: 0rem 0rem 1.5rem 0rem;
-	--standard-button-padding: 1.5rem;
-	--standard-button-margin: 0.75rem 0rem;
-	--stander-spacing: 1.5rem;
+	/* Standard Spacing */
+	--spacing-xs: 0.5rem;
+	--spacing-sm: 1rem;
+	--spacing-md: 1.5rem;
+	--spacing-lg: 2rem;
+	--spacing-xl: 3rem;
+	--container-padding: var(--spacing-sm) var(--spacing-sm);
+	--container-margin: var(--spacing-md) 0;
+	--element-margin: 0 0 var(--spacing-md) 0;
+	--button-padding: var(--spacing-sm) var(--spacing-md);
+	--button-margin: var(--spacing-xs);
+	/* Standard Text*/
+	--font-size-sm: 1.6rem;
+	--font-size-md: 3.2rem;
 }
 
 body {
-	background-color: lightgray;
 	margin: 0;
 	padding: 0;
+}
+
+div {
+	align-items: center;
+	box-sizing: border-box;
+	display: flex;
+	font-size: var(--font-size-sm);
+	padding: var(--container-padding);
+	width: 100%;
+	line-height: 1.6;
+}
+
+span {
+	align-items: center;
+	justify-content: center;
+	display: flex;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	margin-bottom: var(--spacing-sm);
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+ul {
+	box-sizing: border-box;
+	width: 100%;
+	padding-left: var(--spacing-lg);
+	margin: 0;
+}
+
+li {
+	margin-bottom: var(--spacing-xs);
+}
+
+form {
+	box-shadow: var(--shadow);
+	justify-content: center;
+	background-color: #ffffff;
+	box-sizing: border-box;
+	border-radius: var(--radius);
+	display: flex;
+	font-family: 'Roboto', sans-serif;
+	padding: var(--container-padding);
+	width: 100%;
+}
+
+textarea {
+	box-sizing: border-box;
+	border: 0.1rem solid #ccc;
+	border-radius: var(--radius);
+	height: auto;
+	text-align: center;
+	min-width: 100%;
+	min-height: 100%;
+	line-height: var(--font-size-sm);
+	padding: var(--container-padding);
+	resize: none;
+}
+
+button {
+	width: auto;
+	border: none;
+	border-radius: var(--radius);
+	cursor: pointer;
+	font-size: var(--font-size-sm);
+	font-weight: bold;
+	color: white;
+	background-color: var(--color-primary);
+	padding: var(--button-padding);
+	margin: var(--button-margin);
 }

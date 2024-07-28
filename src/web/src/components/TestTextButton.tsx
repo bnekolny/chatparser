@@ -21,7 +21,7 @@ const TestTextButton: React.FC = () => {
 			onClick={submitTestText}
 			className={styles.submitTestText}
 		>
-			Submit test text
+			Add test text
 		</button>
 	);
 };

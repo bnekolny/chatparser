@@ -1,73 +1,28 @@
 .mainContainer {
 	display: flex;
 	flex-flow: column nowrap;
-	box-sizing: border-box;
 	width: 100%;
-	background-color: lightseagreen;
-	padding: var(--standard-container-padding);
+	/* background-color: lightseagreen; */
 }
 
 .form {
-	box-sizing: border-box;
-	display: flex;
-	justify-content: center;
-	background-color: #ffffff;
-	border-radius: var(--radius);
-	box-shadow: var(--shadow);
-	font-family: 'Roboto', sans-serif;
 	min-height: 20vh;
-	padding: var(--standard-container-padding);
-}
-
-.form textarea {
-	margin: var(--standard-element-margin);
-	padding-bottom: var(--stander-spacing);
 }
 
 .buttonContainer {
-	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-between;
-	align-items: center;
-	padding: var(--standard-container-padding);
-	background-color: lightyellow;
-	box-sizing: border-box;
+	/* background-color: lightyellow; */
 	width: 100%;
+	max-width: 30rem;
 }
 
-@media screen and (min-width: 775px) and (orientation: landscape) {
-	form {
-		margin-right: 5rem;
-		width: 100%;
-		min-height: 30vh;
-	}
+@media screen and (min-width: 700px) {
 	.mainContainer {
 		flex-flow: row nowrap;
-		justify-content: space-evenly;
-		width: 100%;
 	}
 
-	.buttonContainer {
-		padding-top: 10px;
-		display: flex;
-		flex-flow: row wrap;
-		justify-content: space-between;
-		align-items: center;
-		width: 50%;
+	.form {
+		min-height: 50rem;
 	}
-}
-
-@media only screen and (max-width: 775px) {
-	/* CSS rules for tablet portrait */
-	/* .mainContainer {
-		width: 75%;
-	} */
-}
-
-@media only screen and (min-width: 481px) and (max-width: 775px) {
-	/* CSS rules for mobile landscape */
-}
-
-@media only screen and (max-width: 480px) {
-	/* CSS rules for mobile portrait */
 }

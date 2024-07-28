@@ -8,7 +8,7 @@ const ModeSelector: React.FC = () => {
 	const {mode, setMode} = useChatContext();
 	return (
 		<div className={styles.modeSelector}>
-			<div className={styles.selector}>
+			<span className={styles.selector}>
 				<input
 					type="radio"
 					id={Mode.Verify}
@@ -20,9 +20,9 @@ const ModeSelector: React.FC = () => {
 				<label htmlFor={Mode.Verify}>
 					{capitalizeFirstLetter(Mode.Verify)}
 				</label>
-			</div>
+			</span>
 
-			<div className={styles.selector}>
+			<span className={styles.selector}>
 				<input
 					type="radio"
 					id={Mode.Improve}
@@ -34,7 +34,7 @@ const ModeSelector: React.FC = () => {
 				<label htmlFor={Mode.Improve}>
 					{capitalizeFirstLetter(Mode.Improve)}
 				</label>
-			</div>
+			</span>
 		</div>
 	);
 };
