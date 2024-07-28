@@ -107,7 +107,6 @@ textarea {
 	border: 0.1rem solid #ccc;
 	border-radius: var(--radius);
 	height: auto;
-	text-align: center;
 	min-width: 100%;
 	min-height: 100%;
 	line-height: var(--font-size-sm);

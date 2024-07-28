@@ -2,7 +2,7 @@
 	/* background-color: papayawhip; */
 	flex-flow: column nowrap;
 	justify-content: center;
-	min-height: 100vh;
+	min-height: 95vh;
 	padding: var(--container-padding);
 	margin: 0rem auto;
 	max-width: 100rem;
