@@ -26,9 +26,12 @@
 	--color-success: #4caf50;
 	--color-warning: #ffc107;
 	--color-error: #f44336;
-	--standard-container-padding: 1.5rem;
-	--standard-container-margin: 1.5rem;
-	--standard-element-margin: 0.5rem;
+	--standard-container-padding: 1.5rem 1.5rem 0rem 1.5rem;
+	--standard-container-margin: 1.5rem 1.5rem 0rem 1.5rem;
+	--standard-element-margin: 0rem 0rem 1.5rem 0rem;
+	--standard-button-padding: 1.5rem;
+	--standard-button-margin: 0.75rem 0rem;
+	--stander-spacing: 1.5rem;
 }
 
 body {

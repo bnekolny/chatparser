@@ -18,6 +18,10 @@
 	width: 100%;
 }
 
+.modeAndDescription p {
+	background-color: lightgray;
+}
+
 .description {
 	font-size: 1.6rem;
 	text-align: center;

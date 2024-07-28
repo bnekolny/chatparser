@@ -1,6 +1,5 @@
 button {
-	width: 100%;
-
+	width: auto;
 	border: none;
 	border-radius: var(--radius);
 	cursor: pointer;
@@ -8,6 +7,12 @@ button {
 	font-weight: bold;
 	color: white;
 	background-color: var(--color-primary);
+	padding: var(--standard-button-padding);
+	margin: var(--standard-button-margin);
+}
+
+.submitTestText {
+	width: 100%;
 }
 
 .submit:disabled {
@@ -17,10 +22,12 @@ button {
 
 .copy {
 	background-color: var(--color-warning);
+	width: 45%;
 }
 
 .clear {
 	background-color: var(--color-accent-light);
+	width: 45%;
 }
 
 .submit {
@@ -30,7 +37,6 @@ button {
 
 .copy,
 .clear {
-	width: 48%;
 }
 
 @media screen and (min-width: 768px) and (orientation: landscape) {

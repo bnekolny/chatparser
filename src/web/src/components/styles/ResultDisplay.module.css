@@ -6,13 +6,24 @@
 	line-height: 1.5;
 	overflow-wrap: break-word;
 	background-color: lightpink;
-	margin: 0;
-	padding: 0;
 	width: auto; /* because of markdown component */
+	padding: var(--standard-container-padding);
 }
 
-.responseContent {
+.response h2,
+.response p {
+	background-color: lightsalmon;
+	margin: 0;
+	padding: 0;
 }
+
+.response ul {
+	background-color: lightsteelblue;
+	margin: 0;
+}
+
+/* .responseContent {
+} */
 
 @media screen and (min-width: 775px) and (orientation: landscape) {
 	/* CSS rules for desktop screens in landscape orientation */

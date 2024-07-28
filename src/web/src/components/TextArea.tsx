@@ -14,7 +14,6 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((_, ref) => {
 			className={styles.textarea}
 			rows={1}
 			placeholder={TEXTAREA.DEFAULT_PLACEHOLDER}
-			style={{resize: 'vertical', overflow: 'hidden'}}
 		/>
 	);
 });

@@ -1,4 +1,6 @@
 .mainContainer {
+	display: flex;
+	flex-flow: column nowrap;
 	box-sizing: border-box;
 	width: 100%;
 	background-color: lightseagreen;
@@ -17,11 +19,19 @@
 	padding: var(--standard-container-padding);
 }
 
+.form textarea {
+	margin: var(--standard-element-margin);
+	padding-bottom: var(--stander-spacing);
+}
+
 .buttonContainer {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-between;
 	align-items: center;
+	padding: var(--standard-container-padding);
+	background-color: lightyellow;
+	box-sizing: border-box;
 	width: 100%;
 }
 

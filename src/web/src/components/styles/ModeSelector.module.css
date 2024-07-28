@@ -1,6 +1,6 @@
 .modeSelector {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	background-color: lightgreen;
 	padding: var(--standard-container-padding);
 }
@@ -16,7 +16,7 @@
 	cursor: pointer;
 	font-size: 1.6rem;
 	font-weight: 500;
-	margin: 0 var(--standard-element-margin);
+	margin: var(--standard-element-margin);
 }
 
 .modeSelector input[type='radio'] {

@@ -1,5 +1,6 @@
 import React from 'react';
 import {useChatContext} from '../context/ChatContext';
+import styles from './styles/Button.module.css';
 
 const TestTextButton: React.FC = () => {
 	const {setText} = useChatContext();
@@ -15,7 +16,11 @@ const TestTextButton: React.FC = () => {
 	};
 
 	return (
-		<button type="button" onClick={submitTestText} className="button">
+		<button
+			type="button"
+			onClick={submitTestText}
+			className={styles.submitTestText}
+		>
 			Submit test text
 		</button>
 	);

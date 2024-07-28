@@ -1,12 +1,12 @@
 .textarea {
 	width: 100%;
-	border: 1px solid #ccc;
-	border-radius: 0.5rem;
+	border: 0.1rem solid #ccc;
+	border-radius: var(--radius);
 	font-size: 1.6rem;
 	line-height: 1.5;
-	height: 100%;
-	padding: 1rem;
-	min-height: 20vh;
+	height: auto;
+	padding: var(--standard-container-padding);
+	text-align: center;
 }
 
 @media screen and (min-width: 768px) and (orientation: landscape) {
