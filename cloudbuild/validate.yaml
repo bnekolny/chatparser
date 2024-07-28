@@ -6,7 +6,7 @@ steps:
     corepack enable
     yarn set version berry
 
-    yarn ci
+    yarn install
     yarn run build
   waitFor: ["-"]
 
