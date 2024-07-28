@@ -1,15 +1,10 @@
 // API Related
-export const API_ENDPOINTS = {
-	MESSAGE: (mode: string) => `/api/message/${mode}`,
-	AI_REQUEST_STREAM: '/api/ai-response/stream',
-};
-
 export const HTTP_METHODS = {
 	POST: 'POST',
 };
 
-export const CONTENT_TYPES = {
-	TEXT_PLAIN: 'text/plain',
+export const CONTENT_TYPE_HEADER = {
+	TEXT: {'Content-Type': 'text/plain'},
 };
 
 // Error Handling
