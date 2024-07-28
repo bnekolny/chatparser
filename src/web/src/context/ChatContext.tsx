@@ -43,26 +43,31 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			const messageStream = aiRequestStream(text);
-			let fullResponse = '';
-			let currentWord = '';
+			if (mode == Mode.Improve) {
+				const response = await sendMessage(inputText || text, mode);
+				setResponse(response.data);
+			} else {
+				const messageStream = aiRequestStream(text);
+				let fullResponse = '';
+				let currentWord = '';
 
-			for await (const char of messageStream) {
-				fullResponse += char;
-				currentWord += char;
+				for await (const char of messageStream) {
+					fullResponse += char;
+					currentWord += char;
 
-				// this is spitting out words at a time which runs significantly
-				// faster than character at a time is able to do
-				if (/\s/.test(char)) {
-					setResponse(fullResponse);
-					await new Promise(resolve => setTimeout(resolve, 0));
-					currentWord = '';
-				} else if (currentWord.length >= 5) {
-					setResponse(fullResponse);
-					currentWord = '';
+					// this is spitting out words at a time which runs significantly
+					// faster than character at a time is able to do
+					if (/\s/.test(char)) {
+						setResponse(fullResponse);
+						await new Promise(resolve => setTimeout(resolve, 0));
+						currentWord = '';
+					} else if (currentWord.length >= 5) {
+						setResponse(fullResponse);
+						currentWord = '';
+					}
 				}
+				setResponse(fullResponse);
 			}
-			setResponse(fullResponse);
 		} finally {
 			setIsLoading(false);
 		}
