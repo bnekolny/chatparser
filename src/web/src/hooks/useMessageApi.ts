@@ -72,5 +72,8 @@ export const useMessageApi = () => {
 		}
 	};
 
-	return { sendMessage, aiRequestStream };
+	return {
+		sendMessage,
+		aiRequestStream,
+	};
 };
