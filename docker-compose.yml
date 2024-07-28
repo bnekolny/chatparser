@@ -16,7 +16,9 @@ services:
     depends_on:
       - gcsemulator
   vite:
-    image: node:22-alpine
+    build:
+      context: src
+      target: staticbuilder
     entrypoint: ''
     environment:
       VITE_DEV_HOST: 'https://local.chatparser.xyz'
@@ -26,7 +28,7 @@ services:
     volumes:
       - ./src/web:/srv/app
       - ./src/.cert:/srv/.cert
-    command: /bin/sh -c "npm run dev"
+    command: /bin/sh -c "yarn install && yarn run dev"
     depends_on:
       - chatparser
   gcsemulator:

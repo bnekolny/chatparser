@@ -17,9 +17,6 @@ get the gemini API key here: https://console.cloud.google.com/security/secret-ma
   b. windows via https://github.com/FiloSottile/mkcert/releases
 5. generate certificates mkcert -key-file src/.cert/key.pem -cert-file src/.cert/cert.pem 'local.chatparser.xyz'
 
-TODO:
-- manual `npm install` was required
-
 NOTE: requires a US VPN
 
 running locally

@@ -1,11 +1,13 @@
 FROM node:22-alpine3.18 AS staticbuilder
 # was node:22-alpine, but alpine broke things
 # https://github.com/docker-library/official-images/issues/16830
+RUN corepack enable && yarn set version berry
 WORKDIR /srv/app
-COPY web/package*.json ./
-RUN npm ci
+COPY web/package.json ./
+COPY web/yarn.lock ./
+RUN yarn install
 COPY web /srv/app
-RUN npm run build
+RUN yarn run build
 
 FROM golang:1.22-alpine AS gobuilder
 WORKDIR /app
