@@ -30,7 +30,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 
-	const {sendMessage} = useMessageApi();
+	const {aiRequestStream} = useMessageApi();
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
@@ -43,30 +43,26 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			const stream = await sendMessage(text);
-			if (stream) {
-				const reader = stream.getReader();
-				const decoder = new TextDecoder();
-				let fullResponse = '';
+			const messageStream = aiRequestStream(text);
+			let fullResponse = '';
+			let currentWord = '';
 
-				while (true) {
-					const { done, value } = await reader.read();
-					if (done) break;
+			for await (const char of messageStream) {
+				fullResponse += char;
+				currentWord += char;
 
-					const chunk = decoder.decode(value, { stream: true });
-					for (let i = 0; i < chunk.length; i++ ) {
-						fullResponse += chunk[i];
-						setResponse(fullResponse);
-						// Add a small delay to create a typing effect
-						await new Promise(resolve => setTimeout(resolve, 0));
-					}
-					//partialResponse += decoder.decode(value, { stream: true });
-					//setResponse(partialResponse);
+				// this is spitting out words at a time which runs significantly
+				// faster than character at a time is able to do
+				if (/\s/.test(char)) {
+					setResponse(fullResponse);
+					await new Promise(resolve => setTimeout(resolve, 0));
+					currentWord = '';
+				} else if (currentWord.length >= 5) {
+					setResponse(fullResponse);
+					currentWord = '';
 				}
 			}
-			else {
-				setResponse('doh! something went wrong');
-			}
+			setResponse(fullResponse);
 		} finally {
 			setIsLoading(false);
 		}
