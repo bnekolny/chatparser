@@ -30,7 +30,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 
-	const {aiRequestStream} = useMessageApi();
+	const {sendMessage, aiRequestStream} = useMessageApi();
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
@@ -43,7 +43,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			if (mode == Mode.Improve) {
+			if (mode != Mode.Improve) {
 				const response = await sendMessage(inputText || text, mode);
 				setResponse(response.data);
 			} else {
