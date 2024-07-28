@@ -3,6 +3,9 @@ steps:
   script: |
     #!/bin/sh
     cd src/web
+    corepack enable
+    yarn set version berry
+
     yarn ci
     yarn run build
   waitFor: ["-"]
