@@ -4,6 +4,8 @@ steps:
     #!/bin/bash
     cd src
     go test -timeout 1m -v ./...
+  env:
+  - 'GEMINI_API_KEY=fake-gemini-api-key'
 
 options:
   logging: CLOUD_LOGGING_ONLY

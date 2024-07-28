@@ -34,7 +34,7 @@ const ChatContextProvider: React.FC<{
 	const [response, setResponse] = useState<string>('');
 	const [revisedMessage, setRevisedMessage] = useState<string>('');
 
-	const {sendMessage} = useMessageApi();
+	const {sendMessage, aiRequestStream} = useMessageApi();
 
 	useEffect(() => {
 		if (mode === Mode.Verify && response) {
@@ -51,8 +51,31 @@ const ChatContextProvider: React.FC<{
 		setPreviousText(inputText || text);
 		setIsLoading(true);
 		try {
-			const response = await sendMessage(inputText || text, mode);
-			setResponse(response.data);
+			if (mode != Mode.Improve) {
+				const response = await sendMessage(inputText || text, mode);
+				setResponse(response.data);
+			} else {
+				const messageStream = aiRequestStream(text);
+				let fullResponse = '';
+				let currentWord = '';
+
+				for await (const char of messageStream) {
+					fullResponse += char;
+					currentWord += char;
+
+					// this is spitting out words at a time which runs significantly
+					// faster than character at a time is able to do
+					if (/\s/.test(char)) {
+						setResponse(fullResponse);
+						await new Promise(resolve => setTimeout(resolve, 0));
+						currentWord = '';
+					} else if (currentWord.length >= 5) {
+						setResponse(fullResponse);
+						currentWord = '';
+					}
+				}
+				setResponse(fullResponse);
+			}
 		} finally {
 			setIsLoading(false);
 		}

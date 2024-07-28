@@ -1,6 +1,7 @@
 // API Related
 export const API_ENDPOINTS = {
 	MESSAGE: (mode: string) => `/api/message/${mode}`,
+	AI_REQUEST_STREAM: '/api/ai-response/stream',
 };
 
 export const HTTP_METHODS = {

@@ -1,11 +1,26 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
+	"io"
 	"os"
 )
+
+const GeminiModelSelection = "gemini-1.5-flash"
+
+var GeminiApiKey string
+
+func init() {
+	// TODO: on boot, throw an error if this isn't configured
+	GeminiApiKey = os.Getenv("GEMINI_API_KEY")
+	if GeminiApiKey == "" {
+		panic("GEMINI_API_KEY not set")
+	}
+}
 
 type FeedbackType int
 
@@ -89,4 +104,54 @@ func getFeedback(feedbackType FeedbackType, text string) (string, error) {
 
 	// TODO: check on contents so we don't hit errors
 	return string(resp.Candidates[0].Content.Parts[0].(genai.Text)), nil
+}
+
+type streamingReader struct {
+	genaiResponseIter genai.GenerateContentResponseIterator
+	buffer            *bytes.Buffer
+}
+
+func (sr *streamingReader) Read(p []byte) (n int, err error) {
+	for len(sr.buffer.Bytes()) == 0 {
+		resp, err := sr.genaiResponseIter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return 0, err
+		}
+
+		// TODO: check errors
+		txtResp := resp.Candidates[0].Content.Parts[0]
+		txtString := string(txtResp.(genai.Text))
+		sr.buffer.WriteString(txtString)
+	}
+	return sr.buffer.Read(p)
+}
+
+func streamFeedback(ctx context.Context, promptPretext string, prompt string) (respCategorization map[string]string, respReader io.Reader, err error) {
+	defer logger.Sync()
+
+	client, err := genai.NewClient(ctx, option.WithAPIKey(GeminiApiKey))
+	// TODO: do better
+	if err != nil {
+		logger.Fatal(err)
+		return nil, nil, err
+	}
+	defer client.Close()
+
+	model := client.GenerativeModel(GeminiModelSelection)
+	genaiResponseIter := model.GenerateContentStream(ctx, genai.Text(promptPretext+"\n"+prompt))
+	if err != nil {
+		logger.Fatal(err)
+		return nil, nil, err
+	}
+
+	respReader = &streamingReader{
+		genaiResponseIter: *genaiResponseIter,
+		buffer:            bytes.NewBuffer(nil),
+	}
+
+	// TODO: read the content classification to return as headers
+	return nil, respReader, nil
 }
