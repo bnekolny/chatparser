@@ -1,7 +1,6 @@
 import {MessageApiResult, Mode} from '../types';
 import {
-	API_ENDPOINTS,
-	CONTENT_TYPES,
+	CONTENT_TYPE_HEADER,
 	ERROR_MESSAGES,
 	HTTP_METHODS,
 	SUBMIT_ERROR,
@@ -13,10 +12,10 @@ export const useMessageApi = () => {
 		mode: Mode,
 	): Promise<MessageApiResult> => {
 		try {
-			const response = await fetch(API_ENDPOINTS.MESSAGE(mode), {
+			const response = await fetch(`/api/message/${mode}`, {
 				method: HTTP_METHODS.POST,
 				headers: {
-					'Content-Type': CONTENT_TYPES.TEXT_PLAIN,
+					...CONTENT_TYPE_HEADER.TEXT
 				},
 				body: text,
 			});
@@ -42,10 +41,10 @@ export const useMessageApi = () => {
 		text: string,
 	): AsyncGenerator<string, void, unknown> {
 		try {
-			const response = await fetch(API_ENDPOINTS.AI_REQUEST_STREAM, {
+			const response = await fetch('/api/ai-response/stream', {
 				method: HTTP_METHODS.POST,
 				headers: {
-					'Content-Type': CONTENT_TYPES.TEXT_PLAIN,
+					...CONTENT_TYPE_HEADER.TEXT
 				},
 				body: text,
 			});
