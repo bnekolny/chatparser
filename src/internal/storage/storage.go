@@ -1,4 +1,4 @@
-package main
+package storage
 
 import (
 	"bytes"
@@ -50,7 +50,7 @@ func getObjectRef(userId string, objectType ObjectType, objectIdentifier string)
 	return bucket, fmt.Sprintf("%s/%s/%s_%s.txt.gz", userId, objectType.String(), time.Now().UTC().Format("2006-01-02"), objectIdentifier)
 }
 
-func write(userId string, objectType ObjectType, text string) (err error) {
+func Write(userId string, objectType ObjectType, text string) (err error) {
 	ctx := context.Background()
 
 	// 1. construct path to object `getObjectRef`

@@ -14,6 +14,11 @@ import (
 	"strings"
 	"time"
 
+	"chatparser/internal/genaiclient"
+	"chatparser/internal/logger"
+	"chatparser/internal/prompt"
+	"chatparser/internal/storage"
+
 	"github.com/vearutop/statigz"
 	"github.com/vearutop/statigz/brotli"
 )
@@ -66,7 +71,7 @@ func filterLinesByAuthor(reader io.Reader, targetAuthor string) (map[string][]st
 }
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
-	defer logger.Sync()
+	defer logger.Logger.Sync()
 
 	author := "Brett"
 	messages, err := filterLinesByAuthor(r.Body, author)
@@ -82,7 +87,7 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
-	defer logger.Sync()
+	defer logger.Logger.Sync()
 
 	author := "Brett"
 	messages, err := filterLinesByAuthor(r.Body, author)
@@ -92,7 +97,7 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: remove this hardcoding
-	response, err := getFeedback(CHAT_FEEDBACK, strings.Join(messages["2024-06"], "\n"))
+	response, err := genaiclient.GetFeedback(prompt.CHAT_FEEDBACK, strings.Join(messages["2024-06"], "\n"))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -102,7 +107,7 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
-	defer logger.Sync()
+	defer logger.Logger.Sync()
 	ctx := r.Context()
 
 	buffer := make([]byte, 1024)
@@ -130,7 +135,7 @@ func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	headers, genaiReader, err := streamFeedback(ctx, FeedbackTypeMap[MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
+	headers, genaiReader, err := genaiclient.StreamFeedback(ctx, prompt.FeedbackTypeMap[prompt.MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -181,7 +186,7 @@ func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
 	bw.Flush()
 }
 
-func messageHandler(messageType FeedbackType) http.HandlerFunc {
+func messageHandler(messageType prompt.FeedbackType) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//w.Header().Set("Content-Type", "application/json")
 
@@ -210,23 +215,23 @@ func messageHandler(messageType FeedbackType) http.HandlerFunc {
 		}
 		defer r.Body.Close()
 
-		response, err := getFeedback(messageType, string(bodyString))
+		response, err := genaiclient.GetFeedback(messageType, string(bodyString))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = write(hardcodedUserId, Message, bodyString)
+		err = storage.Write(hardcodedUserId, storage.Message, bodyString)
 		if err != nil {
-			logger.Error("write error")
-			logger.Error(err)
+			logger.Logger.Error("write error")
+			logger.Logger.Error(err)
 		}
 		//text, err := read(hardcodedUserId, Message)
 		//if err != nil {
-		//	logger.Error("read error")
-		//	logger.Error(err)
+		//	logger.Logger.Error("read error")
+		//	logger.Logger.Error(err)
 		//}
-		//logger.Info(text)
+		//logger.Logger.Info(text)
 
 		w.Write([]byte(response))
 	}
@@ -268,7 +273,7 @@ var staticFS embed.FS
 var hardcodedUserId string = "anonymous"
 
 func main() {
-	defer logger.Sync()
+	defer logger.Logger.Sync()
 
 	//config stuff to extract later
 	port, found := os.LookupEnv("PORT")
@@ -282,21 +287,21 @@ func main() {
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
 	mux.HandleFunc("/api/ai-response/stream", aiResponseStreamingHandler)
-	mux.HandleFunc("/api/message/verify", messageHandler(MESSAGE_FEEDBACK_VERIFICATION))
-	mux.HandleFunc("/api/message/improve", messageHandler(MESSAGE_FEEDBACK_IMPROVEMENT))
-	mux.HandleFunc("/api/message/dictionary", messageHandler(MESSAGE_FEEDBACK_DICTIONARY))
+	mux.HandleFunc("/api/message/verify", messageHandler(prompt.MESSAGE_FEEDBACK_VERIFICATION))
+	mux.HandleFunc("/api/message/improve", messageHandler(prompt.MESSAGE_FEEDBACK_IMPROVEMENT))
+	mux.HandleFunc("/api/message/dictionary", messageHandler(prompt.MESSAGE_FEEDBACK_DICTIONARY))
 	staticAssets, err := fs.Sub(staticFS, "static")
 	if err != nil {
-		logger.Fatal(err)
+		logger.Logger.Fatal(err)
 	}
 	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
 	mux.Handle("/dict", staticHtmlPageHandler("pages/dict.html", staticAssets))
 	// Send requests to the root domain to something visible
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
-	logger.Infof("Starting server on port %v", port)
+	logger.Logger.Infof("Starting server on port %v", port)
 	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
 	if err != nil {
-		logger.Fatal(err)
+		logger.Logger.Fatal(err)
 	}
 }
