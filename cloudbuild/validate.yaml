@@ -3,8 +3,11 @@ steps:
   script: |
     #!/bin/sh
     cd src/web
-    npm ci
-    npm run build
+    corepack enable
+    yarn set version berry
+
+    yarn install
+    yarn run build
   waitFor: ["-"]
 
 - name: golang:1.22
