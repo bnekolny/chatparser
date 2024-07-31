@@ -30,7 +30,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 
-	const {sendMessage, aiRequestStream} = useMessageApi();
+	const {aiRequestStream} = useMessageApi();
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
