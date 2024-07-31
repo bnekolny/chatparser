@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"chatparser/internal/api"
 	"chatparser/internal/genaiclient"
+	"chatparser/internal/handlers"
 	"chatparser/internal/logger"
 	"chatparser/internal/prompt"
 	"chatparser/internal/storage"
@@ -158,17 +158,6 @@ func messageHandler(messageType prompt.PromptType) http.HandlerFunc {
 	}
 }
 
-func healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(map[string]string{
-		"status": "ok",
-	})
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
-
 func staticHtmlPageHandler(targetHtmlFile string, staticFS fs.FS) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		f, err := staticFS.Open(targetHtmlFile)
@@ -204,10 +193,10 @@ func main() {
 
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
-	mux.HandleFunc("/healthcheck", healthcheckHandler)
+	mux.HandleFunc("/healthcheck", handlers.HealthcheckHandler)
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
-	mux.HandleFunc("/api/ai-prompt/stream", api.AiPromptStreamRequestHandler)
+	mux.HandleFunc("/api/ai-prompt/stream", handlers.AiPromptStreamRequestHandler)
 	mux.HandleFunc("/api/message/verify", messageHandler(prompt.VERIFY))
 	mux.HandleFunc("/api/message/improve", messageHandler(prompt.IMPROVE))
 	mux.HandleFunc("/api/message/dictionary", messageHandler(prompt.DICTIONARY))
