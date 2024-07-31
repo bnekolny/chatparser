@@ -26,7 +26,7 @@ func init() {
 }
 
 // func getFeedback(ctx context.Context, text string) string {
-func GetFeedback(feedbackType prompt.FeedbackType, text string) (string, error) {
+func GetFeedback(feedbackType prompt.PromptType, text string) (string, error) {
 	defer logger.Logger.Sync()
 
 	ctx := context.Background()
@@ -39,7 +39,7 @@ func GetFeedback(feedbackType prompt.FeedbackType, text string) (string, error) 
 	defer client.Close()
 
 	model := client.GenerativeModel("gemini-1.5-flash")
-	resp, err := model.GenerateContent(ctx, genai.Text(prompt.FeedbackTypeMap[feedbackType]+"\n"+text))
+	resp, err := model.GenerateContent(ctx, genai.Text(prompt.PromptTypeMap[feedbackType]+"\n"+text))
 	if err != nil {
 		logger.Logger.Fatal(err)
 		return "", err

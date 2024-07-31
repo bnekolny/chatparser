@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"chatparser/internal/api"
 	"chatparser/internal/genaiclient"
 	"chatparser/internal/logger"
 	"chatparser/internal/prompt"
@@ -106,87 +107,7 @@ func chatFeedbackHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
-func aiResponseStreamingHandler(w http.ResponseWriter, r *http.Request) {
-	defer logger.Logger.Sync()
-	ctx := r.Context()
-
-	buffer := make([]byte, 1024)
-	maxPayloadSize := int64(1024 * 1024 * 10)
-	if r.ContentLength > maxPayloadSize {
-		http.Error(w, "Request body too large", http.StatusRequestEntityTooLarge)
-		return
-	}
-
-	bodyString := ""
-	reader := io.LimitReader(r.Body, maxPayloadSize) // Optional: limit reading to specified size
-	for {
-		n, err := reader.Read(buffer)
-		if err != nil {
-			if err == io.EOF {
-				if n > 0 { // Check if any bytes were read
-					bodyString += string(buffer[:n])
-				}
-				break
-			}
-			http.Error(w, "Error reading request body", http.StatusInternalServerError)
-			return
-		}
-		bodyString += string(buffer[:n])
-	}
-	defer r.Body.Close()
-
-	headers, genaiReader, err := genaiclient.StreamFeedback(ctx, prompt.FeedbackTypeMap[prompt.MESSAGE_FEEDBACK_IMPROVEMENT], string(bodyString))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	bufferSize := 256 // Adjust buffer size as needed
-	writeBuffer := make([]byte, bufferSize)
-
-	// todo: write content safety information in headers?
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Transfer-Encoding", "chunked")
-
-	for k, v := range headers {
-		w.Header().Set(k, v)
-	}
-
-	bw := bufio.NewWriterSize(w, bufferSize)
-	for {
-		n, err := genaiReader.Read(writeBuffer)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		for i := 0; i < n; i += bufferSize {
-			chunkSize := min(bufferSize, n-i)
-			_, err := bw.Write(writeBuffer[i : i+chunkSize])
-
-			if err != nil {
-				// Handle error
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = bw.Flush()
-			if f, ok := w.(http.Flusher); ok {
-				f.Flush()
-			}
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-	}
-	// TODO: handle error
-	// todo: write to GCS
-	bw.Flush()
-}
-
-func messageHandler(messageType prompt.FeedbackType) http.HandlerFunc {
+func messageHandler(messageType prompt.PromptType) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//w.Header().Set("Content-Type", "application/json")
 
@@ -286,10 +207,10 @@ func main() {
 	mux.HandleFunc("/healthcheck", healthcheckHandler)
 	mux.HandleFunc("/api/chat", chatHandler)
 	mux.HandleFunc("/api/chatFeedback", chatFeedbackHandler)
-	mux.HandleFunc("/api/ai-response/stream", aiResponseStreamingHandler)
-	mux.HandleFunc("/api/message/verify", messageHandler(prompt.MESSAGE_FEEDBACK_VERIFICATION))
-	mux.HandleFunc("/api/message/improve", messageHandler(prompt.MESSAGE_FEEDBACK_IMPROVEMENT))
-	mux.HandleFunc("/api/message/dictionary", messageHandler(prompt.MESSAGE_FEEDBACK_DICTIONARY))
+	mux.HandleFunc("/api/ai-prompt/stream", api.AiPromptStreamRequestHandler)
+	mux.HandleFunc("/api/message/verify", messageHandler(prompt.VERIFY))
+	mux.HandleFunc("/api/message/improve", messageHandler(prompt.IMPROVE))
+	mux.HandleFunc("/api/message/dictionary", messageHandler(prompt.DICTIONARY))
 	staticAssets, err := fs.Sub(staticFS, "static")
 	if err != nil {
 		logger.Logger.Fatal(err)

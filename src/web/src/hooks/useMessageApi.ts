@@ -39,14 +39,21 @@ export const useMessageApi = () => {
 
 	const aiRequestStream = async function* (
 		text: string,
+		mode: Mode,
 	): AsyncGenerator<string, void, unknown> {
 		try {
-			const response = await fetch('/api/ai-response/stream', {
+			const response = await fetch('/api/ai-prompt/stream', {
 				method: HTTP_METHODS.POST,
 				headers: {
-					...CONTENT_TYPE_HEADER.TEXT
+					...CONTENT_TYPE_HEADER.JSON
 				},
-				body: text,
+				body: JSON.stringify({
+					prompt: {
+						system_prompt_type: Mode.Improve,
+						//custom_prompt_text: customPromptText
+					},
+					input_text: text
+				}),
 			});
 
 			if (!response.ok) {
