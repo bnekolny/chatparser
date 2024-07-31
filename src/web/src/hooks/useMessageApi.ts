@@ -49,7 +49,7 @@ export const useMessageApi = () => {
 				},
 				body: JSON.stringify({
 					prompt: {
-						system_prompt_type: Mode.Improve,
+						system_prompt_type: mode,
 						//custom_prompt_text: customPromptText
 					},
 					input_text: text
