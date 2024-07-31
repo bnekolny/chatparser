@@ -5,6 +5,7 @@ export const HTTP_METHODS = {
 
 export const CONTENT_TYPE_HEADER = {
 	TEXT: {'Content-Type': 'text/plain'},
+	JSON: {'Content-Type': 'application/json'},
 };
 
 // Error Handling
