@@ -31,6 +31,9 @@ func main() {
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", handlers.HealthcheckHandler)
+
+	mux.HandleFunc("/dict/og:image.jpg", handlers.OgImageHandler)
+
 	mux.HandleFunc("/api/ai-prompt/stream", handlers.AiPromptStreamRequestHandler)
 	staticAssets, err := fs.Sub(staticFS, "static")
 	if err != nil {
