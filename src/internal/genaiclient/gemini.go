@@ -7,39 +7,35 @@ import (
 	"os"
 
 	"chatparser/internal/logger"
-	"chatparser/internal/prompt"
 
 	"github.com/google/generative-ai-go/genai"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
 
-const GeminiModelSelection = "gemini-1.5-flash"
+const geminiModelSelection = "gemini-1.5-flash"
 
-var GeminiApiKey string
+var geminiApiKey string
 
 func init() {
-	GeminiApiKey = os.Getenv("GEMINI_API_KEY")
-	if GeminiApiKey == "" {
+	geminiApiKey = os.Getenv("GEMINI_API_KEY")
+	if geminiApiKey == "" {
 		panic("GEMINI_API_KEY not set")
 	}
 }
 
-// func getFeedback(ctx context.Context, text string) string {
-func GetFeedback(feedbackType prompt.PromptType, text string) (string, error) {
+func GetFeedback(ctx context.Context, prompt string) (string, error) {
 	defer logger.Logger.Sync()
 
-	ctx := context.Background()
-	// TODO: on boot, throw an error if this isn't configured
-	client, err := genai.NewClient(ctx, option.WithAPIKey(os.Getenv("GEMINI_API_KEY")))
+	client, err := genai.NewClient(ctx, option.WithAPIKey(geminiApiKey))
 	if err != nil {
 		logger.Logger.Fatal(err)
 		return "", err
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel("gemini-1.5-flash")
-	resp, err := model.GenerateContent(ctx, genai.Text(prompt.PromptTypeMap[feedbackType]+"\n"+text))
+	model := client.GenerativeModel(geminiModelSelection)
+	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
 		logger.Logger.Fatal(err)
 		return "", err
@@ -75,7 +71,7 @@ func (sr *streamingReader) Read(p []byte) (n int, err error) {
 func StreamFeedback(ctx context.Context, promptPretext string, prompt string) (respCategorization map[string]string, respReader io.Reader, err error) {
 	defer logger.Logger.Sync()
 
-	client, err := genai.NewClient(ctx, option.WithAPIKey(GeminiApiKey))
+	client, err := genai.NewClient(ctx, option.WithAPIKey(geminiApiKey))
 	// TODO: do better
 	if err != nil {
 		logger.Logger.Fatal(err)
@@ -83,7 +79,7 @@ func StreamFeedback(ctx context.Context, promptPretext string, prompt string) (r
 	}
 	defer client.Close()
 
-	model := client.GenerativeModel(GeminiModelSelection)
+	model := client.GenerativeModel(geminiModelSelection)
 	genaiResponseIter := model.GenerateContentStream(ctx, genai.Text(promptPretext+"\n"+prompt))
 	if err != nil {
 		logger.Logger.Fatal(err)
