@@ -34,7 +34,7 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO provide prompt feedback type or string
-	headers, genaiReader, err := genaiclient.StreamFeedback(ctx, prompt.PromptTypeMap[prompt.IMPROVE], input.InputText)
+	headers, genaiReader, err := genaiclient.StreamFeedback(ctx, prompt.PromptTypeMap[input.Prompt.SystemPromptType], input.InputText)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
