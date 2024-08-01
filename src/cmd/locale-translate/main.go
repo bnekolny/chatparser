@@ -60,5 +60,5 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("Translation completed successfully: %v\n", *outputFile)
+	fmt.Printf("Translation completed successfully: %s\n", *outputFile)
 }
