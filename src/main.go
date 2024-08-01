@@ -31,14 +31,18 @@ func main() {
 	mux := http.NewServeMux()
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", handlers.HealthcheckHandler)
+
+	mux.HandleFunc("/dict/og:image.jpg", handlers.OgImageHandler)
+
 	mux.HandleFunc("/api/ai-prompt/stream", handlers.AiPromptStreamRequestHandler)
 	staticAssets, err := fs.Sub(staticFS, "static")
 	if err != nil {
 		logger.Logger.Fatal(err)
 	}
 	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
-	mux.Handle("/dict", handlers.StaticHtmlPageHandler("pages/dict.html", staticAssets))
-	// Send requests to the root domain to something visible
+
+	mux.Handle("/dict", handlers.DictTemplateData(staticAssets))
+
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Logger.Infof("Starting server on port %v", port)
