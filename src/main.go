@@ -40,8 +40,9 @@ func main() {
 		logger.Logger.Fatal(err)
 	}
 	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
-	mux.Handle("/dict", handlers.StaticHtmlPageHandler("pages/dict.html", staticAssets))
-	// Send requests to the root domain to something visible
+
+	mux.Handle("/dict", handlers.DictTemplateData(staticAssets))
+
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Logger.Infof("Starting server on port %v", port)
