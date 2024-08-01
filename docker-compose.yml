@@ -76,3 +76,25 @@ services:
       -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
     profiles:
       - formatters
+
+  tools-locale-translate:
+    build:
+      dockerfile_inline: |
+        FROM golang:alpine
+        WORKDIR /app
+        COPY src/go.mod .
+        RUN go mod download
+    working_dir: /app
+    volumes:
+      - ./src:/app
+    entrypoint: /bin/sh
+    command: >
+      -c '
+      go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/es.json &&
+      go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/fr.json &&
+      echo "done"
+      '
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    profiles:
+      - tools
