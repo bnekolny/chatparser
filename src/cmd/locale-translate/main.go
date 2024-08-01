@@ -36,7 +36,7 @@ func main() {
         %s\n
         the result back from you should be an equivalent file for the new locale: %s`,
 		string(inputData),
-		outputFile,
+		*outputFile,
 	)
 	result, err := genaiclient.GetFeedback(ctx, "json", prompt)
 	if err != nil {
