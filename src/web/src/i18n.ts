@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import enTranslations from './locales/en.json'; 
 import esTranslations from './locales/es.json';
+import frTranslations from './locales/fr.json';
 
 i18n
   .use(initReactI18next)
@@ -14,6 +15,9 @@ i18n
       es: {
         translation: esTranslations
       },
+      fr: {
+        translation: frTranslations
+      }
     },
     lng: 'es', // Default language
     fallbackLng: 'en', // Fallback language

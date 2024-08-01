@@ -3,6 +3,8 @@ package genaiclient
 import (
 	"bytes"
 	"context"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -24,7 +26,7 @@ func init() {
 	}
 }
 
-func GetFeedback(ctx context.Context, prompt string) (string, error) {
+func GetFeedback(ctx context.Context, responseFormat string, prompt string) (string, error) {
 	defer logger.Logger.Sync()
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(geminiApiKey))
@@ -35,6 +37,20 @@ func GetFeedback(ctx context.Context, prompt string) (string, error) {
 	defer client.Close()
 
 	model := client.GenerativeModel(geminiModelSelection)
+
+	var responseMIME string
+	switch responseFormat {
+	case "text":
+		responseMIME = "text/plain"
+	case "json":
+		responseMIME = "application/json"
+	default:
+		return "", errors.New(fmt.Sprintf("invalid responseFormat: %s, valid: text, json", responseFormat))
+	}
+
+	model.GenerationConfig = genai.GenerationConfig{
+		ResponseMIMEType: responseMIME,
+	}
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
 		logger.Logger.Fatal(err)
