@@ -195,6 +195,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.24.8":
+  version: 7.25.0
+  resolution: "@babel/runtime@npm:7.25.0"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/bd3faf246170826cef2071a94d7b47b49d532351360ecd17722d03f6713fd93a3eb3dbd9518faa778d5e8ccad7392a7a604e56bd37aaad3f3aa68d619ccd983d
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.24.7, @babel/template@npm:^7.25.0":
   version: 7.25.0
   resolution: "@babel/template@npm:7.25.0"
@@ -1941,6 +1950,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-parse-stringify@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "html-parse-stringify@npm:3.0.1"
+  dependencies:
+    void-elements: "npm:3.1.0"
+  checksum: 10c0/159292753d48b84d216d61121054ae5a33466b3db5b446e2ffc093ac077a411a99ce6cbe0d18e55b87cf25fa3c5a86c4d8b130b9719ec9b66623259000c72c15
+  languageName: node
+  linkType: hard
+
 "html-url-attributes@npm:^3.0.0":
   version: 3.0.0
   resolution: "html-url-attributes@npm:3.0.0"
@@ -1972,6 +1990,15 @@ __metadata:
     agent-base: "npm:^7.0.2"
     debug: "npm:4"
   checksum: 10c0/2490e3acec397abeb88807db52cac59102d5ed758feee6df6112ab3ccd8325e8a1ce8bce6f4b66e5470eca102d31e425ace904242e4fa28dbe0c59c4bafa7b2c
+  languageName: node
+  linkType: hard
+
+"i18next@npm:^23.12.2":
+  version: 23.12.2
+  resolution: "i18next@npm:23.12.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+  checksum: 10c0/aa7654afefc3f5383513563226401994558675a57eb562f0c4580d573d8410d24954f25112d45f9b6b1ca3f88c7beea1ac802ed50ad4081a06a17d08857e3c5d
   languageName: node
   linkType: hard
 
@@ -3046,6 +3073,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-i18next@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "react-i18next@npm:15.0.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.24.8"
+    html-parse-stringify: "npm:^3.0.1"
+  peerDependencies:
+    i18next: ">= 23.2.3"
+    react: ">= 16.8.0"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 10c0/d62a817818f8b16c87b68b3c2563a628d983e6ecbe37d9baa29f276dd8fdfee180abc101efa551a13f1c4839dd2c5bc9b2b24996d231686d9e5e79d9327900a7
+  languageName: node
+  linkType: hard
+
 "react-markdown@npm:^9.0.1":
   version: 9.0.1
   resolution: "react-markdown@npm:9.0.1"
@@ -3080,6 +3125,13 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10c0/283e8c5efcf37802c9d1ce767f302dd569dd97a70d9bb8c7be79a789b9902451e0d16334b05d73299b20f048cbc3c7d288bbbde10b701fa194e2089c237dbea3
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 10c0/1b16eb2c4bceb1665c89de70dcb64126a22bc8eb958feef3cd68fe11ac6d2a4899b5cd1b80b0774c7c03591dc57d16631a7f69d2daa2ec98100e2f29f7ec4cc4
   languageName: node
   linkType: hard
 
@@ -3698,6 +3750,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"void-elements@npm:3.1.0":
+  version: 3.1.0
+  resolution: "void-elements@npm:3.1.0"
+  checksum: 10c0/0b8686f9f9aa44012e9bd5eabf287ae0cde409b9a2854c5a2335cb83920c957668ac5876e3f0d158dd424744ac411a7270e64128556b451ed3bec875ef18534d
+  languageName: node
+  linkType: hard
+
 "web@workspace:.":
   version: 0.0.0-use.local
   resolution: "web@workspace:."
@@ -3711,8 +3770,10 @@ __metadata:
     eslint: "npm:^9.8.0"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-react-refresh: "npm:^0.4.9"
+    i18next: "npm:^23.12.2"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
+    react-i18next: "npm:^15.0.0"
     react-markdown: "npm:^9.0.1"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.3.4"

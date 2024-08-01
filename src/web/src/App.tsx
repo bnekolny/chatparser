@@ -1,14 +1,16 @@
 import React, {useEffect} from 'react';
+import { useTranslation } from 'react-i18next';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
 import TestTextButton from './components/TestTextButton';
 import styles from './App.module.css';
-import {DESCRIPTION_TEXT, HOSTS} from './constants';
+import {HOSTS} from './constants';
 import {Mode} from './types';
 import {useChatContext} from './context/ChatContext';
 
 const App: React.FC = () => {
+	const { t } = useTranslation();
 	const {mode, setMode} = useChatContext();
 
 	useEffect(() => {
@@ -28,7 +30,7 @@ const App: React.FC = () => {
 			<ResultDisplay />
 			<div className={styles.modeAndDescription}>
 				<ModeSelector />
-				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
+				<p className={styles.description}>{t('app_description_text')}</p>
 			</div>
 			{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 		</div>

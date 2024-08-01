@@ -1,9 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './styles/TextArea.module.css';
-import {TEXTAREA} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((_, ref) => {
+	const { t } = useTranslation();
 	const {text, handleTextChange} = useChatContext();
 
 	return (
@@ -13,7 +14,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, {}>((_, ref) => {
 			onChange={handleTextChange}
 			className={styles.textarea}
 			rows={1}
-			placeholder={TEXTAREA.DEFAULT_PLACEHOLDER}
+			placeholder={t('textarea_default_placeholder')}
 			style={{resize: 'vertical', overflow: 'hidden'}}
 		/>
 	);

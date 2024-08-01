@@ -1,11 +1,14 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
-import {BUTTON_TEXT} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
+
 const TextInputForm: React.FC = () => {
+	const { t } = useTranslation();
+
 	const {
 		text,
 		setText,
@@ -39,7 +42,7 @@ const TextInputForm: React.FC = () => {
 				disabled={!hasNewText || isLoading}
 				className={styles.submitButton}
 			>
-				{isLoading ? BUTTON_TEXT.LOADING : BUTTON_TEXT.SUBMIT}
+				{isLoading ? t('button_loading') : t('button_submit')}
 			</Button>
 			<div className={styles.buttonContainer}>
 				<Button
@@ -47,14 +50,14 @@ const TextInputForm: React.FC = () => {
 					onClick={handleCopy}
 					className={styles.copyButton}
 				>
-					{BUTTON_TEXT.COPY}
+					{t('button_copy')}
 				</Button>
 				<Button
 					type="button"
 					onClick={handleClear}
 					className={styles.clearButton}
 				>
-					{BUTTON_TEXT.CLEAR}
+					{t('button_clear')}
 				</Button>
 			</div>
 		</form>
