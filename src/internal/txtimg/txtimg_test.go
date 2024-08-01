@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"image/jpeg"
 	"io"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
