@@ -1,7 +1,8 @@
 {
+  "app_description_text": "Esta página ayuda a componer mensajes en español para estudiantes. Ingresa un mensaje que deseas enviar para \"verificar\" que tiene el significado deseado o para \"mejorar\" y desarrollar tus habilidades.",
   "button_copy": "Copiar",
   "button_clear": "Limpiar",
   "button_submit": "Enviar",
-  "button_loading": "Cargando..."
+  "button_loading": "Cargando...",
+  "textarea_default_placeholder": "Ingrese su texto aquí"
 }
-

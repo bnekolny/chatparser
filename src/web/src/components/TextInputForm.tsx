@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
-import {BUTTON_TEXT} from '../constants';
 import {useChatContext} from '../context/ChatContext';
 
 
