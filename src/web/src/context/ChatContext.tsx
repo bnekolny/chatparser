@@ -40,10 +40,12 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	};
 
 	const handleSendMessage = async (inputText?: string): Promise<void> => {
-		setPreviousText(inputText || text);
+		var submitText = inputText || text;
+
+		setPreviousText(submitText);
 		setIsLoading(true);
 		try {
-			const messageStream = aiRequestStream(text, mode);
+			const messageStream = aiRequestStream(submitText, mode);
 			let fullResponse = '';
 			let currentWord = '';
 
