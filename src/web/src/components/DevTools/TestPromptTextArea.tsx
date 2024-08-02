@@ -5,7 +5,7 @@ import styles from './styles/TestPromptTextArea.module.css';
 import Button from '../Button';
 
 const TestPromptTextArea: React.FC = () => {
-  const { setText, handleSendMessage, prompt, setPrompt, mode, setMode, locale, setLocale } = useChatContext();
+  const { handleSendMessage, prompt, setPrompt, mode, setMode, locale, setLocale } = useChatContext();
 
   useEffect(() => {
     (async () => {

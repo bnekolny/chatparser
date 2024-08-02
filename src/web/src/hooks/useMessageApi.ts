@@ -1,4 +1,4 @@
-import {MessageApiResult, Mode} from '../types';
+import {MessageApiResult, Mode, Locale} from '../types';
 import {
 	CONTENT_TYPE_HEADER,
 	ERROR_MESSAGES,
