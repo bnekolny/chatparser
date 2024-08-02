@@ -31,7 +31,7 @@ func main() {
 	ctx := context.Background()
 
 	prompt := fmt.Sprintf(
-        `Please translate the prompt found in %s to the target language specified by the locale in %s.
+		`Please translate the prompt found in %s to the target language specified by the locale in %s.
         Ensure that all occurrences of the source locale in the text are updated to match the target locale.
         The translated prompt will be saved in %s. Replace the source language name with the target language name
         in the translated prompt text, and make sure to adapt any cultural references appropriately.
@@ -41,7 +41,7 @@ func main() {
         Here is the prompt text to be translated:
         %s`,
 
-        *inputFile,
+		*inputFile,
 		*outputFile,
 		*outputFile,
 		string(inputData),

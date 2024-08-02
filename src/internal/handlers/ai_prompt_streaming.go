@@ -21,6 +21,8 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	defer logger.Logger.Sync()
 	ctx := r.Context()
 
+	locale := "es" // target is spanish right now, hard-coded until we pass it in
+
 	// Validation Steps
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -36,7 +38,7 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	if input.Prompt.CustomPromptText != "" {
 		promptStr = input.Prompt.CustomPromptText
 	} else {
-		promptStr = prompt.PromptTypeMap["en"][input.Prompt.SystemPromptType]
+		promptStr = prompt.PromptTypeMap[locale][input.Prompt.SystemPromptType]
 	}
 	headers, genaiReader, e := genaiclient.StreamFeedback(ctx, promptStr, input.InputText)
 	if e != nil {
