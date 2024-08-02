@@ -11,6 +11,8 @@ interface ChatContextType {
 	setText: (text: string) => void;
 	previousText: string;
 	setPreviousText: (text: string) => void;
+	prompt: string;
+	setPrompt: (text: string) => void;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
 	handleSendMessage: (inputText?: string) => Promise<void>;
@@ -27,6 +29,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);//Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
+	const [prompt, setPrompt] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 
@@ -45,7 +48,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(submitText);
 		setIsLoading(true);
 		try {
-			const messageStream = aiRequestStream(submitText, mode);
+			const messageStream = aiRequestStream(submitText, prompt || mode);
 			let fullResponse = '';
 			let currentWord = '';
 
@@ -78,6 +81,8 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setText,
 		previousText,
 		setPreviousText,
+		prompt,
+		setPrompt,
 		handleSendMessage,
 		response,
 		setResponse,

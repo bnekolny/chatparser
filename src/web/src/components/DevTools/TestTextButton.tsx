@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {useChatContext} from '../context/ChatContext';
-import {Mode} from '../types';
+import {useChatContext} from '../../context/ChatContext';
+import {Mode} from '../../types';
 
 const TestTextButton: React.FC = () => {
 	const {setText, setMode, handleSendMessage} = useChatContext();

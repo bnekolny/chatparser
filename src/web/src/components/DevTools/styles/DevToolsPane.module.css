@@ -1,0 +1,16 @@
+.devToolsPane {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fffbeb; /* Softer, warmer yellow */
+    border-top: 1px solid #f0e8d5; /* Softer border color */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  

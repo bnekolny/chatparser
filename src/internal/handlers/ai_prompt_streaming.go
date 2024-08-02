@@ -3,7 +3,6 @@ package handlers
 import (
 	"bufio"
 	"encoding/json"
-	"io"
 	"net/http"
 
 	"chatparser/internal/genaiclient"
@@ -28,15 +27,20 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var input AiPromptStreamRequest
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+	if e := json.NewDecoder(r.Body).Decode(&input); e != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	// TODO provide prompt feedback type or string
-	headers, genaiReader, err := genaiclient.StreamFeedback(ctx, prompt.PromptTypeMap["en"][input.Prompt.SystemPromptType], input.InputText)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	var promptStr string
+	if input.Prompt.CustomPromptText != "" {
+		promptStr = input.Prompt.CustomPromptText
+	} else {
+		promptStr = prompt.PromptTypeMap["en"][input.Prompt.SystemPromptType]
+	}
+	headers, genaiReader, e := genaiclient.StreamFeedback(ctx, promptStr, input.InputText)
+	if e != nil {
+		http.Error(w, e.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -54,32 +58,17 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	// can't utilize `io.Copy` as it doesn't flush the buffer frequently enough
 	// thus not streaming the data to the client
 	bw := bufio.NewWriterSize(w, bufferSize)
-	for {
-		n, err := genaiReader.Read(writeBuffer)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
+	var err error
+	for err == nil {
+		var n int
+		n, err = genaiReader.Read(writeBuffer)
 		for i := 0; i < n; i += bufferSize {
 			chunkSize := min(bufferSize, n-i)
-			_, err := bw.Write(writeBuffer[i : i+chunkSize])
+			_, err = bw.Write(writeBuffer[i : i+chunkSize])
 
-			if err != nil {
-				// Handle error
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
 			err = bw.Flush()
 			if f, ok := w.(http.Flusher); ok {
 				f.Flush()
-			}
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
 			}
 		}
 	}

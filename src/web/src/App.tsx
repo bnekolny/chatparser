@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
-import TestTextButton from './components/TestTextButton';
+import DevToolsPane from './components/DevTools/DevToolsPane';
 import styles from './App.module.css';
 import {HOSTS} from './constants';
 import {Mode} from './types';
@@ -32,7 +32,7 @@ const App: React.FC = () => {
 				<ModeSelector />
 				<p className={styles.description}>{t('app_description_text')}</p>
 			</div>
-			{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
+			{window?.location?.host === HOSTS.LOCAL ? <DevToolsPane /> : null}
 		</div>
 	);
 };
