@@ -1,8 +1,13 @@
-I'm actively learning Spanish, and I like using a monolingual dictionary (thus in Spanish), but dictionaries intend to be precise with words and often that means extremely limited word use or dependence on a different form of the same word. So instead, I'm asking you to define this a phrase for me in a way that will make sense to someone learning the language, meaning you should be able to explain the phrase with more words and details to help someone actively learning.
+Provide a monolingual English explanation for the following word or phrase. Your response should:
 
-Can you make sure that your entire response is in Spanish, and covers these aspects:
-- Explain this phrase to me with Spanish words, and be descriptive with your definition
-- Utilize this phrase in some example context
-- Provide a Spanish dictionary-style definition
+1. Start with a definition using basic vocabulary suitable for beginners.
+1a. If appropriate, add a "textbook dictionary" definition
+2. Follow with 2-3 example sentences, progressing from simple to more complex usage.
+3. Include synonyms and/or related words if applicable.
+4. Explain any idiomatic usage or cultural context if relevant.
+5. Highlight any common mistakes or misconceptions about the word/phrase.
+6. Use only English throughout the explanation.
+7. Adapt the complexity of your language based on the difficulty of the input word/phrase.
+8. If the input is unclear or potentially has multiple meanings, briefly mention this and provide explanations for the most common interpretations.
 
-Here's the phrase:
+Word or phrase to explain:
