@@ -1,25 +1,28 @@
 import React, { useEffect } from 'react';
 import { useChatContext } from '../../context/ChatContext';
-import { Mode } from '../../types';
+import { Mode, Locale } from '../../types';
 import styles from './styles/TestPromptTextArea.module.css';
 import Button from '../Button';
 
 const TestPromptTextArea: React.FC = () => {
-  const { setText, handleSendMessage, prompt, setPrompt, mode, setMode } = useChatContext();
+  const { setText, handleSendMessage, prompt, setPrompt, mode, setMode, locale, setLocale } = useChatContext();
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/assets/prompts/en/${mode}.txt`);
+      const response = await fetch(`/assets/prompts/${locale}/${mode}.txt`);
       setPrompt(await response.text());
     })();
-  }, [mode, setText]);
-
-  const handleSubmit = () => {
-    handleSendMessage();
-  };
+  }, [locale, mode]);
 
   return (
     <div>
+      <select value={locale} onChange={(event) => setLocale(event.target.value as Locale)}>
+        {Object.values(Locale).map((locale) => (
+          <option key={locale} value={locale}>
+            {locale}
+          </option>
+        ))}
+      </select>
       <select value={mode} onChange={(event) => setMode(event.target.value as Mode)}>
         {Object.values(Mode).map((mode) => (
           <option key={mode} value={mode}>
@@ -35,7 +38,7 @@ const TestPromptTextArea: React.FC = () => {
       />
       <Button
         type="button"
-        onClick={handleSubmit}
+        onClick={() => handleSendMessage()}
         className={styles.submitButton}
       >
         Submit Prompt

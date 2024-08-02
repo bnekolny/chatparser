@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import {Mode} from '../types';
+import {Mode, Locale} from '../types';
 import {useMessageApi} from '../hooks/useMessageApi';
 import {CHAT_CONTEXT_ERROR} from '../constants';
 
 interface ChatContextType {
+	locale: Locale;
+	setLocale: (locale: Locale) => void;
 	mode: Mode;
 	setMode: (mode: Mode) => void;
 	handleTextChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -26,6 +28,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	children,
 	value = {},
 }) => {
+	const [locale, setLocale] = useState<Locale>(value.locale || Locale.en);
 	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
@@ -48,7 +51,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(submitText);
 		setIsLoading(true);
 		try {
-			const messageStream = aiRequestStream(submitText, prompt || mode);
+			const messageStream = aiRequestStream(locale, submitText, prompt || mode);
 			let fullResponse = '';
 			let currentWord = '';
 
@@ -74,6 +77,8 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	};
 
 	const chatContext = {
+		locale,
+		setLocale,
 		mode,
 		setMode,
 		handleTextChange,

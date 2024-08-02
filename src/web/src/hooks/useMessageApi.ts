@@ -38,6 +38,7 @@ export const useMessageApi = () => {
 	};
 
 	const aiRequestStream = async function* (
+		locale: Locale,
 		text: string,
 		promptModeOrPromptText: string | Mode,
 	): AsyncGenerator<string, void, unknown> {
@@ -54,6 +55,7 @@ export const useMessageApi = () => {
 					...CONTENT_TYPE_HEADER.JSON
 				},
 				body: JSON.stringify({
+					locale: locale,
 					prompt: {
 						...promptObj,
 					},
