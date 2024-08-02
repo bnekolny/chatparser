@@ -9,6 +9,8 @@ import {useChatContext} from './context/ChatContext';
 import {Mode} from './types';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import DevToolsPane from './components/DevTools/DevToolsPane';
+import {HOSTS} from './constants';
 
 const Dict: React.FC = () => {
 	const {} = useChatContext();
@@ -17,6 +19,7 @@ const Dict: React.FC = () => {
 		<div className={styles.container}>
 			<DictInputForm />
 			<ResultDisplay />
+			{window?.location?.host === HOSTS.LOCAL && <DevToolsPane />}
 		</div>
 	);
 };
