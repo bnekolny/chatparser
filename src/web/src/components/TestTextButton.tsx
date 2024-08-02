@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useChatContext} from '../context/ChatContext';
 import {Mode} from '../types';
 
 const TestTextButton: React.FC = () => {
 	const {setText, setMode, handleSendMessage} = useChatContext();
+	const [testString, setTestString] = useState('');
 
-	const testString = `
-    👋 hola! Creo que estamos lista para la próxima cita contigo! Puedas avisarme a cuando traerle? Lo más fácil para nosotros es algun tiempo después de 14:00, si es posible durante la semana o cualquier hora en el fin de semana. 
-
-    Gracias!
-    `.trim();
+	useEffect(() => {
+		fetch('/assets/samples/message_verification_appointment.txt')
+		.then((response) => response.text())
+		.then((text) => setTestString(text.trim()));
+	}, []);
 
 	const submitTestText = async () => {
 		await setText(testString);
 		await setMode(Mode.Verify);
-		handleSendMessage();
+		handleSendMessage(testString);
 	};
 
 	return (

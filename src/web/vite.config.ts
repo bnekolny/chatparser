@@ -24,6 +24,11 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
           changeOrigin: true,
           //rewrite: (path) => path.replace(/^\/api/, ''),
         },
+        '/assets': {
+          target: 'http://chatparser:8080',
+          changeOrigin: true,
+          //rewrite: (path) => path.replace(/^\/api/, ''),
+        }
       }
     },
     build: {
