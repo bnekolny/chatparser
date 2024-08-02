@@ -39,9 +39,15 @@ export const useMessageApi = () => {
 
 	const aiRequestStream = async function* (
 		text: string,
-		mode: Mode,
+		promptModeOrPromptText: string | Mode,
 	): AsyncGenerator<string, void, unknown> {
 		try {
+			const promptObj: { custom_prompt_text?: string; system_prompt_type?: Mode } = {};
+			if (!Object.values(Mode).includes(promptModeOrPromptText as Mode)) {
+				promptObj.custom_prompt_text = promptModeOrPromptText;
+			} else {
+				promptObj.system_prompt_type = promptModeOrPromptText as Mode;
+			}
 			const response = await fetch('/api/ai-prompt/stream', {
 				method: HTTP_METHODS.POST,
 				headers: {
@@ -49,8 +55,7 @@ export const useMessageApi = () => {
 				},
 				body: JSON.stringify({
 					prompt: {
-						system_prompt_type: mode,
-						//custom_prompt_text: customPromptText
+						...promptObj,
 					},
 					input_text: text
 				}),

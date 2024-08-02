@@ -17,6 +17,9 @@ import (
 //go:embed static/*
 var staticFS embed.FS
 
+//go:embed assets/*
+var assetsFS embed.FS
+
 var hardcodedUserId string = "anonymous"
 
 func main() {
@@ -40,6 +43,7 @@ func main() {
 		logger.Logger.Fatal(err)
 	}
 	mux.Handle("/static/", http.StripPrefix("/static", statigz.FileServer(staticAssets.(fs.ReadDirFS), brotli.AddEncoding)))
+	mux.Handle("/assets/", http.FileServer(http.FS(assetsFS)))
 
 	mux.Handle("/dict", handlers.DictTemplateData(staticAssets))
 
