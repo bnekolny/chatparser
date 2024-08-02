@@ -26,7 +26,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	children,
 	value = {},
 }) => {
-	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);//Mode.Verify);
+	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
 	const [prompt, setPrompt] = useState<string>('');

@@ -43,10 +43,10 @@ export const useMessageApi = () => {
 	): AsyncGenerator<string, void, unknown> {
 		try {
 			const promptObj: { custom_prompt_text?: string; system_prompt_type?: Mode } = {};
-			if (typeof promptModeOrPromptText === 'string') {
+			if (!Object.values(Mode).includes(promptModeOrPromptText as Mode)) {
 				promptObj.custom_prompt_text = promptModeOrPromptText;
 			} else {
-				promptObj.system_prompt_type = promptModeOrPromptText;
+				promptObj.system_prompt_type = promptModeOrPromptText as Mode;
 			}
 			const response = await fetch('/api/ai-prompt/stream', {
 				method: HTTP_METHODS.POST,
