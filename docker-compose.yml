@@ -77,7 +77,7 @@ services:
     profiles:
       - formatters
 
-  tools-locale-translate:
+  tools-locale-translate: &tools-golang
     build:
       dockerfile_inline: |
         FROM golang:alpine
@@ -92,6 +92,20 @@ services:
       -c '
       go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/es.json &&
       go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/fr.json &&
+      echo "done"
+      '
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    profiles:
+      - tools
+  tools-prompt-translate:
+    <<: *tools-golang
+    volumes:
+      - ./src:/app
+    command: >
+      -c '
+      go run ./cmd/prompt-translate/main.go -input assets/prompts/en/verify.txt -output assets/prompts/es/verify.txt && cat assets/prompts/es/verify.txt &&
+      go run ./cmd/prompt-translate/main.go -input assets/prompts/en/improve.txt -output assets/prompts/es/improve.txt && cat assets/prompts/es/improve.txt &&
       echo "done"
       '
     environment:

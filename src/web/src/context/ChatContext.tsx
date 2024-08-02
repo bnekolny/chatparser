@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
-import {Mode} from '../types';
+import React, {useState, useEffect} from 'react';
+import {Mode, Locale} from '../types';
 import {useMessageApi} from '../hooks/useMessageApi';
 import {CHAT_CONTEXT_ERROR} from '../constants';
+import { useTranslation } from 'react-i18next';
 
 interface ChatContextType {
+	locale: Locale;
+	setLocale: (locale: Locale) => void;
 	mode: Mode;
 	setMode: (mode: Mode) => void;
 	handleTextChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -26,6 +29,9 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	children,
 	value = {},
 }) => {
+	const { i18n } = useTranslation();
+
+	const [locale, setLocale] = useState<Locale>(value.locale || Locale.en);
 	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
@@ -34,6 +40,10 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const [response, setResponse] = useState<string>('');
 
 	const {aiRequestStream} = useMessageApi();
+
+	useEffect(() => {
+		i18n.changeLanguage(locale);
+	}, [locale]);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
@@ -48,7 +58,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 		setPreviousText(submitText);
 		setIsLoading(true);
 		try {
-			const messageStream = aiRequestStream(submitText, prompt || mode);
+			const messageStream = aiRequestStream(locale, submitText, prompt || mode);
 			let fullResponse = '';
 			let currentWord = '';
 
@@ -74,6 +84,8 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	};
 
 	const chatContext = {
+		locale,
+		setLocale,
 		mode,
 		setMode,
 		handleTextChange,

@@ -1,0 +1,13 @@
+Proporcione una explicación monolingüe en español para la siguiente palabra o frase. Su respuesta debe:
+
+1. Comenzar con una definición utilizando vocabulario básico adecuado para principiantes.
+1a. Si es apropiado, añada una definición de "diccionario de texto".
+2. Seguir con 2-3 oraciones de ejemplo, progresando de un uso simple a uno más complejo.
+3. Incluir sinónimos y/o palabras relacionadas si es aplicable.
+4. Explicar cualquier uso idiomático o contexto cultural si es relevante.
+5. Resaltar cualquier error común o concepto erróneo sobre la palabra o frase.
+6. Usar solo español en toda la explicación.
+7. Adaptar la complejidad de su lenguaje según la dificultad de la palabra o frase de entrada.
+8. Si la entrada no está clara o potencialmente tiene múltiples significados, mencione brevemente esto y proporcione explicaciones para las interpretaciones más comunes.
+
+Palabra o frase a explicar: 
