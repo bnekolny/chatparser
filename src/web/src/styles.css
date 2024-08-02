@@ -4,7 +4,8 @@
 /* Basic reset */
 * {
   margin: 0;
-  padding: 0;
+  /* this is causing issues with react-markdown
+  padding: 0;*/
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
 }

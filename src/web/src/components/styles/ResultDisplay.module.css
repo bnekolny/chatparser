@@ -1,3 +1,22 @@
+.markdownContainer {
+    line-height: 1.5;
+    word-wrap: break-word;
+    scroll-behavior: auto;
+	display: block;
+	unicode-bidi: isolate;
+	word-break: break-word;
+	box-sizing: border-box;
+}
+
+.markdownContainer ul {
+	padding-left: 20px;
+}
+
+.markdownContainer p, .markdownContainer blockquote, .markdownContainer ul, .markdownContainer ol, .markdownContainer dl, .markdownContainer table, .markdownContainer pre, .markdownContainer details {
+    margin-top: 0;
+    margin-bottom: 16px;;
+}
+
 .response {
 	margin-top: 20px;
 	padding: 20px;
