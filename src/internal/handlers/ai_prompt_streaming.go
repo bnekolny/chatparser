@@ -3,6 +3,7 @@ package handlers
 import (
 	"bufio"
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"chatparser/internal/genaiclient"
@@ -58,17 +59,27 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	// can't utilize `io.Copy` as it doesn't flush the buffer frequently enough
 	// thus not streaming the data to the client
 	bw := bufio.NewWriterSize(w, bufferSize)
-	var err error
-	for err == nil {
-		var n int
-		n, err = genaiReader.Read(writeBuffer)
+	for {
+		n, err := genaiReader.Read(writeBuffer)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return
+		}
 		for i := 0; i < n; i += bufferSize {
 			chunkSize := min(bufferSize, n-i)
-			_, err = bw.Write(writeBuffer[i : i+chunkSize])
-
+			_, err := bw.Write(writeBuffer[i : i+chunkSize])
+			if err != nil {
+				// Handle error
+				return
+			}
 			err = bw.Flush()
 			if f, ok := w.(http.Flusher); ok {
 				f.Flush()
+			}
+			if err != nil {
+				return
 			}
 		}
 	}
