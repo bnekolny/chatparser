@@ -11,7 +11,6 @@ const TextInputForm: React.FC = () => {
 	const {
 		text,
 		setText,
-		previousText,
 		isLoading,
 		handleSendMessage,
 		setResponse,
@@ -19,12 +18,15 @@ const TextInputForm: React.FC = () => {
 		revisedMessage,
 		handleSubmitRevisedText,
 		setRevisedMessage,
+		hasNewText,
 	} = useChatContext();
 
-	const hasNewText = text !== previousText;
-
 	const handleSubmit = async () => {
-		await handleSendMessage();
+		if (mode === Mode.Verify && revisedMessage) {
+			await handleSubmitRevisedText();
+		} else {
+			await handleSendMessage();
+		}
 	};
 
 	const handleCopy = () => {
@@ -35,6 +37,13 @@ const TextInputForm: React.FC = () => {
 		setText('');
 		setResponse('');
 		setRevisedMessage('');
+	};
+
+	const getButtonText = () => {
+		if (isLoading) return BUTTON_TEXT.LOADING;
+		if (mode === Mode.Verify && revisedMessage)
+			return BUTTON_TEXT.SUBMIT_REVISED;
+		return BUTTON_TEXT.SUBMIT;
 	};
 
 	return (
@@ -52,10 +61,7 @@ const TextInputForm: React.FC = () => {
 			<div className={styles.buttonContainer}>
 				<Button
 					type="submit"
-					disabled={
-						(mode !== Mode.Verify || !revisedMessage) &&
-						(!hasNewText || isLoading)
-					}
+					disabled={isLoading || !hasNewText}
 					onClick={
 						mode === Mode.Verify && revisedMessage
 							? handleSubmitRevisedText
@@ -63,11 +69,7 @@ const TextInputForm: React.FC = () => {
 					}
 					className="submit"
 				>
-					{isLoading
-						? BUTTON_TEXT.LOADING
-						: mode === Mode.Verify && revisedMessage
-						? BUTTON_TEXT.SUBMIT_REVISED
-						: BUTTON_TEXT.SUBMIT}
+					{getButtonText()}
 				</Button>
 				<Button type="button" onClick={handleCopy} className="copy">
 					{BUTTON_TEXT.COPY}

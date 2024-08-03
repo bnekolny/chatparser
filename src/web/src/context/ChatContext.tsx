@@ -19,6 +19,10 @@ interface ChatContextType {
 	revisedMessage: string;
 	setRevisedMessage: (text: string) => void;
 	handleSubmitRevisedText: () => void;
+	modeChanged: boolean;
+	setModeChanged: (changed: boolean) => void;
+	hasNewText: boolean;
+	setHasNewText: (hasNew: boolean) => void;
 }
 
 const ChatContext = React.createContext<ChatContextType | undefined>(undefined);
@@ -33,6 +37,8 @@ const ChatContextProvider: React.FC<{
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 	const [revisedMessage, setRevisedMessage] = useState<string>('');
+	const [modeChanged, setModeChanged] = useState<boolean>(false);
+	const [hasNewText, setHasNewText] = useState<boolean>(false);
 
 	const {sendMessage, aiRequestStream} = useMessageApi();
 
@@ -43,13 +49,25 @@ const ChatContextProvider: React.FC<{
 		}
 	}, [mode, response]);
 
+	useEffect(() => {
+		setModeChanged(true);
+		setHasNewText(true);
+	}, [mode]);
+
+	useEffect(() => {
+		setHasNewText(text !== previousText || modeChanged);
+	}, [text, previousText, modeChanged]);
+
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);
+		setHasNewText(true);
 	};
 
 	const handleSendMessage = async (inputText?: string): Promise<void> => {
 		setPreviousText(inputText || text);
 		setIsLoading(true);
+		setModeChanged(false);
+		setHasNewText(false);
 		try {
 			if (mode != Mode.Improve) {
 				const response = await sendMessage(inputText || text, mode);
@@ -63,8 +81,6 @@ const ChatContextProvider: React.FC<{
 					fullResponse += char;
 					currentWord += char;
 
-					// this is spitting out words at a time which runs significantly
-					// faster than character at a time is able to do
 					if (/\s/.test(char)) {
 						setResponse(fullResponse);
 						await new Promise(resolve => setTimeout(resolve, 0));
@@ -83,13 +99,12 @@ const ChatContextProvider: React.FC<{
 
 	const handleSubmitRevisedText = async (): Promise<void> => {
 		setText(revisedMessage);
-		await handleSendMessage();
+		await handleSendMessage(revisedMessage);
 	};
 
 	const extractRevisedMessage = (response: string): string => {
 		const match = response.match(REGEX.REVISED_MESSAGE);
 		return match ? match[1].trim() : '';
-		return '';
 	};
 
 	const chatContext = {
@@ -108,6 +123,10 @@ const ChatContextProvider: React.FC<{
 		revisedMessage,
 		handleSubmitRevisedText,
 		setRevisedMessage,
+		modeChanged,
+		setModeChanged,
+		hasNewText,
+		setHasNewText,
 	};
 
 	return (
