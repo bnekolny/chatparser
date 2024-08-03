@@ -68,7 +68,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 
 				// this is spitting out words at a time which runs significantly
 				// faster than character at a time is able to do
-				if (/\s/.test(char)) {
+				if (!/\w/.test(char)) {
 					setResponse(fullResponse);
 					await new Promise(resolve => setTimeout(resolve, 0));
 					currentWord = '';
