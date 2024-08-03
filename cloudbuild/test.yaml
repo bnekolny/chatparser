@@ -7,5 +7,12 @@ steps:
   env:
   - 'GEMINI_API_KEY=fake-gemini-api-key'
 
+- name: node:22-alpine3.18
+  script: |
+    #!/bin/bash
+    cd src/web
+    yarn install
+    yarn test
+
 options:
   logging: CLOUD_LOGGING_ONLY
