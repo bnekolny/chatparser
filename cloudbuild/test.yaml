@@ -1,18 +1,20 @@
 steps:
-- name: golang:1.22
+- name: golang:1.22-alpine
   script: |
     #!/bin/bash
     cd src
     go test -timeout 1m -v ./...
   env:
   - 'GEMINI_API_KEY=fake-gemini-api-key'
+  waitFor: ['-']
 
 - name: node:22-alpine3.18
   script: |
-    #!/bin/bash
+    #!/bin/sh
     cd src/web
     yarn install
     yarn test
+  waitFor: ['-']
 
 options:
   logging: CLOUD_LOGGING_ONLY
