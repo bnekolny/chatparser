@@ -9,23 +9,23 @@ const ResultDisplay: React.FC = () => {
 	const[parsedJson, setParsedJson] = useState(null);
 
 	useEffect(() => {
-		//setParsedJson(JsonParser.parseIncompleteJson(response) as any);
-		setParsedJson(JsonParser.parseIncompleteJson(
-			'{"etiquetas": ["solicitud de cita", "flexibilidad", "horario"], "traducción": "👋 Hi! I think wer'));
+		if (!response) { return; }
+		setParsedJson(JsonParser.parseIncompleteJson(response) as any);
 	}, [response]);
 
 	if (response) {
 			return (
 				<>
+				<div>
 					Tags:
-					<div className={styles.markdownContainer}>
+					<div>
 						<p>{JSON.stringify(parsedJson?.etiquetas)}</p>
 					</div>
-					<div className={styles.markdownContainer}>
+					<div>
 						traducción:
-						<p>{parsedJson?.traducción}</p>
+						<Markdown>{((parsedJson?.traducción || '') as string).replace(/\\n/g, '\n\n')}</Markdown>
 					</div>
-					<p>{JSON.stringify(parsedJson)}</p>
+					</div>
 				</>
 			)
 	}
