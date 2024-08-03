@@ -4,7 +4,7 @@ import { useChatContext } from '../../context/ChatContext';
 import { Mode, Locale } from '../../types';
 import styles from './styles/TestPromptTextArea.module.css';
 import Button from '../Button';
-import {shortLanguageCode} from '../../utils';
+import {shortLanguageCode} from '../../utils/languageUtils';
 
 const TestPromptTextArea: React.FC = () => {
   const { handleSendMessage, prompt, setPrompt, mode, setMode } = useChatContext();

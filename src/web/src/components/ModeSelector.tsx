@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles/ModeSelector.module.css';
 import {Mode} from '../types';
-import {capitalizeFirstLetter} from '../utils';
+import {capitalizeFirstLetter} from '../utils/languageUtils';
 import {useChatContext} from '../context/ChatContext';
 
 const ModeSelector: React.FC = () => {

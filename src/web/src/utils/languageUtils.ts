@@ -1,5 +1,5 @@
-import {ERROR_CAPITALIZE, ERROR_INVALID_INPUT} from './constants';
-import {Locale} from './types';
+import {ERROR_CAPITALIZE, ERROR_INVALID_INPUT} from '../constants';
+import {Locale} from '../types';
 
 // TODO: write unit tests for this function
 export const capitalizeFirstLetter = (str: string): string => {
