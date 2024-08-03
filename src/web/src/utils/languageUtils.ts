@@ -26,42 +26,100 @@ export const shortLanguageCode = (i18nextLanguageCode: string): Locale => {
 	}
 }
 
-/* commenting these out so that they don't cause build failures with typescript
-src/utils.ts(17,7): error TS6133: 'sampleMDVerify' is declared but its value is never read.
-
-const sampleMDVerify = `
-## Feedback on your message:
-
-**Appropriateness:** The message is grammatically incorrect but conveys the intended meaning.
-
-**Translation:** I want an ice cream.
-
-**Critical Feedback:** The word order is incorrect. In Spanish, the adjective typically comes after the noun.
-
-**Suggestion:** It is important to correct the word order.
-
-**Revised Message:** Yo quiero un helado.
-`;
-
-const sampleMDImprove = `
-Okay, let's break down your Spanish phrase:
-
-**1. Grammatical Analysis:**
-
-* **The most advanced grammatical construct is the use of the indefinite article "uno" before "helado".**
-
-    * **Appropriate Use:** You are using it correctly! The indefinite article "uno" is used when referring to a singular, unspecified noun.
-    * **Grammatical Rules:** In Spanish, indefinite articles (un/una/unos/unas) agree in gender and number with the noun they modify. "Helado" is masculine, so we use "uno."
-    * **Changes:** No changes are needed!
-
-**2. Translation:**
-
-"I want an ice cream."
-
-**3. Additional Feedback:**
-
-* **Simplicity:** Your phrase is very straightforward and grammatically correct.
-* **Naturalness:** While grammatically sound, it might sound a bit stilted in a casual conversation. To make it more natural, you could use the more colloquial "quiero un helado" (I want an ice cream).
-
-**Overall:** You are on the right track! You understand the use of the indefinite article, which is an important aspect of Spanish grammar. Keep practicing and experimenting with different ways to express yourself in Spanish. Don't be afraid to make mistakes – they are a part of learning!
-`;*/
+export class JsonDebug {
+	static format(json: string): string {
+	  let depth = 0;
+	  let result = '';
+	  const length = json.length;
+  
+	  for (let n = 0; n < length; n++) {
+		const c = json[n];
+		
+		if (c === '}' || c === ']') {
+		  depth--;
+		  result += JsonDebug.addBreak(depth);
+		}
+  
+		result += c;
+  
+		if (c === '{' || c === '[') {
+		  depth++;
+		  result += JsonDebug.addBreak(depth);
+		}
+		
+		if (c === ',') {
+		  result += JsonDebug.addBreak(depth);
+		}
+	  }
+  
+	  return result;
+	}
+  
+	private static addBreak(depth: number): string {
+	  return "\n" + "\t".repeat(depth);
+	}
+  
+	static parseIncompleteJson(jsonString: string): any {
+	  // Remove any trailing commas
+	  jsonString = jsonString.replace(/,\s*$/, '');
+  
+	  // Attempt to close any unclosed structures
+	  let openBraces = (jsonString.match(/{/g) || []).length;
+	  let closeBraces = (jsonString.match(/}/g) || []).length;
+	  let openBrackets = (jsonString.match(/\[/g) || []).length;
+	  let closeBrackets = (jsonString.match(/\]/g) || []).length;
+  
+	  jsonString += '}'.repeat(Math.max(0, openBraces - closeBraces));
+	  jsonString += ']'.repeat(Math.max(0, openBrackets - closeBrackets));
+  
+	  try {
+		return JSON.parse(jsonString);
+	  } catch (error) {
+		console.warn("Unable to parse JSON, attempting partial parse:", error);
+		return this.parsePartial(jsonString);
+	  }
+	}
+  
+	private static parsePartial(json: string): any {
+	  const result: any = {};
+	  const keyRegex = /"([\w\-]+)"\s*:/g;
+	  let match;
+	  let lastIndex = 0;
+  
+	  while ((match = keyRegex.exec(json)) !== null) {
+		const key = match[1];
+		const valueStart = match.index + match[0].length;
+		let valueEnd = json.length;
+  
+		// Find the end of the value
+		let depth = 0;
+		for (let i = valueStart; i < json.length; i++) {
+		  if (json[i] === '{' || json[i] === '[') depth++;
+		  if (json[i] === '}' || json[i] === ']') depth--;
+		  if (depth === 0 && json[i] === ',') {
+			valueEnd = i;
+			break;
+		  }
+		}
+  
+		let value = json.slice(valueStart, valueEnd).trim();
+  
+		// Remove surrounding quotes if present
+		if (value.startsWith('"') && value.endsWith('"')) {
+		  value = value.slice(1, -1);
+		}
+  
+		// Attempt to parse the value
+		try {
+		  result[key] = JSON.parse(value);
+		} catch {
+		  // If parsing fails, store as is
+		  result[key] = value;
+		}
+  
+		lastIndex = valueEnd;
+	  }
+  
+	  return result;
+	}
+  }

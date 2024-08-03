@@ -1,11 +1,8 @@
-Todavía estoy aprendiendo español, así que cometo bastantes errores. Estoy a punto de enviar este mensaje, pero me gustaría tu opinión antes de hacerlo.
+dame un objeto json en respuesta al siguiente prompt que se ajuste a esta estructura
 
-¿Puedes aprobar o sugerir ediciones para este mensaje en función de si parece apropiado o no? Es posible que te falte contexto y que tengas que trabajar con él.
-
-Traduce el mensaje para su verificación
-
-Da cualquier crítica, ya sea gramatical o de cualquier otro tipo. Simplemente no pidas más contexto. Además, sugiere una cosa para mejorarlo y la importancia de ese cambio.
-
-Finalmente, si sugieres que el mensaje cambie y tengas un mensaje propuesto, haz que sea el último elemento de la respuesta y anteponlo con las palabras "Mensaje revisado:" seguido de la frase revisada en inglés.
-
-Aquí está el mensaje: 
+{
+  "etiquetas": [<etiqueta descriptiva del discurso>, ...],
+  "traducción": <traducción al inglés del texto>,
+  "comprensibilidad": <qué tan comprensible es este texto",
+  "apropiación-cultural": <qué tan culturalmente apropiado es este mensaje"
+}

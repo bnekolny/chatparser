@@ -3,8 +3,6 @@ package genaiclient
 import (
 	"bytes"
 	"context"
-	"errors"
-	"fmt"
 	"io"
 	"os"
 
@@ -26,6 +24,18 @@ func init() {
 	}
 }
 
+func responseMimeFromString(responseFormat string) string {
+	switch responseFormat {
+	case "text":
+		return "text/plain"
+	case "json":
+		return "application/json"
+	default:
+		return "application/json"
+		//return "", errors.New(fmt.Sprintf("invalid responseFormat: %s, valid: text, json", responseFormat))
+	}
+}
+
 func GetFeedback(ctx context.Context, responseFormat string, prompt string) (string, error) {
 	defer logger.Logger.Sync()
 
@@ -38,18 +48,8 @@ func GetFeedback(ctx context.Context, responseFormat string, prompt string) (str
 
 	model := client.GenerativeModel(geminiModelSelection)
 
-	var responseMIME string
-	switch responseFormat {
-	case "text":
-		responseMIME = "text/plain"
-	case "json":
-		responseMIME = "application/json"
-	default:
-		return "", errors.New(fmt.Sprintf("invalid responseFormat: %s, valid: text, json", responseFormat))
-	}
-
 	model.GenerationConfig = genai.GenerationConfig{
-		ResponseMIMEType: responseMIME,
+		ResponseMIMEType: responseMimeFromString(responseFormat),
 	}
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
@@ -96,6 +96,9 @@ func StreamFeedback(ctx context.Context, promptPretext string, prompt string) (r
 	defer client.Close()
 
 	model := client.GenerativeModel(geminiModelSelection)
+	model.GenerationConfig = genai.GenerationConfig{
+		ResponseMIMEType: responseMimeFromString("json"),
+	}
 	genaiResponseIter := model.GenerateContentStream(ctx, genai.Text(promptPretext+"\n"+prompt))
 	if err != nil {
 		logger.Logger.Fatal(err)
