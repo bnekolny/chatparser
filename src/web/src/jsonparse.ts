@@ -1,97 +1,143 @@
 export class JsonParser {
-	static format(json: string): string {
-	  let depth = 0;
-	  let result = '';
-	  const length = json.length;
+    static parseIncompleteJson(jsonString: string): any {
+      const parser = new PartialJsonParser(jsonString);
+      return parser.parse();
+    }
+  }
   
-	  for (let n = 0; n < length; n++) {
-		const c = json[n];
-		
-		if (c === '}' || c === ']') {
-		  depth--;
-		  result += JsonParser.addBreak(depth);
-		}
+  class PartialJsonParser {
+    private pos: number = 0;
+    private json: string;
   
-		result += c;
+    constructor(json: string) {
+      this.json = json;
+    }
   
-		if (c === '{' || c === '[') {
-		  depth++;
-		  result += JsonParser.addBreak(depth);
-		}
-		
-		if (c === ',') {
-		  result += JsonParser.addBreak(depth);
-		}
-	  }
+    parse(): any {
+      this.skipWhitespace();
+      if (this.json[this.pos] === '{') {
+        return this.parseObject();
+      } else if (this.json[this.pos] === '[') {
+        return this.parseArray();
+      } else {
+        throw new Error('Invalid JSON: must start with { or [');
+      }
+    }
   
-	  return result;
-	}
+    private parseObject(): any {
+      const obj: any = {};
+      this.pos++; // Skip opening brace
+      
+      while (this.pos < this.json.length) {
+        this.skipWhitespace();
+        
+        if (this.json[this.pos] === '}') {
+          this.pos++; // Skip closing brace
+          return obj;
+        }
+        
+        const key = this.parseString();
+        this.skipWhitespace();
+        
+        if (this.pos >= this.json.length || this.json[this.pos] !== ':') {
+          return obj; // Incomplete, return what we have
+        }
+        
+        this.pos++; // Skip colon
+        this.skipWhitespace();
+        
+        const value = this.parseValue();
+        obj[key] = value;
+        
+        this.skipWhitespace();
+        if (this.json[this.pos] === ',') {
+          this.pos++; // Skip comma
+        } else if (this.json[this.pos] !== '}') {
+          return obj; // Incomplete, return what we have
+        }
+      }
+      
+      return obj; // Reached end of input
+    }
   
-	private static addBreak(depth: number): string {
-	  return "\n" + "\t".repeat(depth);
-	}
+    private parseArray(): any[] {
+      const arr: any[] = [];
+      this.pos++; // Skip opening bracket
+      
+      while (this.pos < this.json.length) {
+        this.skipWhitespace();
+        
+        if (this.json[this.pos] === ']') {
+          this.pos++; // Skip closing bracket
+          return arr;
+        }
+        
+        const value = this.parseValue();
+        arr.push(value);
+        
+        this.skipWhitespace();
+        if (this.json[this.pos] === ',') {
+          this.pos++; // Skip comma
+        } else if (this.json[this.pos] !== ']') {
+          return arr; // Incomplete, return what we have
+        }
+      }
+      
+      return arr; // Reached end of input
+    }
   
-	static parseIncompleteJson(jsonString: string): any {
-	  // Remove any trailing commas
-	  jsonString = jsonString.replace(/,\s*$/, '');
+    private parseValue(): any {
+      this.skipWhitespace();
+      const char = this.json[this.pos];
+      
+      if (char === '{') {
+        return this.parseObject();
+      } else if (char === '[') {
+        return this.parseArray();
+      } else if (char === '"') {
+        return this.parseString();
+      } else if (char === 't' && this.json.slice(this.pos, this.pos + 4) === 'true') {
+        this.pos += 4;
+        return true;
+      } else if (char === 'f' && this.json.slice(this.pos, this.pos + 5) === 'false') {
+        this.pos += 5;
+        return false;
+      } else if (char === 'n' && this.json.slice(this.pos, this.pos + 4) === 'null') {
+        this.pos += 4;
+        return null;
+      } else {
+        return this.parseNumber();
+      }
+    }
   
-	  // Attempt to close any unclosed structures
-	  let openBraces = (jsonString.match(/{/g) || []).length;
-	  let closeBraces = (jsonString.match(/}/g) || []).length;
-	  let openBrackets = (jsonString.match(/\[/g) || []).length;
-	  let closeBrackets = (jsonString.match(/\]/g) || []).length;
+    private parseString(): string {
+      let result = '';
+      this.pos++; // Skip opening quote
+      
+      while (this.pos < this.json.length) {
+        const char = this.json[this.pos];
+        if (char === '"' && this.json[this.pos - 1] !== '\\') {
+          this.pos++; // Skip closing quote
+          return result;
+        }
+        result += char;
+        this.pos++;
+      }
+      
+      return result; // Incomplete string, return what we have
+    }
   
-	  jsonString += '}'.repeat(Math.max(0, openBraces - closeBraces));
-	  jsonString += ']'.repeat(Math.max(0, openBrackets - closeBrackets));
+    private parseNumber(): number {
+      const start = this.pos;
+      while (this.pos < this.json.length && /[\d.+\-eE]/.test(this.json[this.pos])) {
+        this.pos++;
+      }
+      return parseFloat(this.json.slice(start, this.pos));
+    }
   
-	  try {
-		return JSON.parse(jsonString);
-	  } catch (error) {
-		console.warn("Unable to parse JSON, attempting partial parse:", error);
-		return this.parsePartial(jsonString);
-	  }
-	}
-  
-	private static parsePartial(json: string): any {
-	  const result: any = {};
-	  const keyRegex = /"([\w\-]+)"\s*:/g;
-	  let match;
-	  let lastIndex = 0;
-  
-	  while ((match = keyRegex.exec(json)) !== null) {
-		const key = match[1];
-		const valueStart = match.index + match[0].length;
-		let valueEnd = json.length;
-  
-		// Find the end of the value
-		let depth = 0;
-		for (let i = valueStart; i < json.length; i++) {
-		  if (json[i] === '{' || json[i] === '[') depth++;
-		  if (json[i] === '}' || json[i] === ']') depth--;
-		  if (depth === 0 && json[i] === ',') {
-			valueEnd = i;
-			break;
-		  }
-		}
-  
-		let value = json.slice(valueStart, valueEnd).trim();
-  
-		// Remove surrounding quotes if present
-		if (value.startsWith('"') && value.endsWith('"')) {
-		  value = value.slice(1, -1);
-		}
-  
-		// Attempt to parse the value
-		try {
-		  result[key] = JSON.parse(value);
-		} catch {
-		  // If parsing fails, store as is
-		  result[key] = value;
-		}
-  
-		lastIndex = valueEnd;
-	  }
-  
-	  return result;
-	}
+    private skipWhitespace(): void {
+      while (this.pos < this.json.length && /\s/.test(this.json[this.pos])) {
+        this.pos++;
+      }
+    }
   }

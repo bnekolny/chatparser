@@ -25,6 +25,7 @@ const ResultDisplay: React.FC = () => {
 						traducción:
 						<p>{parsedJson?.traducción}</p>
 					</div>
+					<p>{JSON.stringify(parsedJson)}</p>
 				</>
 			)
 	}
