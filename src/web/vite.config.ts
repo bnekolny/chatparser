@@ -12,7 +12,7 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       viteCompression({algorithm: 'brotliCompress'}),
     ],
     server: {
-      https: {
+      https: process.env.CI ? undefined : {
         key: '../.cert/key.pem',
         cert: '../.cert/cert.pem',
       },

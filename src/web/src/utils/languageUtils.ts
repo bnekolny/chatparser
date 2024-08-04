@@ -1,4 +1,5 @@
-import {ERROR_CAPITALIZE, ERROR_INVALID_INPUT} from './constants';
+import {ERROR_CAPITALIZE, ERROR_INVALID_INPUT} from '../constants';
+import {Locale} from '../types';
 
 // TODO: write unit tests for this function
 export const capitalizeFirstLetter = (str: string): string => {
@@ -13,6 +14,17 @@ export const capitalizeFirstLetter = (str: string): string => {
 		return str;
 	}
 };
+
+// NOTE: fallback to Spanish if language code is not supported, although that
+// should not happen so long as i18n.ts and types.ts (Locale) are in sync
+export const shortLanguageCode = (i18nextLanguageCode: string): Locale => {
+	const iso6391Code = i18nextLanguageCode.slice(0, 2).toLowerCase(); // trim to first 2 characters
+	if (Object.values(Locale).map(String).includes(iso6391Code)) {
+		return iso6391Code as Locale;
+	} else {
+		return Locale.es;
+	}
+}
 
 /* commenting these out so that they don't cause build failures with typescript
 src/utils.ts(17,7): error TS6133: 'sampleMDVerify' is declared but its value is never read.

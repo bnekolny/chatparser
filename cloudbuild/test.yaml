@@ -1,11 +1,25 @@
 steps:
-- name: golang:1.22
+- id: gotest
+  name: golang:1.22-alpine
   script: |
-    #!/bin/bash
+    #!/bin/sh
     cd src
     go test -timeout 1m -v ./...
   env:
   - 'GEMINI_API_KEY=fake-gemini-api-key'
+  waitFor: ['-']
+
+- id: vitest
+  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+  script: |
+    #!/bin/sh
+    cd src/web
+    yarn install
+    yarn test:ci
+  env:
+  - 'CI=true'
+
+  waitFor: ['-']
 
 options:
   logging: CLOUD_LOGGING_ONLY

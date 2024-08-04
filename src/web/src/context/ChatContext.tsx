@@ -31,7 +31,7 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 }) => {
 	const { i18n } = useTranslation();
 
-	const [locale, setLocale] = useState<Locale>(value.locale || Locale.en);
+	const [locale, setLocale] = useState<Locale>(i18n.language as Locale);
 	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
@@ -42,8 +42,8 @@ const ChatContextProvider: React.FC<{children: React.ReactNode, value?: Partial<
 	const {aiRequestStream} = useMessageApi();
 
 	useEffect(() => {
-		i18n.changeLanguage(locale);
-	}, [locale]);
+		setLocale(i18n.language as Locale);
+	}, [i18n.language]);
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setText(event.target.value);

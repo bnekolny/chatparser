@@ -1,11 +1,9 @@
 steps:
-- name: node:22-alpine3.18
+- id: tsc
+  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
   script: |
     #!/bin/sh
     cd src/web
-    corepack enable
-    yarn set version berry
-
     yarn install
     yarn run build
   waitFor: ["-"]
