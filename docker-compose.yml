@@ -1,5 +1,8 @@
+include:
+  - ./docker-compose.tools.yml
+
 services:
-  chatparser:
+  golang:
     build:
       context: src
       target: gobuilder
@@ -30,7 +33,7 @@ services:
       - ./src/.cert:/srv/.cert
     command: /bin/sh -c "yarn install && yarn run dev"
     depends_on:
-      - chatparser
+      - golang
   gcsemulator:
     image: golang:alpine
     ports:
@@ -43,7 +46,6 @@ services:
       - |
         go install github.com/fullstorydev/emulators/storage/...@latest
         gcsemulator -port 8888 -host 0.0.0.0 -dir var/storage
-
   terraform: &terraform
     build: terraform
     volumes:
@@ -56,59 +58,3 @@ services:
     # prevent this from running with `docker-compose up`
     profiles:
       - terraform
-
-  formatter-golang:
-    image: golang:1.22
-    volumes:
-      - ./src:/go
-    entrypoint: /bin/bash
-    command: >
-      -c "gofmt -w -s ."
-    profiles:
-      - formatters
-  formatter-terraform:
-    <<: *terraform
-    # array elements aren't inhereted from <<: *service syntax
-    volumes:
-      - ./terraform:/workspace
-    working_dir: /workspace
-    command: >
-      -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
-    profiles:
-      - formatters
-
-  tools-locale-translate: &tools-golang
-    build:
-      dockerfile_inline: |
-        FROM golang:alpine
-        WORKDIR /app
-        COPY src/go.mod .
-        RUN go mod download
-    working_dir: /app
-    volumes:
-      - ./src:/app
-    entrypoint: /bin/sh
-    command: >
-      -c '
-      go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/es.json &&
-      go run ./cmd/locale-translate/main.go -input web/src/locales/en.json -output web/src/locales/fr.json &&
-      echo "done"
-      '
-    environment:
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
-    profiles:
-      - tools
-  tools-prompt-translate:
-    <<: *tools-golang
-    volumes:
-      - ./src:/app
-    command: >
-      -c '
-      go run ./cmd/prompt-translate/main.go -input assets/prompts/en/verify.txt -output assets/prompts/es/verify.txt && cat assets/prompts/es/verify.txt &&
-      go run ./cmd/prompt-translate/main.go -input assets/prompts/en/improve.txt -output assets/prompts/es/improve.txt && cat assets/prompts/es/improve.txt &&
-      echo "done"
-      '
-    environment:
-      GEMINI_API_KEY: ${GEMINI_API_KEY}
-    profiles:
-      - tools

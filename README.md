@@ -23,7 +23,7 @@ A few use-cases:
 1. Visit https://local.chatparser.xyz
 1. Visit https://local.chatparser.xyz/static/pages/dict.html
 1. To add packages
-    1. Installing golang packages: `docker compose run chatparser sh -c "go get {package}"`
+    1. Installing golang packages: `docker compose run golang sh -c "go get {package}"`
     1. Installing node packages: `docker compose run vite sh -c "yarn add {package}"`
 <details><summary>[optional] install gcloud</summary>
 
