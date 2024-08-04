@@ -1,7 +1,7 @@
 steps:
 - name: golang:1.22-alpine
   script: |
-    #!/bin/bash
+    #!/bin/sh
     cd src
     go test -timeout 1m -v ./...
   env:
