@@ -10,7 +10,6 @@ i18n
   .use(detector)
   .use(initReactI18next)
   .init({
-    debug: true,
     resources: {
       en: {
         translation: enTranslations
@@ -25,11 +24,7 @@ i18n
     fallbackLng: 'en', // Fallback language
     interpolation: {
       escapeValue: false,
-    },
-    // found this here: https://codesandbox.io/s/react-i18next-example-5w0ny?file=/src/i18n.js:420-455
-    react: {
-      wait: true
-    },
+    }
   });
 
 export default i18n;
