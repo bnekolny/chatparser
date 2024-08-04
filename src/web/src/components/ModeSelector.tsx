@@ -1,11 +1,14 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import styles from './styles/ModeSelector.module.css';
 import {Mode} from '../types';
 import {capitalizeFirstLetter} from '../utils/languageUtils';
 import {useChatContext} from '../context/ChatContext';
 
 const ModeSelector: React.FC = () => {
+	const { t } = useTranslation();
 	const {mode, setMode} = useChatContext();
+
 	return (
 		<div className={styles.modeSelector}>
 			<input
@@ -16,7 +19,7 @@ const ModeSelector: React.FC = () => {
 				checked={mode === Mode.Verify}
 				onChange={() => setMode(Mode.Verify)}
 			/>
-			<label htmlFor={Mode.Verify}>{capitalizeFirstLetter(Mode.Verify)}</label>
+			<label htmlFor={Mode.Verify}>{t(capitalizeFirstLetter(Mode.Verify))}</label>
 
 			<input
 				type="radio"
@@ -27,7 +30,7 @@ const ModeSelector: React.FC = () => {
 				onChange={() => setMode(Mode.Improve)}
 			/>
 			<label htmlFor={Mode.Improve}>
-				{capitalizeFirstLetter(Mode.Improve)}
+				{t(capitalizeFirstLetter(Mode.Improve))}
 			</label>
 		</div>
 	);
