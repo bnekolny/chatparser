@@ -17,7 +17,7 @@ steps:
     docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2
   waitFor: ['-']
 
-- id: 'node22-alpine-yarn'
+- id: 'alpine-yarn-node:22'
   name: 'gcr.io/cloud-builders/docker'
   script: |
     #!/bin/sh
@@ -26,6 +26,9 @@ steps:
     RUN corepack enable && yarn set version berry
     WORKDIR /srv/app
     EOF
+
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+  waitFor: ['-']
 
 options:
   automapSubstitutions: true

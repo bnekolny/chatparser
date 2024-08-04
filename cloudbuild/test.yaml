@@ -1,5 +1,6 @@
 steps:
-- name: golang:1.22-alpine
+- id: gotest
+  name: golang:1.22-alpine
   script: |
     #!/bin/sh
     cd src
@@ -8,7 +9,8 @@ steps:
   - 'GEMINI_API_KEY=fake-gemini-api-key'
   waitFor: ['-']
 
-- name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+- id: vitest
+  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
   script: |
     #!/bin/sh
     cd src/web
