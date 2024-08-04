@@ -1,0 +1,6 @@
+steps:
+- name: securego/gosec
+  script: |
+    #!/bin/sh
+    cd src
+    gosec ./...
