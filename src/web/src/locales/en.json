@@ -4,5 +4,7 @@
   "button_clear": "Clear",
   "button_submit": "Submit",
   "button_loading": "Loading...",
-  "textarea_default_placeholder": "Enter your text here"
+  "textarea_default_placeholder": "Enter your text here",
+  "Verify": "Verify",
+  "Improve": "Improve"
 }
