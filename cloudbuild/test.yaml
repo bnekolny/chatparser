@@ -16,6 +16,9 @@ steps:
     cd src/web
     yarn install
     yarn test
+  env:
+  - 'CI=true'
+
   waitFor: ['-']
 
 options:
