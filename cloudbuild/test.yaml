@@ -15,7 +15,7 @@ steps:
     #!/bin/sh
     cd src/web
     yarn install
-    yarn test
+    yarn test:ci
   env:
   - 'CI=true'
 
