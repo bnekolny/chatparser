@@ -51,7 +51,7 @@ func (pt PromptType) MarshalJSON() ([]byte, error) {
 
 var PromptTypeMap = func() map[string]map[PromptType]string {
 	m := make(map[string]map[PromptType]string)
-	locales := []string{"en"}
+	locales := []string{"en","es"}
 
 	for _, locale := range locales {
 		m[locale] = make(map[PromptType]string)
