@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"crypto/md5"
+	"crypto/sha256"
 	"fmt"
 	//"io"
 	"time"
@@ -54,8 +54,9 @@ func Write(userId string, objectType ObjectType, text string) (err error) {
 	ctx := context.Background()
 
 	// 1. construct path to object `getObjectRef`
-	md5 := fmt.Sprintf("%x", md5.Sum([]byte(text)))
-	bucket, storagePath := getObjectRef(userId, objectType, md5)
+	hasher := sha256.New()
+	sha := fmt.Sprintf("%x", hasher.Sum([]byte(text)))
+	bucket, storagePath := getObjectRef(userId, objectType, sha)
 
 	// 2. compress text
 	var compressed bytes.Buffer

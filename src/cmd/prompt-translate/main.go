@@ -53,7 +53,7 @@ func main() {
 	}
 
 	// Write result to output file
-	err = ioutil.WriteFile(*outputFile, []byte(result), 0644)
+	err = ioutil.WriteFile(*outputFile, []byte(result), 0600)
 	if err != nil {
 		fmt.Printf("Error writing output file: %v\n", err)
 		os.Exit(1)

@@ -74,8 +74,14 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	if err != nil {
+		logger.Logger.Info(err)
+	}
 
 	// TODO: handle error
 	// TODO: write to GCS
-	bw.Flush()
+	err = bw.Flush()
+	if err != nil {
+		logger.Logger.Info(err)
+	}
 }

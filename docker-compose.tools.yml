@@ -1,9 +1,9 @@
 services:
   formatter-golang:
-    image: golang:1.22
+    image: golang:1.22-alpine
     volumes:
       - ./src:/go
-    entrypoint: /bin/bash
+    entrypoint: /bin/sh
     command: >
       -c "gofmt -w -s ."
     profiles:
@@ -18,6 +18,18 @@ services:
       -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
     profiles:
       - formatters
+
+  security-golang:
+    image: golang:1.22-alpine
+    volumes:
+      - ./:/go
+    entrypoint: /bin/sh
+    # using -quiet so it doesn't throw a bad error code if there are no errors
+    command: >
+      -c '
+      wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0 &&
+      ./bin/gosec -quiet ./...
+      '
 
   tools-locale-translate: &tools-golang
     build:

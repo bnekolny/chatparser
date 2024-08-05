@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"net/http"
 	"os"
+	"time"
 
 	"chatparser/internal/handlers"
 	"chatparser/internal/logger"
@@ -32,6 +33,13 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+	srv := &http.Server{
+		Addr:         fmt.Sprintf(":%v", port),
+		Handler:      mux,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
 	// Register handler functions for specific paths
 	mux.HandleFunc("/healthcheck", handlers.HealthcheckHandler)
 
@@ -50,7 +58,7 @@ func main() {
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Logger.Infof("Starting server on port %v", port)
-	err = http.ListenAndServe(fmt.Sprintf(":%v", port), mux)
+	err = srv.ListenAndServe()
 	if err != nil {
 		logger.Logger.Fatal(err)
 	}
