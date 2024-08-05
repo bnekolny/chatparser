@@ -13,6 +13,6 @@ func OgImageHandler(w http.ResponseWriter, r *http.Request) {
 	err := txtimg.GenerateJPG(text, w)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		_, _ = w.Write([]byte(err.Error()))
 	}
 }
