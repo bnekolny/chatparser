@@ -1,6 +1,7 @@
 steps:
 # use this instead of securego/gosec due to frequency of golang updates
-- name: golang:1.22-alpine
+- id: securego/gosec
+  name: golang:1.22-alpine
   script: |
     #!/bin/sh
     cd src
