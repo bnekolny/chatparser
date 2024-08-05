@@ -7,3 +7,6 @@ steps:
     wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0
     ./bin/gosec -quiet ./...
   waitFor: ['-']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
