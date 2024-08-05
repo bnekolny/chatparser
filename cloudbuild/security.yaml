@@ -6,6 +6,7 @@ steps:
     #!/bin/sh
     cd src
     wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0
+    echo "running gosec..."
     ./bin/gosec -quiet ./...
   waitFor: ['-']
 
