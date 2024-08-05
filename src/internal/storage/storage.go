@@ -54,7 +54,8 @@ func Write(userId string, objectType ObjectType, text string) (err error) {
 	ctx := context.Background()
 
 	// 1. construct path to object `getObjectRef`
-	sha := fmt.Sprintf("%x", sha256.Sum([]byte(text)))
+	hasher := sha256.New()
+	sha := fmt.Sprintf("%x", hasher.Sum([]byte(text)))
 	bucket, storagePath := getObjectRef(userId, objectType, sha)
 
 	// 2. compress text
