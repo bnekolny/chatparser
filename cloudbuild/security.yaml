@@ -1,6 +1,9 @@
 steps:
-- name: securego/gosec
+# use this instead of securego/gosec due to frequency of golang updates
+- name: golang:1.22-alpine
   script: |
     #!/bin/sh
     cd src
-    gosec ./...
+    wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0
+    ./bin/gosec -quiet ./...
+  waitFor: ['-']
