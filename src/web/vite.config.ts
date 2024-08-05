@@ -20,12 +20,12 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       port: 443,
       proxy: {
         '/api': {
-          target: 'http://chatparser:8080',
+          target: 'http://golang:8080',
           changeOrigin: true,
           //rewrite: (path) => path.replace(/^\/api/, ''),
         },
         '/assets': {
-          target: 'http://chatparser:8080',
+          target: 'http://golang:8080',
           changeOrigin: true,
           //rewrite: (path) => path.replace(/^\/api/, ''),
         }
