@@ -3,14 +3,11 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"strings"
 	"testing"
 
-	prompt_assets "chatparser/assets/prompts"
 	"chatparser/internal/prompt"
 )
 
