@@ -8,7 +8,8 @@ steps:
     yarn run build
   waitFor: ["-"]
 
-- name: golang:1.22-alpine
+- id: gofmt
+  name: golang:1.22-alpine
   script: |
     #!/bin/sh
     cd src
