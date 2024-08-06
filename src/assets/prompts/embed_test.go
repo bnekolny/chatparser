@@ -7,28 +7,28 @@ import (
 
 func TestGetPrompt(t *testing.T) {
 	tests := []struct {
-		name     string
-		locale   string
+		name       string
+		locale     string
 		promptName string
-		wantErr  bool
+		wantErr    bool
 	}{
 		{
-			name:     "Valid prompt",
-			locale:   "en",
+			name:       "Valid prompt",
+			locale:     "en",
 			promptName: "improve",
-			wantErr:  false,
+			wantErr:    false,
 		},
 		{
-			name:     "Invalid locale",
-			locale:   "invalid",
+			name:       "Invalid locale",
+			locale:     "invalid",
 			promptName: "improve",
-			wantErr:  true,
+			wantErr:    true,
 		},
 		{
-			name:     "Invalid prompt name",
-			locale:   "en",
+			name:       "Invalid prompt name",
+			locale:     "en",
 			promptName: "invalid",
-			wantErr:  true,
+			wantErr:    true,
 		},
 	}
 
@@ -48,28 +48,28 @@ func TestGetPrompt(t *testing.T) {
 
 func TestGetResponse(t *testing.T) {
 	tests := []struct {
-		name     string
-		locale   string
+		name         string
+		locale       string
 		responseName string
-		wantErr  bool
+		wantErr      bool
 	}{
 		{
-			name:     "Valid response",
-			locale:   "en",
+			name:         "Valid response",
+			locale:       "en",
 			responseName: "dictionary",
-			wantErr:  false,
+			wantErr:      false,
 		},
 		{
-			name:     "Invalid locale",
-			locale:   "invalid",
+			name:         "Invalid locale",
+			locale:       "invalid",
 			responseName: "dictionary",
-			wantErr:  true,
+			wantErr:      true,
 		},
 		{
-			name:     "Invalid response name",
-			locale:   "en",
+			name:         "Invalid response name",
+			locale:       "en",
 			responseName: "invalid",
-			wantErr:  true,
+			wantErr:      true,
 		},
 	}
 

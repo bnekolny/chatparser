@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"chatparser/internal/prompt"
 	prompt_assets "chatparser/assets/prompts"
+	"chatparser/internal/prompt"
 )
 
 func TestAiPromptStreamRequestHandler(t *testing.T) {
