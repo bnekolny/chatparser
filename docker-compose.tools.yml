@@ -30,6 +30,8 @@ services:
       wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0 &&
       ./bin/gosec -quiet ./...
       '
+    profiles:
+      - security
 
   tools-locale-translate: &tools-golang
     build:
