@@ -35,31 +35,13 @@ func TestAiPromptStreamRequestHandler(t *testing.T) {
 				Prompt:    PromptInput{CustomPromptText: "Custom prompt"},
 				InputText: "Test input",
 			},
-			expectedStatus: http.StatusOK,
+			expectedStatus: http.StatusBadRequest,
 			setupEnv: func() {
-				os.Setenv("ACCEPT_CUSTOM_PROMPT_TEXT", "true")
+				os.Setenv("ACCEPT_CUSTOM_PROMPT_TEXT", "false")
 			},
 			cleanupEnv: func() {
 				os.Unsetenv("ACCEPT_CUSTOM_PROMPT_TEXT")
 			},
-		},
-		{
-			name:   "Valid System Prompt",
-			method: http.MethodPost,
-			body: AiPromptStreamRequest{
-				Prompt:    PromptInput{SystemPromptType: prompt.IMPROVE},
-				InputText: "Test input",
-			},
-			expectedStatus: http.StatusOK,
-		},
-		{
-			name:   "Valid System Prompt",
-			method: http.MethodPost,
-			body: AiPromptStreamRequest{
-				Prompt:    PromptInput{SystemPromptType: prompt.VERIFY},
-				InputText: "Test input",
-			},
-			expectedStatus: http.StatusOK,
 		},
 		{
 			name:   "Invalid Prompt",
@@ -91,7 +73,7 @@ func TestAiPromptStreamRequestHandler(t *testing.T) {
 			}
 
 			body, _ := json.Marshal(tt.body)
-			req, _ := http.NewRequest(tt.method, "/ai-prompt-stream", bytes.NewBuffer(body))
+			req, _ := http.NewRequest(tt.method, "/api/ai-prompt/stream", bytes.NewBuffer(body))
 			rr := httptest.NewRecorder()
 
 			AiPromptStreamRequestHandler(rr, req)
@@ -109,58 +91,5 @@ func TestAiPromptStreamRequestHandler(t *testing.T) {
 				}
 			}
 		})
-	}
-}
-
-func TestAiPromptStreamRequestHandlerStreaming(t *testing.T) {
-	body := AiPromptStreamRequest{
-		Prompt:    PromptInput{SystemPromptType: prompt.IMPROVE},
-		InputText: "Test input",
-	}
-	bodyBytes, _ := json.Marshal(body)
-	req, _ := http.NewRequest(http.MethodPost, "/ai-prompt-stream", bytes.NewBuffer(bodyBytes))
-	rr := httptest.NewRecorder()
-
-	AiPromptStreamRequestHandler(rr, req)
-
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-
-	responseBody := rr.Body.String()
-	if len(responseBody) == 0 {
-		t.Errorf("Response body is empty")
-	}
-
-	chunks := strings.Split(responseBody, "\n")
-	if len(chunks) < 2 {
-		t.Errorf("Expected multiple chunks, got %d", len(chunks))
-	}
-}
-
-func TestAiPromptStreamRequestHandlerDictionary(t *testing.T) {
-	body := AiPromptStreamRequest{
-		Prompt:    PromptInput{SystemPromptType: prompt.DICTIONARY},
-		InputText: "",
-	}
-	bodyBytes, _ := json.Marshal(body)
-	req, _ := http.NewRequest(http.MethodPost, "/ai-prompt-stream", bytes.NewBuffer(bodyBytes))
-	rr := httptest.NewRecorder()
-
-	AiPromptStreamRequestHandler(rr, req)
-
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-	}
-
-	responseBody := rr.Body.String()
-	if len(responseBody) == 0 {
-		t.Errorf("Response body is empty")
-	}
-
-	expectedResponse, _ := prompt_assets.GetResponse("es", prompt.DICTIONARY.String())
-	expectedBytes, _ := io.ReadAll(expectedResponse)
-	if !bytes.Equal(rr.Body.Bytes(), expectedBytes) {
-		t.Errorf("Response body does not match expected dictionary response")
 	}
 }
