@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"chatparser/internal/prompt"
-	"chatparser/internal/prompt_assets"
+	prompt_assets "chatparser/assets/prompts"
 )
 
 func TestAiPromptStreamRequestHandler(t *testing.T) {

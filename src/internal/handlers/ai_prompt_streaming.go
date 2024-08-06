@@ -67,6 +67,7 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: write content safety information in headers
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Transfer-Encoding", "chunked")
+	w.Header().Set("Content-Type", "text/plain")
 
 	for k, v := range headers {
 		w.Header().Set(k, v)
