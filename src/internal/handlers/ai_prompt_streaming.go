@@ -5,7 +5,10 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 
+	prompt_assets "chatparser/assets/prompts"
 	"chatparser/internal/genaiclient"
 	"chatparser/internal/logger"
 	"chatparser/internal/prompt"
@@ -34,17 +37,28 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-
 	var promptStr string
-	if input.Prompt.CustomPromptText != "" {
+	if input.Prompt.CustomPromptText != "" && os.Getenv("ACCEPT_CUSTOM_PROMPT_TEXT") == "true" {
 		promptStr = input.Prompt.CustomPromptText
-	} else {
+	} else if input.Prompt.SystemPromptType != prompt.UNKNOWN {
 		promptStr = prompt.PromptTypeMap[locale][input.Prompt.SystemPromptType]
-	}
-	headers, genaiReader, e := genaiclient.StreamFeedback(ctx, promptStr, input.InputText)
-	if e != nil {
-		http.Error(w, e.Error(), http.StatusInternalServerError)
+	} else {
+		http.Error(w, "Invalid `prompt` parameter", http.StatusBadRequest)
 		return
+	}
+
+	var headers map[string]string
+	var textStream io.Reader
+	var e error
+	if input.Prompt.SystemPromptType == prompt.DICTIONARY && strings.TrimSpace(input.InputText) == "" {
+		textStream, e = prompt_assets.GetResponse(locale, input.Prompt.SystemPromptType.String())
+	} else {
+
+		headers, textStream, e = genaiclient.StreamFeedback(ctx, promptStr, input.InputText)
+		if e != nil {
+			http.Error(w, e.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	const bufferSize = 256
@@ -64,7 +78,7 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	for err == nil {
 		var n int
-		n, err = genaiReader.Read(writeBuffer)
+		n, err = textStream.Read(writeBuffer)
 		for i := 0; i < n; i += bufferSize {
 			chunkSize := min(bufferSize, n-i)
 			_, err = bw.Write(writeBuffer[i : i+chunkSize])
