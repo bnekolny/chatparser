@@ -3,6 +3,7 @@ package handlers
 import (
 	"bufio"
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"chatparser/internal/genaiclient"
@@ -73,6 +74,9 @@ func AiPromptStreamRequestHandler(w http.ResponseWriter, r *http.Request) {
 				f.Flush()
 			}
 		}
+	}
+	if err == io.EOF {
+		err = nil
 	}
 	if err != nil {
 		logger.Logger.Info(err)
