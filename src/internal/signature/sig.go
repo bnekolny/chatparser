@@ -9,6 +9,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -47,14 +48,15 @@ func generateFromExpiration(unsortedQueryValues map[string]string, expiration ti
 		baseString += fmt.Sprintf("%s=%s&", k, url.QueryEscape(unsortedQueryValues[k]))
 	}
 	baseString += fmt.Sprintf("%s=%d", expirationKey, expiration.Unix())
+	readyString := strings.ReplaceAll(baseString, "+", "%20")
 
 	mac := hmac.New(sha256.New, []byte(signatureSecretKey))
-	mac.Write([]byte(baseString))
+	mac.Write([]byte(readyString))
 	signature = base64.URLEncoding.EncodeToString(mac.Sum(nil))
 
-	queryString = fmt.Sprintf("?%s&%s=%s", baseString, signatureKey, signature)
+	queryString = fmt.Sprintf("%s&%s=%s", readyString, signatureKey, signature)
 
-	return queryString, signature
+	return "?" + queryString, signature
 }
 
 func IsValidFromUrlValues(queryValues url.Values) bool {

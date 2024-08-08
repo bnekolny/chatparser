@@ -1,10 +1,10 @@
 package signature
 
 import (
+	"net/url"
 	"strconv"
 	"testing"
 	"time"
-	"net/url"
 )
 
 func TestGenerateFromExpiration(t *testing.T) {
@@ -43,7 +43,7 @@ func TestGenerateFromExpiration(t *testing.T) {
 				"text": "Hola, cómo estás",
 			},
 			expiration:      time.Unix(1000000000, 0),
-			wantQueryString: "?text=Hola%2C+c%C3%B3mo+est%C3%A1s&exp=1000000000&sig=E_AVgWQ00X5LcvG5lUY7b1YioWLiVRxfgDdDBNN8noQ=",
+			wantQueryString: "?text=Hola%2C%20c%C3%B3mo%20est%C3%A1s&exp=1000000000&sig=_Hzcr5C6VX96zgS_d4LUYUjQz9QI_sBxIhRWgsvhU6Y=",
 		},
 	}
 
