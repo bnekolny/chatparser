@@ -7,6 +7,9 @@ import (
 	"io/fs"
 	"net/http"
 	"net/url"
+	"time"
+
+	"chatparser/internal/signature"
 )
 
 type fsAdapter struct {
@@ -42,11 +45,16 @@ func DictTemplateData(fsys fs.FS) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		text := r.URL.Query().Get("text")
+		unescapedText, _ := url.QueryUnescape(text)
+		if unescapedText == "" {
+			unescapedText = "¡Preguntame!"
+		}
+		ogUrl := fmt.Sprintf("/dict/og:image.jpg%s", signature.GenerateQuerystring(map[string]string{"text": unescapedText}, 3*24*time.Hour))
 
 		templateData := struct {
-			OgUrl string
+			OgUrl template.HTML
 		}{
-			OgUrl: fmt.Sprintf("/dict/og:image.jpg?text=%s", url.PathEscape(text)),
+			OgUrl: template.HTML(ogUrl), // #nosec G203 -- This arrives escaped from GenerateQuerystring
 		}
 
 		templateHandler(dictTemplatePath, templateData, fsys)(w, r)
