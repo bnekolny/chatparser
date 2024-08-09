@@ -1,19 +1,4 @@
-import {ERROR_CAPITALIZE, ERROR_INVALID_INPUT} from '../constants';
 import {Locale} from '../types';
-
-// TODO: write unit tests for this function
-export const capitalizeFirstLetter = (str: string): string => {
-	try {
-		if (typeof str !== 'string' || str.length === 0) {
-			throw new Error(ERROR_INVALID_INPUT);
-		}
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	} catch (error: any) {
-		// TODO: type error
-		console.error(`${ERROR_CAPITALIZE} ${error.message}`);
-		return str;
-	}
-};
 
 // NOTE: fallback to Spanish if language code is not supported, although that
 // should not happen so long as i18n.ts and types.ts (Locale) are in sync
