@@ -2,6 +2,7 @@ package signature
 
 import (
 	"net/url"
+	"os"
 	"strconv"
 	"testing"
 	"time"
@@ -18,7 +19,7 @@ func TestGenerateFromExpiration(t *testing.T) {
 			name:            "Empty query values",
 			queryValues:     map[string]string{},
 			expiration:      time.Unix(1000000000, 0),
-			wantQueryString: "?exp=1000000000&sig=wwlk0g7IntPw3m5QoDBBZvbBSL3o9GDNuxECUaCrKKI=",
+			wantQueryString: "?exp=1000000000&sig=c0c18E6KeIB5vbGiGCCZF9zitVIKdIEASyy2hkQouFQ=",
 		},
 		{
 			name: "Single query value",
@@ -26,7 +27,7 @@ func TestGenerateFromExpiration(t *testing.T) {
 				"key": "value",
 			},
 			expiration:      time.Unix(1000000000, 0),
-			wantQueryString: "?key=value&exp=1000000000&sig=KG0UcJigOur5tbDAvzACt7if6bEGW8BQxyd80TgaBAo=",
+			wantQueryString: "?key=value&exp=1000000000&sig=o_q2DEbdsczkJzBNv2CkMr77He_GqWqwv6Nc459_OTU=",
 		},
 		{
 			name: "Multiple query values",
@@ -35,7 +36,7 @@ func TestGenerateFromExpiration(t *testing.T) {
 				"key2": "value2",
 			},
 			expiration:      time.Unix(1000000000, 0),
-			wantQueryString: "?key1=value1&key2=value2&exp=1000000000&sig=yaN3J49eVvbu02USi-nxWiuTrhq7Tb8UuBNnlw0_Nh8=",
+			wantQueryString: "?key1=value1&key2=value2&exp=1000000000&sig=HgGBIr4l9qnbPI6-cvi35wNB_UmhDSoywsZTdQ52ycg=",
 		},
 		{
 			name: "Text Query Values",
@@ -43,12 +44,18 @@ func TestGenerateFromExpiration(t *testing.T) {
 				"text": "Hola, cómo estás",
 			},
 			expiration:      time.Unix(1000000000, 0),
-			wantQueryString: "?text=Hola%2C%20c%C3%B3mo%20est%C3%A1s&exp=1000000000&sig=_Hzcr5C6VX96zgS_d4LUYUjQz9QI_sBxIhRWgsvhU6Y=",
+			wantQueryString: "?text=Hola%2C%20c%C3%B3mo%20est%C3%A1s&exp=1000000000&sig=IXEWesbXjVCb9piM-EalrKKEHl_LhfrozPI0O1iYYHc=",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			prevSecretVal := os.Getenv("SIGNATURE_SECRET_KEY")
+			os.Setenv("SIGNATURE_SECRET_KEY", "fake-signature-secret-key")
+			defer func(val string) {
+				os.Setenv("SIGNATURE_SECRET_KEY", val)
+			}(prevSecretVal)
+
 			gotQueryString, gotSignature := generateFromExpiration(tt.queryValues, tt.expiration)
 			if gotQueryString != tt.wantQueryString {
 				t.Errorf("generateFromExpiration() queryString = %v, want queryString = %v", gotQueryString, tt.wantQueryString)
