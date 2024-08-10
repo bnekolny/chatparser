@@ -6,7 +6,6 @@ import styles from './styles/TextInputForm.module.css';
 import {useChatContext} from '../context/ChatContext';
 
 import {Mode} from '../types';
-import TestTextButton from './TestTextButton';
 
 const TextInputForm: React.FC = () => {
 	const {t} = useTranslation();
@@ -78,7 +77,6 @@ const TextInputForm: React.FC = () => {
 				<Button type="button" onClick={handleClear} className="clear">
 					{t('button_clear')}
 				</Button>
-				{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 			</div>
 		</div>
 	);

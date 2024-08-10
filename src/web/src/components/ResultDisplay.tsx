@@ -1,7 +1,6 @@
 import styles from './styles/ResultDisplay.module.css';
 import {useChatContext} from '../context/ChatContext';
-import Markdown from 'react-markdown';
-import styles from './styles/ResultDisplay.module.css';
+import ReactMarkdown from 'react-markdown';
 
 const ResultDisplay: React.FC = () => {
 	const {response} = useChatContext();
