@@ -1,7 +1,6 @@
-import {MessageApiResult, Mode} from '../types';
+import {MessageApiResult, Mode, Locale} from '../types';
 import {
-	API_ENDPOINTS,
-	CONTENT_TYPES,
+	CONTENT_TYPE_HEADER,
 	ERROR_MESSAGES,
 	HTTP_METHODS,
 	SUBMIT_ERROR,
@@ -13,10 +12,10 @@ export const useMessageApi = () => {
 		mode: Mode,
 	): Promise<MessageApiResult> => {
 		try {
-			const response = await fetch(API_ENDPOINTS.MESSAGE(mode), {
+			const response = await fetch(`/api/message/${mode}`, {
 				method: HTTP_METHODS.POST,
 				headers: {
-					'Content-Type': CONTENT_TYPES.TEXT_PLAIN,
+					...CONTENT_TYPE_HEADER.TEXT
 				},
 				body: text,
 			});
@@ -39,15 +38,29 @@ export const useMessageApi = () => {
 	};
 
 	const aiRequestStream = async function* (
+		locale: Locale,
 		text: string,
+		promptModeOrPromptText: string | Mode,
 	): AsyncGenerator<string, void, unknown> {
 		try {
-			const response = await fetch(API_ENDPOINTS.AI_REQUEST_STREAM, {
+			const promptObj: { custom_prompt_text?: string; system_prompt_type?: Mode } = {};
+			if (!Object.values(Mode).includes(promptModeOrPromptText as Mode)) {
+				promptObj.custom_prompt_text = promptModeOrPromptText;
+			} else {
+				promptObj.system_prompt_type = promptModeOrPromptText as Mode;
+			}
+			const response = await fetch('/api/ai-prompt/stream', {
 				method: HTTP_METHODS.POST,
 				headers: {
-					'Content-Type': CONTENT_TYPES.TEXT_PLAIN,
+					...CONTENT_TYPE_HEADER.JSON
 				},
-				body: text,
+				body: JSON.stringify({
+					locale: locale,
+					prompt: {
+						...promptObj,
+					},
+					input_text: text
+				}),
 			});
 
 			if (!response.ok) {

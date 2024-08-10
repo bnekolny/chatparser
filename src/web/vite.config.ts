@@ -12,7 +12,7 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       viteCompression({algorithm: 'brotliCompress'}),
     ],
     server: {
-      https: {
+      https: process.env.CI ? undefined : {
         key: '../.cert/key.pem',
         cert: '../.cert/cert.pem',
       },
@@ -20,10 +20,15 @@ export default defineConfig(({ command, mode, isSsrBuild, isPreview }) => {
       port: 443,
       proxy: {
         '/api': {
-          target: 'http://chatparser:8080',
+          target: 'http://golang:8080',
           changeOrigin: true,
           //rewrite: (path) => path.replace(/^\/api/, ''),
         },
+        '/assets': {
+          target: 'http://golang:8080',
+          changeOrigin: true,
+          //rewrite: (path) => path.replace(/^\/api/, ''),
+        }
       }
     },
     build: {

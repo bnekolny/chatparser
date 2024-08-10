@@ -7,3 +7,9 @@ export enum Mode {
 	Improve = 'improve',
 	Dictionary = 'dictionary',
 }
+
+export enum Locale {
+	en = "en",
+	es = "es",
+	fr = "fr",
+}

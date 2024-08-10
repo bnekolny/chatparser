@@ -1,13 +1,16 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import Button from './Button';
 import TextArea from './TextArea';
 import styles from './styles/TextInputForm.module.css';
-import {BUTTON_TEXT, HOSTS} from '../constants';
 import {useChatContext} from '../context/ChatContext';
+
 import {Mode} from '../types';
 import TestTextButton from './TestTextButton';
 
 const TextInputForm: React.FC = () => {
+	const {t} = useTranslation();
+
 	const {
 		text,
 		setText,
@@ -64,16 +67,16 @@ const TextInputForm: React.FC = () => {
 					className="submit"
 				>
 					{isLoading
-						? BUTTON_TEXT.LOADING
+						? t('button_loading')
 						: mode === Mode.Verify && revisedMessage
-						? BUTTON_TEXT.SUBMIT_REVISED
-						: BUTTON_TEXT.SUBMIT}
+						? t('button_submit_revised')
+						: t('button_submit')}
 				</Button>
 				<Button type="button" onClick={handleCopy} className="copy">
-					{BUTTON_TEXT.COPY}
+					{t('button_copy')}
 				</Button>
 				<Button type="button" onClick={handleClear} className="clear">
-					{BUTTON_TEXT.CLEAR}
+					{t('button_clear')}
 				</Button>
 				{window?.location?.host === HOSTS.LOCAL ? <TestTextButton /> : null}
 			</div>

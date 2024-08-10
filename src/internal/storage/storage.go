@@ -1,10 +1,10 @@
-package main
+package storage
 
 import (
 	"bytes"
 	"compress/gzip"
 	"context"
-	"crypto/md5"
+	"crypto/sha256"
 	"fmt"
 	//"io"
 	"time"
@@ -50,12 +50,13 @@ func getObjectRef(userId string, objectType ObjectType, objectIdentifier string)
 	return bucket, fmt.Sprintf("%s/%s/%s_%s.txt.gz", userId, objectType.String(), time.Now().UTC().Format("2006-01-02"), objectIdentifier)
 }
 
-func write(userId string, objectType ObjectType, text string) (err error) {
+func Write(userId string, objectType ObjectType, text string) (err error) {
 	ctx := context.Background()
 
 	// 1. construct path to object `getObjectRef`
-	md5 := fmt.Sprintf("%x", md5.Sum([]byte(text)))
-	bucket, storagePath := getObjectRef(userId, objectType, md5)
+	hasher := sha256.New()
+	sha := fmt.Sprintf("%x", hasher.Sum([]byte(text)))
+	bucket, storagePath := getObjectRef(userId, objectType, sha)
 
 	// 2. compress text
 	var compressed bytes.Buffer

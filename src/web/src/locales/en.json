@@ -1,0 +1,10 @@
+{
+  "app_description_text": "This page helps with composing messages in Spanish as a learner. Input a message that you want to send either to \"verify\" it has the intended meaning, or to \"improve\" and push your abilities.",
+  "button_copy": "Copy",
+  "button_clear": "Clear",
+  "button_submit": "Submit",
+  "button_loading": "Loading...",
+  "textarea_default_placeholder": "Enter your text here",
+  "Verify": "Verify",
+  "Improve": "Improve"
+}

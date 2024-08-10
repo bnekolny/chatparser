@@ -1,5 +1,8 @@
+include:
+  - ./docker-compose.tools.yml
+
 services:
-  chatparser:
+  golang:
     build:
       context: src
       target: gobuilder
@@ -10,13 +13,17 @@ services:
       GO_ENV: development
       PORT: ${PORT}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      SIGNATURE_SECRET_KEY: ${SIGNATURE_SECRET_KEY}
       STORAGE_EMULATOR_HOST: gcsemulator:8888
+      ACCEPT_CUSTOM_PROMPT_TEXT: true
     ports:
       - '${PORT}:${PORT}'
     depends_on:
       - gcsemulator
   vite:
-    image: node:22-alpine
+    build:
+      context: src
+      target: staticbuilder
     entrypoint: ''
     environment:
       VITE_DEV_HOST: 'https://local.chatparser.xyz'
@@ -26,9 +33,9 @@ services:
     volumes:
       - ./src/web:/srv/app
       - ./src/.cert:/srv/.cert
-    command: /bin/sh -c "npm run dev"
+    command: /bin/sh -c "yarn install && yarn run dev"
     depends_on:
-      - chatparser
+      - golang
   gcsemulator:
     image: golang:alpine
     ports:
@@ -41,7 +48,6 @@ services:
       - |
         go install github.com/fullstorydev/emulators/storage/...@latest
         gcsemulator -port 8888 -host 0.0.0.0 -dir var/storage
-
   terraform: &terraform
     build: terraform
     volumes:
@@ -54,23 +60,3 @@ services:
     # prevent this from running with `docker-compose up`
     profiles:
       - terraform
-
-  formatter-golang:
-    image: golang:1.22
-    volumes:
-      - ./src:/go
-    entrypoint: /bin/bash
-    command: >
-      -c "gofmt -w -s ."
-    profiles:
-      - formatters
-  formatter-terraform:
-    <<: *terraform
-    # array elements aren't inhereted from <<: *service syntax
-    volumes:
-      - ./terraform:/workspace
-    working_dir: /workspace
-    command: >
-      -c "while true; do inotifywait -r -e modify,create,delete,move /workspace; terraform fmt -recursive; done"
-    profiles:
-      - formatters

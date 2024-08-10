@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import TextInputForm from './components/TextInputForm';
 import ResultDisplay from './components/ResultDisplay';
 import ModeSelector from './components/ModeSelector';
+import DevToolsPane from './components/DevTools/DevToolsPane';
 import styles from './App.module.css';
-import {DESCRIPTION_TEXT} from './constants';
+import {HOSTS} from './constants';
 import {Mode} from './types';
 import {useChatContext} from './context/ChatContext';
 import LandscapeBlocker from './components/LandscapeBlocker';
 
 const App: React.FC = () => {
+	const {t} = useTranslation();
 	const {mode, setMode} = useChatContext();
 	const [isLandscape, setIsLandscape] = useState<boolean>(false);
 
@@ -41,11 +44,12 @@ const App: React.FC = () => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.modeAndDescription}>
-				<p className={styles.description}>{DESCRIPTION_TEXT}</p>
+				<p className={styles.description}>{t('app_description_text')}</p>
 				<ModeSelector />
 			</div>
 			<TextInputForm />
 			<ResultDisplay />
+			{window?.location?.host === HOSTS.LOCAL ? <DevToolsPane /> : null}
 		</div>
 	);
 };

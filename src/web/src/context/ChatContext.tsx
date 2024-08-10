@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Mode} from '../types';
+import {Mode, Locale} from '../types';
 import {useMessageApi} from '../hooks/useMessageApi';
 import {CHAT_CONTEXT_ERROR, REGEX} from '../constants';
+import {useTranslation} from 'react-i18next';
 
 interface ChatContextType {
+	locale: Locale;
+	setLocale: (locale: Locale) => void;
 	mode: Mode;
 	setMode: (mode: Mode) => void;
 	handleTextChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -11,6 +14,8 @@ interface ChatContextType {
 	setText: (text: string) => void;
 	previousText: string;
 	setPreviousText: (text: string) => void;
+	prompt: string;
+	setPrompt: (text: string) => void;
 	isLoading: boolean;
 	setIsLoading: (isLoading: boolean) => void;
 	handleSendMessage: (inputText?: string) => Promise<void>;
@@ -27,14 +32,22 @@ const ChatContextProvider: React.FC<{
 	children: React.ReactNode;
 	value?: Partial<ChatContextType>;
 }> = ({children, value = {}}) => {
+	const {i18n} = useTranslation();
+
+	const [locale, setLocale] = useState<Locale>(i18n.language as Locale);
 	const [mode, setMode] = useState<Mode>(value.mode || Mode.Verify);
 	const [text, setText] = useState<string>('');
 	const [previousText, setPreviousText] = useState<string>('');
+	const [prompt, setPrompt] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [response, setResponse] = useState<string>('');
 	const [revisedMessage, setRevisedMessage] = useState<string>('');
 
-	const {sendMessage, aiRequestStream} = useMessageApi();
+	const {aiRequestStream} = useMessageApi();
+
+	useEffect(() => {
+		setLocale(i18n.language as Locale);
+	}, [i18n.language]);
 
 	useEffect(() => {
 		if (mode === Mode.Verify && response) {
@@ -48,34 +61,31 @@ const ChatContextProvider: React.FC<{
 	};
 
 	const handleSendMessage = async (inputText?: string): Promise<void> => {
-		setPreviousText(inputText || text);
+		var submitText = inputText || text;
+
+		setPreviousText(submitText);
 		setIsLoading(true);
 		try {
-			if (mode != Mode.Improve) {
-				const response = await sendMessage(inputText || text, mode);
-				setResponse(response.data);
-			} else {
-				const messageStream = aiRequestStream(text);
-				let fullResponse = '';
-				let currentWord = '';
+			const messageStream = aiRequestStream(locale, submitText, prompt || mode);
+			let fullResponse = '';
+			let currentWord = '';
 
-				for await (const char of messageStream) {
-					fullResponse += char;
-					currentWord += char;
+			for await (const char of messageStream) {
+				fullResponse += char;
+				currentWord += char;
 
-					// this is spitting out words at a time which runs significantly
-					// faster than character at a time is able to do
-					if (/\s/.test(char)) {
-						setResponse(fullResponse);
-						await new Promise(resolve => setTimeout(resolve, 0));
-						currentWord = '';
-					} else if (currentWord.length >= 5) {
-						setResponse(fullResponse);
-						currentWord = '';
-					}
+				// this is spitting out words at a time which runs significantly
+				// faster than character at a time is able to do
+				if (/\s/.test(char)) {
+					setResponse(fullResponse);
+					await new Promise(resolve => setTimeout(resolve, 0));
+					currentWord = '';
+				} else if (currentWord.length >= 5) {
+					setResponse(fullResponse);
+					currentWord = '';
 				}
-				setResponse(fullResponse);
 			}
+			setResponse(fullResponse);
 		} finally {
 			setIsLoading(false);
 		}
@@ -93,6 +103,8 @@ const ChatContextProvider: React.FC<{
 	};
 
 	const chatContext = {
+		locale,
+		setLocale,
 		mode,
 		setMode,
 		handleTextChange,
@@ -100,6 +112,8 @@ const ChatContextProvider: React.FC<{
 		setText,
 		previousText,
 		setPreviousText,
+		prompt,
+		setPrompt,
 		handleSendMessage,
 		response,
 		setResponse,

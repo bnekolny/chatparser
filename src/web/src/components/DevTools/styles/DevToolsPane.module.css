@@ -1,0 +1,19 @@
+.devToolsPane {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #fffbeb;
+  border-left: 1px solid #f0e8d5;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  width: 500px;
+}
+
+.devToolsPaneActive {
+  margin-right: 500px;
+}

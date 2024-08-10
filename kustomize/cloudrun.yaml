@@ -31,6 +31,13 @@ spec:
             secretKeyRef:
               key: latest
               name: GEMINI_API_KEY
+        # using an existing secret so not to incur additional cloud costs
+        # and is okay as it's internal only and rotation doesn't impose risk
+        - name: SIGNATURE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: GEMINI_API_KEY
         ports:
         - name: http1
           containerPort: 8080
