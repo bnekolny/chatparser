@@ -15,7 +15,7 @@ steps:
   script: |
     #!/bin/sh
     cd src
-    semgrep scan --error
+    semgrep scan --error --text
   waitFor: ['-']
 
 options:
