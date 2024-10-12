@@ -10,5 +10,13 @@ steps:
     ./bin/gosec -quiet ./...
   waitFor: ['-']
 
+- id: semgrep
+  name: semgrep/semgrep
+  script: |
+    #!/bin/sh
+    cd src
+    semgrep scan --error
+  waitFor: ['-']
+
 options:
   logging: CLOUD_LOGGING_ONLY
