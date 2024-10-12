@@ -10,5 +10,6 @@ RUN echo 'alias tf="terragrunt"' >> ~/.bashrc
 
 WORKDIR /workspace
 
+USER nonroot
 ENTRYPOINT ["bash"]
 

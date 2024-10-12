@@ -32,6 +32,7 @@ WORKDIR /app
 COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=gobuilder /app/chatparser /app/chatparser
 COPY --from=staticbuilder /srv/app/dist /app/static
+USER nonroot
 CMD ["sh"]
 
 FROM scratch as release
@@ -42,4 +43,5 @@ COPY --from=gobuilder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=gobuilder /app/chatparser /app/chatparser
 # Can't go here with //go:embed static/* as the embed is loaded at build time
 #COPY --from=staticbuilder /srv/app/dist /app/static
+USER nonroot
 CMD ["/app/chatparser"]
