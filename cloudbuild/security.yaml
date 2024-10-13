@@ -10,12 +10,12 @@ steps:
     ./bin/gosec -quiet ./...
   waitFor: ['-']
 
-- id: semgrep
+- id: semgrep/code
   name: semgrep/semgrep
   script: |
     #!/bin/sh
     cd src
-    semgrep ci
+    semgrep ci --code --oss-only --no-suppress-errors --disable-version-check
   waitFor: ['-']
 
 options:
