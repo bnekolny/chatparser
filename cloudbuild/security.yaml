@@ -15,7 +15,16 @@ steps:
   script: |
     #!/bin/sh
     cd src
-    semgrep scan --config=auto --error --text
+    # configs found here https://semgrep.dev/explore
+    PACKS="
+      p/default,p/cwe-top-25,p/owasp-top-ten,p/secure-defaults,
+      p/golang,
+      p/javascript,p/react,p/eslint,
+      p/dockerfile,p/docker-compose,
+      p/kubernetes,p/terraform
+    "
+
+    semgrep scan --error --text --metrics=off --config=$PACKS
   waitFor: ['-']
 
 options:
