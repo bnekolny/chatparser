@@ -15,7 +15,7 @@ steps:
   script: |
     #!/bin/sh
     cd src
-    semgrep ci --code --oss-only --no-suppress-errors --disable-version-check
+    semgrep ci --code --oss-only --no-suppress-errors --disable-version-check --subdir=.
   waitFor: ['-']
 
 options:
