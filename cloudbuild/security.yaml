@@ -16,15 +16,14 @@ steps:
     #!/bin/sh
     cd src
     # configs found here https://semgrep.dev/explore
-    PACKS="
-      p/default,p/cwe-top-25,p/owasp-top-ten,p/secure-defaults,
-      p/golang,
-      p/javascript,p/react,p/eslint,
-      p/dockerfile,p/docker-compose,
-      p/kubernetes,p/terraform
-    "
-
-    semgrep scan --error --text --metrics=off --config=$PACKS
+    semgrep scan --error --text --metrics=off \
+      --config p/default --config p/secure-defaults \
+      --config p/cwe-top-25 --config p/owasp-top-ten \
+      --config p/golang \
+      --config p/javascript --config p/react --config p/eslint \
+      --config p/dockerfile --config p/docker-compose \
+      --config p/kubernetes \
+      --config p/terraform
   waitFor: ['-']
 
 options:
