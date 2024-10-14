@@ -29,7 +29,7 @@ steps:
     #  --config p/kubernetes \
     #  --config p/terraform
   env:
-  - SEMGREP_SRC_DIRECTORY="/workspace"
+  - 'SEMGREP_SRC_DIRECTORY=/workspace'
   waitFor: ['-']
 
 options:
