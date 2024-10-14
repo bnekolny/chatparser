@@ -14,7 +14,6 @@ steps:
   name: semgrep/semgrep
   script: |
     #!/bin/sh
-    cd src
     # configs found here https://semgrep.dev/explore
     semgrep scan --config p/golang --config p/dockerfile 
     # --error --metrics=auto --debug
