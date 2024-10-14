@@ -12,7 +12,7 @@ steps:
 
 - id: semgrep/code
   name: semgrep/semgrep
-  args: ['semgrep', 'scan']
+  args: ['semgrep', 'scan', '--debug']
     #!/bin/sh
     # configs found here https://semgrep.dev/explore
     # semgrep scan --config p/golang --config p/dockerfile --debug
