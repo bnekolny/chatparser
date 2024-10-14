@@ -12,10 +12,10 @@ steps:
 
 - id: semgrep/code
   name: semgrep/semgrep
-  script: |
+  args: ['semgrep', 'scan']
     #!/bin/sh
     # configs found here https://semgrep.dev/explore
-    semgrep scan --config p/golang --config p/dockerfile 
+    # semgrep scan --config p/golang --config p/dockerfile --debug
     # --error --metrics=auto --debug
     #  --config p/default --config p/secure-defaults \
     #  --config p/cwe-top-25 --config p/owasp-top-ten \
