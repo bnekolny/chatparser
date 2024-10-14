@@ -20,7 +20,7 @@ spec:
         run.googleapis.com/startup-cpu-boost: 'true'
     spec:
       securityContext:
-        runAsNonRoot: true #:
+        runAsNonRoot: true
       containerConcurrency: 80
       timeoutSeconds: 20
       serviceAccountName: CLOUDRUN_SA
