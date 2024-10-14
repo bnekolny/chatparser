@@ -3,7 +3,6 @@ import {
 	CONTENT_TYPE_HEADER,
 	ERROR_MESSAGES,
 	HTTP_METHODS,
-	SUBMIT_ERROR,
 } from '../constants';
 
 export const useMessageApi = () => {
