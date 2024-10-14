@@ -19,11 +19,15 @@ spec:
         autoscaling.knative.dev/maxScale: '1'
         run.googleapis.com/startup-cpu-boost: 'true'
     spec:
+      securityContext:
+        runAsNonRoot: true
       containerConcurrency: 80
       timeoutSeconds: 20
       serviceAccountName: CLOUDRUN_SA
       containers:
-      - name: chatparser
+      - securityContext:
+          allowPrivilegeEscalation: false
+        name: chatparser
         image: chatparser
         env:
         - name: GEMINI_API_KEY

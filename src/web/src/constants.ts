@@ -16,7 +16,6 @@ export const ERROR_MESSAGES = {
 
 export const ERROR_INVALID_INPUT = 'Input must be a non-empty string';
 export const ERROR_CAPITALIZE = 'Error in capitalizeFirstLetter:';
-export const SUBMIT_ERROR = 'Error submitting text';
 
 // Regular Expressions
 export const REGEX = {

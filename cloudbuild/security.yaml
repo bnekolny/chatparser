@@ -10,5 +10,12 @@ steps:
     ./bin/gosec -quiet ./...
   waitFor: ['-']
 
+- id: semgrep/code
+  name: semgrep/semgrep
+  args: ['semgrep', 'scan', '--oss-only', '--error', '--quiet']
+  env:
+  - 'SEMGREP_SRC_DIRECTORY=/workspace'
+  waitFor: ['-']
+
 options:
   logging: CLOUD_LOGGING_ONLY

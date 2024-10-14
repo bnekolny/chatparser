@@ -54,7 +54,8 @@ func DictTemplateData(fsys fs.FS) http.HandlerFunc {
 		templateData := struct {
 			OgUrl template.HTML
 		}{
-			OgUrl: template.HTML(ogUrl), // #nosec G203 -- This arrives escaped from GenerateQuerystring
+			// #nosec G203
+			OgUrl: template.HTML(ogUrl), // nosemgrep This arrives escaped from GenerateQuerystring
 		}
 
 		templateHandler(dictTemplatePath, templateData, fsys)(w, r)
