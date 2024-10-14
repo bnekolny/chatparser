@@ -30,7 +30,7 @@ export const useMessageApi = () => {
 				data: data,
 			};
 		} catch (error) {
-			console.error(`${SUBMIT_ERROR}:`, error);
+			console.error(error);
 			return {
 				data: ERROR_MESSAGES.PROCESSING_ERROR,
 			};
@@ -80,7 +80,7 @@ export const useMessageApi = () => {
 				}
 			}
 		} catch (error) {
-			console.error(`${SUBMIT_ERROR}:`, error);
+			console.error(error);
 			yield ERROR_MESSAGES.PROCESSING_ERROR;
 		}
 	};
