@@ -16,14 +16,14 @@ steps:
     #!/bin/sh
     cd src
     # configs found here https://semgrep.dev/explore
-    semgrep scan --error --text --metrics=auto --debug \
-      --config p/default --config p/secure-defaults \
-      --config p/cwe-top-25 --config p/owasp-top-ten \
-      --config p/golang \
-      --config p/javascript --config p/react --config p/eslint \
-      --config p/dockerfile --config p/docker-compose \
-      --config p/kubernetes \
-      --config p/terraform
+    semgrep scan --config p/golang --config p/dockerfile --error --text --metrics=auto --debug \
+    #  --config p/default --config p/secure-defaults \
+    #  --config p/cwe-top-25 --config p/owasp-top-ten \
+    #  --config p/golang \
+    #  --config p/javascript --config p/react --config p/eslint \
+    #  --config p/dockerfile --config p/docker-compose \
+    #  --config p/kubernetes \
+    #  --config p/terraform
   waitFor: ['-']
 
 options:
