@@ -12,7 +12,11 @@ steps:
 
 - id: semgrep/code
   name: semgrep/semgrep
-  args: ['semgrep', 'scan', '--debug', '--sarif', '--oss-only']
+  script: |
+    ls
+    pwd
+    semgrep scan --debug --sarif --oss-only
+  #args: ['semgrep', 'scan', '--debug', '--sarif', '--oss-only']
     #!/bin/sh
     # configs found here https://semgrep.dev/explore
     # semgrep scan --config p/golang --config p/dockerfile --debug
