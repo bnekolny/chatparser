@@ -12,6 +12,7 @@ steps:
 
 - id: semgrep/code
   name: semgrep/semgrep
+  dir: '/src'
   script: |
     ls
     pwd
