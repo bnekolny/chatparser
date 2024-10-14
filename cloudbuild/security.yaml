@@ -12,7 +12,6 @@ steps:
 
 - id: semgrep/code
   name: semgrep/semgrep
-  dir: '/src'
   script: |
     ls
     pwd
@@ -29,6 +28,8 @@ steps:
     #  --config p/dockerfile --config p/docker-compose \
     #  --config p/kubernetes \
     #  --config p/terraform
+  env:
+  - SEMGREP_SRC_DIRECTORY="/workspace"
   waitFor: ['-']
 
 options:
