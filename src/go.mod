@@ -3,7 +3,7 @@ module chatparser
 go 1.22.4
 
 require (
-	cloud.google.com/go/storage v1.44.0
+	cloud.google.com/go/storage v1.45.0
 	github.com/fogleman/gg v1.3.0
 	github.com/google/generative-ai-go v0.18.0
 	github.com/stretchr/testify v1.9.0
