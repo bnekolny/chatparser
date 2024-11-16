@@ -42,7 +42,7 @@ steps:
     EOF
 
     docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/gosec:latest
-  waitFor:['-']
+  waitFor: ['-']
 
 options:
   automapSubstitutions: true
