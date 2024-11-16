@@ -12,16 +12,14 @@ FROM golang:1.22-alpine AS gobuilder
 WORKDIR /app
 # Install fresh for reloading
 RUN go install github.com/pilu/fresh@latest
-# put this lower so it can cache better
-RUN apk --no-cache add ca-certificates
-
-# This has to go here, not in the final container because the static embed is loaded at compile time
-COPY --from=staticbuilder /srv/app/dist /app/static
-
 COPY go.mod .
 # this happens during build, but separating it out allows it to cache
 RUN go mod download
-# Copy the rest of your application code
+# put this lower so it can cache better
+RUN apk --no-cache add ca-certificates
+# This has to go here, not in the final container because the static embed is loaded at compile time
+COPY --from=staticbuilder /srv/app/dist /app/static
+# Copy the rest of the application code
 COPY . .
 # Build the application with CGO disabled
 RUN CGO_ENABLED=0 go build -o chatparser
