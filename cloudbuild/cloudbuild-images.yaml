@@ -34,12 +34,15 @@ steps:
   name: 'gcr.io/cloud-builders/docker'
   script: |
     #!/bin/sh
-    docker build -t us-central-docker.pkg.dev/$PROJECT_ID/docker/gosec:vv -f- . <<EOF
+    docker build -t us-central-docker.pkg.dev/$PROJECT_ID/docker/gosec:latest -f- . <<EOF
     FROM golang:1.22-alpine
     RUN wget -O - -q https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s v2.20.0
     ENTRYPOINT ["./bin/gosec"]
     CMD ["-quiet", "./..."]
     EOF
+
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/gosec:latest
+  waitFor:['-']
 
 options:
   automapSubstitutions: true
