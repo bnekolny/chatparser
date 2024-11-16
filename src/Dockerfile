@@ -3,8 +3,7 @@ FROM node:22-alpine3.18 AS staticbuilder
 # https://github.com/docker-library/official-images/issues/16830
 RUN corepack enable && yarn set version berry
 WORKDIR /srv/app
-COPY web/package.json ./
-COPY web/yarn.lock ./
+COPY web/package.json web/yarn.lock ./
 RUN yarn install
 COPY web /srv/app
 RUN yarn run build
