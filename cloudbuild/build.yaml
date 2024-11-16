@@ -4,7 +4,7 @@ steps:
   - --destination=us-central1-docker.pkg.dev/$PROJECT_ID/docker/chatparser:$SHORT_SHA
   - --context=src/
   - --cache=true
-  - --cache-ttl=30d
+  - --cache-ttl 30d
 
 options:
   logging: CLOUD_LOGGING_ONLY
