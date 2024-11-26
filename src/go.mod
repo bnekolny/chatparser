@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.47.0
 	github.com/fogleman/gg v1.3.0
 	github.com/google/generative-ai-go v0.18.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	github.com/vearutop/statigz v1.4.3
 	go.uber.org/zap v1.27.0
 	google.golang.org/api v0.209.0
