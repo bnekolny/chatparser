@@ -15,7 +15,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-const geminiModelSelection = "gemini-1.5-flash"
+const geminiModelSelection = "gemini-2.0-flash-exp"
 
 var geminiApiKey string
 
