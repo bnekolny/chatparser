@@ -46,7 +46,8 @@ func main() {
 		*outputFile,
 		string(inputData),
 	)
-	result, err := genaiclient.GetFeedback(ctx, "text", prompt)
+	genAiParams := genaiclient.GenAiParams{Temperature: 0.0}
+	result, err := genaiclient.GetFeedback(ctx, "text", prompt, genAiParams)
 	if err != nil {
 		fmt.Printf("Error getting AI feedback: %v\n", err)
 		os.Exit(1)
