@@ -1,6 +1,6 @@
 steps:
 - id: tsc
-  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:23
   script: |
     #!/bin/sh
     cd src/web
@@ -9,7 +9,7 @@ steps:
   waitFor: ["-"]
 
 - id: gofmt
-  name: golang:1.22-alpine
+  name: golang:1.23-alpine
   script: |
     #!/bin/sh
     cd src

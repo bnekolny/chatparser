@@ -1,6 +1,6 @@
 services:
   formatter-golang:
-    image: golang:1.22-alpine
+    image: golang:1.23-alpine
     volumes:
       - ./src:/go
     entrypoint: /bin/sh
@@ -20,7 +20,7 @@ services:
       - formatters
 
   security-golang:
-    image: golang:1.22-alpine
+    image: golang:1.23-alpine
     volumes:
       - ./:/go
     entrypoint: /bin/sh

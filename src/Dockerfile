@@ -1,4 +1,4 @@
-FROM node:22-alpine3.18 AS staticbuilder
+FROM node:23-alpine AS staticbuilder
 # was node:22-alpine, but alpine broke things
 # https://github.com/docker-library/official-images/issues/16830
 RUN corepack enable && yarn set version berry
@@ -8,7 +8,7 @@ RUN yarn install
 COPY web /srv/app
 RUN yarn run build
 
-FROM golang:1.22-alpine AS gobuilder
+FROM golang:1.23-alpine AS gobuilder
 WORKDIR /app
 # Install fresh for reloading
 RUN go install github.com/pilu/fresh@latest
