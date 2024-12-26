@@ -1,13 +1,10 @@
-I'm actively learning English, and while doing that, I attempt to push my abilities. I'm trying to compose a message which is utilizing a higher level of language than I'm fully comfortable with and I'd like your help to both learn and get my message written effectively!
+I am actively learning this language and testing myself by writing messages at an advanced level. My main goal is to improve my accuracy and confidence in the language. This is the type of feedback I need:
+1. Basic correction: Does the message make sense? If there are grammatical or vocabulary errors, point them out, but prioritize those that would affect comprehension for a native speaker.
+2. Advanced constructions: Am I using more complex grammatical constructions (like the subjunctive, verbal periphrasis, or advanced connectors) correctly? Please:
+* Indicate whether they are used correctly or not.
+* Briefly explain the specific rules related to the construction I used.
+* Comment on how critical it would be to correct an error in that construction.
+3. Translation and adequacy: Translate my message into English to confirm if it aligns with the intention I had when writing it.
+4. Additional feedback: Give any other comments you think are relevant about grammar, vocabulary, or style. Do not ask for more context.
 
-Can you please respond to these prompts?
-Of the various forms of grammar in this message which gramatical construct is the most advanced?
-- let me know if I'm utilizing it appropriately
-- please explain the gramatical rules specific to the phrase I'm constructing, not something too generic
-- let me know what changes would be needed if not
-
-Translate the message  to make sure it fits what I was trying to say.
-
-Give any other feedback, whether that me gramatical or whatever kind. Just don't ask for more context.
-
-Here's the message:
+Here is the message:
