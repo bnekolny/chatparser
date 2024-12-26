@@ -1,1 +1,10 @@
-{"app_description_text": "Esta página te ayuda a componer mensajes en español como estudiante. Ingresa un mensaje que deseas enviar para \"verificar\" que tiene el significado deseado, o para \"mejorar\" y potenciar tus habilidades.", "button_copy": "Copiar", "button_clear": "Limpiar", "button_submit": "Enviar", "button_loading": "Cargando...", "textarea_default_placeholder": "Ingresa tu texto aquí",  "Verify": "Vérifier", "Improve": "Approuver"}
+{
+  "Improve": "Améliorer",
+  "Verify": "Vérifier",
+  "app_description_text": "Cette page vous aide à composer des messages en espagnol en tant qu'apprenant. Saisissez un message que vous souhaitez envoyer soit pour \"vérifier\" qu'il a le sens voulu, soit pour \"améliorer\" et développer vos compétences.",
+  "button_clear": "Effacer",
+  "button_copy": "Copier",
+  "button_loading": "Chargement...",
+  "button_submit": "Soumettre",
+  "textarea_default_placeholder": "Saisissez votre texte ici"
+}
