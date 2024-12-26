@@ -38,7 +38,8 @@ func main() {
 		string(inputData),
 		*outputFile,
 	)
-	result, err := genaiclient.GetFeedback(ctx, "json", prompt)
+	genAiParams := genaiclient.GenAiParams{Temperature: 0.0}
+	result, err := genaiclient.GetFeedback(ctx, "json", prompt, genAiParams)
 	if err != nil {
 		fmt.Printf("Error getting AI feedback: %v\n", err)
 		os.Exit(1)
@@ -54,7 +55,8 @@ func main() {
 	}
 
 	// Write result to output file
-	err = ioutil.WriteFile(*outputFile, []byte(result), 0600)
+	formattedJson, _ := json.MarshalIndent(jsonData, "", "  ")
+	err = ioutil.WriteFile(*outputFile, formattedJson, 0600)
 	if err != nil {
 		fmt.Printf("Error writing output file: %v\n", err)
 		os.Exit(1)

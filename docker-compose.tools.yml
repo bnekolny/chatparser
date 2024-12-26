@@ -36,7 +36,7 @@ services:
   tools-locale-translate: &tools-golang
     build:
       dockerfile_inline: |
-        FROM golang:alpine
+        FROM golang:1.23-alpine
         WORKDIR /app
         COPY src/go.mod .
         RUN go mod download
