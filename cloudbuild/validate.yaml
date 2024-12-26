@@ -1,6 +1,6 @@
 steps:
 - id: tsc
-  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+  name: us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:23
   script: |
     #!/bin/sh
     cd src/web

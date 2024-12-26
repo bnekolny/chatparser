@@ -17,17 +17,17 @@ steps:
     docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/kustomize:v5.4.2
   waitFor: ['-']
 
-- id: 'alpine-yarn-node:22'
+- id: 'alpine-yarn-node:23'
   name: 'gcr.io/cloud-builders/docker'
   script: |
     #!/bin/sh
-    docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22 -f- . <<EOF
-    FROM node:22-alpine3.18
+    docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:23 -f- . <<EOF
+    FROM node:23-alpine3.18
     RUN corepack enable && yarn set version berry
     WORKDIR /srv/app
     EOF
 
-    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:22
+    docker push us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:23
   waitFor: ['-']
 
 - id: 'gosec'

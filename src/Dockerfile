@@ -1,4 +1,4 @@
-FROM node:22-alpine3.18 AS staticbuilder
+FROM node:23-alpine AS staticbuilder
 # was node:22-alpine, but alpine broke things
 # https://github.com/docker-library/official-images/issues/16830
 RUN corepack enable && yarn set version berry
