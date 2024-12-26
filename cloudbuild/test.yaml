@@ -1,6 +1,6 @@
 steps:
 - id: gotest
-  name: golang:1.22-alpine
+  name: golang:1.23-alpine
   script: |
     #!/bin/sh
     cd src

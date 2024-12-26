@@ -8,7 +8,7 @@ RUN yarn install
 COPY web /srv/app
 RUN yarn run build
 
-FROM golang:1.22-alpine AS gobuilder
+FROM golang:1.23-alpine AS gobuilder
 WORKDIR /app
 # Install fresh for reloading
 RUN go install github.com/pilu/fresh@latest
