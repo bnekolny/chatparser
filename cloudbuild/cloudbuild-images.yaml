@@ -22,7 +22,7 @@ steps:
   script: |
     #!/bin/sh
     docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/docker/alpine-yarn-node:23 -f- . <<EOF
-    FROM node:23-alpine3.18
+    FROM node:23-alpine
     RUN corepack enable && yarn set version berry
     WORKDIR /srv/app
     EOF
