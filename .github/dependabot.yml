@@ -5,11 +5,78 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gomod"
-    directory: "src/"
-    schedule:
-      interval: "weekly"
   - package-ecosystem: "npm"
     directory: "src/web/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "@types/node"
+      babel:
+        patterns:
+          - "@babel/*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@eslint*"
+          - "@typescript-eslint/*"
+      typescript:
+        patterns:
+          - "typescript"
+          - "@types/*"
+      build-tools:
+        patterns:
+          - "rollup*"
+          - "esbuild"
+          - "@esbuild/*"
+      node-helpers:
+        patterns:
+          - "node-fetch"
+          - "fs-*"
+          - "*-utils"
+          - "*-cli"
+          - "chalk"
+          - "commander"
+          - "dotenv"
+          - "glob"
+          - "semver"
+          - "debug"
+          - "js-yaml"
+          - "json5"
+          - "ajv"
+          - "prompt*"
+          - "inquirer"
+      browser-polyfills:
+        patterns:
+          - "core-js"
+          - "regenerator-runtime"
+      npm-updates: # Catch-all group for npm (use with extreme caution!)
+        patterns:
+          - "*"
+    versioning-strategy: "widen"
+    open-pull-requests-limit: 2
+  - package-ecosystem: "gomod"
+    directory: "src/"
+    schedule:
+      interval: "daily"
+    groups:
+      google:
+        patterns:
+          - "cloud.google.com/go*"
+          - "google.golang.org/*"
+          - "github.com/Google*"
+      testing:
+        patterns:
+          - "github.com/stretchr/testify"
+      gomod-updates: # Catch-all group for gomod (use with extreme caution!)
+        patterns:
+          - "*"
+    open-pull-requests-limit: 2
+
