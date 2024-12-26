@@ -19,6 +19,15 @@ const geminiModelSelection = "gemini-2.0-flash-exp"
 
 var geminiApiKey string
 
+type GenAiParams struct {
+	// Randomness of output
+	// range [0.0 - 2.0]
+	Temperature float32
+	// TODO: Schema
+	// https://spec.openapis.org/oas/v3.0.3#schema
+	// https://github.com/google/generative-ai-go/blob/7276bbc8524c52eed98d38f2169d14dab9d3289f/genai/generativelanguagepb_veneer.gen.go#L1050
+}
+
 func init() {
 	geminiApiKey = os.Getenv("GEMINI_API_KEY")
 	if geminiApiKey == "" {
@@ -26,7 +35,7 @@ func init() {
 	}
 }
 
-func GetFeedback(ctx context.Context, responseFormat string, prompt string) (string, error) {
+func GetFeedback(ctx context.Context, responseFormat string, prompt string, params ...GenAiParams) (string, error) {
 	defer logger.Logger.Sync()
 
 	client, err := genai.NewClient(ctx, option.WithAPIKey(geminiApiKey))
@@ -48,8 +57,14 @@ func GetFeedback(ctx context.Context, responseFormat string, prompt string) (str
 		return "", errors.New(fmt.Sprintf("invalid responseFormat: %s, valid: text, json", responseFormat))
 	}
 
+	var p GenAiParams
+	if len(params) > 0 {
+		p = params[0] // if there were multiple params in the variadic
+	}
+
 	model.GenerationConfig = genai.GenerationConfig{
 		ResponseMIMEType: responseMIME,
+		Temperature:      &p.Temperature,
 	}
 	resp, err := model.GenerateContent(ctx, genai.Text(prompt))
 	if err != nil {
