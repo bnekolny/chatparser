@@ -62,6 +62,7 @@ services:
       -c '
       go run ./cmd/prompt-translate/main.go -input assets/prompts/en/verify.txt -output assets/prompts/es/verify.txt && cat assets/prompts/es/verify.txt &&
       go run ./cmd/prompt-translate/main.go -input assets/prompts/en/improve.txt -output assets/prompts/es/improve.txt && cat assets/prompts/es/improve.txt &&
+      go run ./cmd/prompt-translate/main.go -input assets/prompts/en/dictionary.txt -output assets/prompts/es/dictionary.txt && cat assets/prompts/es/dictionary.txt &&
       echo "done"
       '
     environment:
