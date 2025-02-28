@@ -58,8 +58,5 @@ func main() {
 	mux.HandleFunc("/", http.RedirectHandler("/static", http.StatusFound).ServeHTTP)
 
 	logger.Logger.Infof("Starting server on port %v", port)
-	err = srv.ListenAndServe()
-	if err != nil {
-		logger.Logger.Fatal(err)
-	}
+	srv.ListenAndServe()
 }

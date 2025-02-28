@@ -11,7 +11,7 @@ export const useMessageApi = () => {
 		mode: Mode,
 	): Promise<MessageApiResult> => {
 		try {
-			const response = await fetch(`/api/message/${mode}`, {
+			const response = await fetch(`/api/message/`+mode, {
 				method: HTTP_METHODS.POST,
 				headers: {
 					...CONTENT_TYPE_HEADER.TEXT
