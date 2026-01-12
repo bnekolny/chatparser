@@ -25,7 +25,8 @@ A few use-cases:
 1. To add packages
     1. Installing golang packages: `docker compose run golang sh -c "go get {package}"`
     1. Installing node packages: `docker compose run vite sh -c "yarn add {package}"`
-<details><summary>[optional] install gcloud</summary>
+<details>
+<summary>[optional] install gcloud</summary>
 
 https://cloud.google.com/sdk/docs/install#linux
 
